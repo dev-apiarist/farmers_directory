@@ -14,7 +14,7 @@ class ProducePageBody extends StatefulWidget {
 }
 
 class _ProducePageBodyState extends State<ProducePageBody> {
-  PageController pageController = PageController(viewportFraction: 0.45);
+  PageController pageController = PageController(viewportFraction: 1);
 
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
@@ -45,129 +45,139 @@ class _ProducePageBodyState extends State<ProducePageBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipPath(
-          clipper: CustomClipPath(),
-          child: Container(
-            height: 400,
-            color: AppColors.mainGreen,
-            child: Column(
+        Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 20,
+          ),
+          height: 150,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      LargeText(
-                        text: 'Featured Produce',
-                        color: Colors.white,
-                      ),
-                      SmallText(
-                        size: 17,
-                        text: 'View all',
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
+                Icon(Icons.perm_contact_cal_sharp),
+                SizedBox(
+                  height: 10,
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 0, right: 30),
-                  height: Dimensions.pageView,
-                  child: PageView.builder(
-                    padEnds: false,
-                    controller: pageController,
-                    itemCount: 5,
-                    itemBuilder: (BuildContext context, position) {
-                      return _buildPageItem(position);
-                    },
-                  ),
-                ),
-                DotsIndicator(
-                  dotsCount: 5,
-                  position: _currPageValue,
-                  decorator: DotsDecorator(
-                    color: Colors.white, // Inactive
-                    size: const Size.square(9.0),
-                    activeSize: const Size(18.0, 9.0),
-                    activeColor: Colors.blueGrey,
-                    activeShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                  ),
-                ),
+                LargeText(text: "Farmers")
               ],
             ),
-          ),
+            VerticalDivider(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.spa_outlined),
+                SizedBox(
+                  height: 10,
+                ),
+                LargeText(text: 'Crops')
+              ],
+            ),
+            VerticalDivider(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.pets),
+                SizedBox(
+                  height: 10,
+                ),
+                LargeText(text: 'Livestock')
+              ],
+            ),
+          ]),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            children: [LargeText(text: 'Farmers nearby')],
-          ),
-        ),
-        ListView.builder(
-          itemCount: 14,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Row(
-                children: [
-                  // image-section
-                  Container(
-                    height: Dimensions.ListViewImageSize,
-                    width: Dimensions.ListViewImageSize,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            'https://images.squarespace-cdn.com/content/v1/5c44ca84ec4eb7bfa5bbe814/1587318820184-ZQE5ER9GKX9K6WVXJE9H/MACHEL+FARM+VISIT+2020+VC-31+%281%29.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      ),
+        Container(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    LargeText(
+                      text: 'In Season',
+                      size: 27,
                     ),
-                  )
-                  //text-container
-                  ,
-                  Expanded(
-                    child: Container(
-                      height: Dimensions.ListViewTextContainer,
-                      decoration: BoxDecoration(
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(Dimensions.radius20),
-                          bottomRight: Radius.circular(Dimensions.radius20),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: Dimensions.height10),
-                              child: LargeText(text: 'Ivan Burt'),
-                            ),
-                            Text(
-                              'Main Produce:',
-                            ),
-                            FarmerProduce()
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            );
-          },
-        )
+              Container(
+                padding: EdgeInsets.only(left: 0, right: 30),
+                height: Dimensions.pageView,
+                child: PageView.builder(
+                  padEnds: false,
+                  controller: pageController,
+                  itemCount: 3,
+                  itemBuilder: (BuildContext context, position) {
+                    return _buildPageItem(position);
+                  },
+                ),
+              ),
+              DotsIndicator(
+                dotsCount: 3,
+                position: _currPageValue,
+                decorator: DotsDecorator(
+                  color: Colors.white, // Inactive
+                  size: const Size.square(9.0),
+                  activeSize: const Size(18.0, 9.0),
+                  activeColor: AppColors.mainBrown,
+                  activeShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 30),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    LargeText(
+                      text: 'Nearby Farmers',
+                      size: 24,
+                    ),
+                    SmallText(
+                      size: 17,
+                      text: 'View all',
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                height: 200,
+                child: Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: 5,
+                    itemBuilder: ((context, index) {
+                      return Card(
+                        clipBehavior: Clip.hardEdge,
+                        child: Stack(children: [
+                          Image.network(
+                            'https://i0.wp.com/www.majoronetours.com/wp-content/uploads/2022/07/E0AE08AE-A9ED-4293-8471-E8DCD90E4C10.jpeg?fit=1280%2C1280&ssl=1',
+                            fit: BoxFit.cover,
+                            width: 150,
+                          )
+                        ]),
+                      );
+                    }),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
 
+//pageview slider
   Widget _buildPageItem(int index) {
     Matrix4 matrix = Matrix4.identity();
 
@@ -212,58 +222,54 @@ class _ProducePageBodyState extends State<ProducePageBody> {
       child: Stack(
         children: [
           Container(
+            clipBehavior: Clip.hardEdge,
             height: Dimensions.pageViewContainer,
             margin: EdgeInsets.only(left: 20, right: 10),
             decoration: BoxDecoration(
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(0, 5),
-                  blurRadius: 5.0,
-                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0, 5),
+                    blurRadius: 5.0,
+                    color: Color.fromARGB(62, 68, 68, 68),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  Dimensions.radius20,
                 ),
-                // BoxShadow(offset: Offset(-5, 0), color: AppColors.mainGreen),
-                // BoxShadow(offset: Offset(5, 0), color: AppColors.mainGreen),
-              ],
-              borderRadius: BorderRadius.circular(
-                Dimensions.radius20,
+                color: Colors.white),
+            child: Row(children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.37,
+                height: double.maxFinite,
+                child: Image.network(
+                  'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
-              color: index.isEven ? AppColors.mainBrown : Color(0xFF931F1F),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, top: 10),
+                child: SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SmallText(text: 'In Season'),
+                      LargeText(text: 'Ackee'),
+                      LargeText(text: "Regions:"),
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: () {},
+                              child: LargeText(
+                                text: "View Farmers",
+                              ))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ]),
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 100,
-                  width: 120,
-                  // margin: EdgeInsets.only(
-                  //   left: Dimensions.width30,
-                  //   right: Dimensions.width30,
-                  //   bottom: Dimensions.height20,
-                  // ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      Dimensions.radius10,
-                    ),
-                    // color: Colors.white,
-                  ),
-                  child: Image(
-                    image: AssetImage('assets/images/mango.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                LargeText(
-                  text: 'Apples',
-                  color: Colors.white,
-                )
-              ],
-            ),
-          )
         ],
       ),
     );

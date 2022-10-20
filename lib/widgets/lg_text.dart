@@ -5,21 +5,20 @@ class LargeText extends StatelessWidget {
   Color? color;
   final String text;
   double size;
-  TextOverflow overflow;
+  TextAlign? align;
 
   LargeText(
       {super.key,
       required this.text,
       this.color = const Color(0xFF1E1E1E),
       this.size = 0,
-      this.overflow = TextOverflow.ellipsis});
+      this.align});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      maxLines: 1,
-      overflow: overflow,
+      textAlign: align,
       style: TextStyle(
           color: color,
           fontWeight: FontWeight.w400,
