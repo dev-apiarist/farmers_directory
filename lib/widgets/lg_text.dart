@@ -22,7 +22,7 @@ class LargeText extends StatelessWidget {
       style: TextStyle(
           color: color,
           fontWeight: FontWeight.w400,
-          fontSize: size == 0 ? Dimensions.font20 : size),
+          fontSize: size == 0 ? Dimensions.font17 : size),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
@@ -18,7 +19,8 @@ class FarmerDetails extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            delegate: CustomSliverAppBar(expandedHeight: 350),
+            delegate:
+                CustomSliverAppBar(expandedHeight: Dimensions.expandedHeight),
             pinned: true,
             floating: true,
           ),
@@ -33,12 +35,12 @@ class FarmerDetails extends StatelessWidget {
                   Align(
                     alignment: AlignmentDirectional.center,
                     child: LargeText(
-                      text: 'Johnny Brown',
-                      size: 40,
+                      text: 'Debra Passie',
+                      size: 30,
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: Dimensions.height10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,57 +48,76 @@ class FarmerDetails extends StatelessWidget {
                       Row(
                         children: [
                           LeadingIconText(
-                              text: 'Banana Cultivator',
-                              icon: Icon(Icons.work_outline))
+                            iconSize: Dimensions.height20,
+                            text: 'Organic Cultivator',
+                            icon: Icons.work_outline,
+                          )
                         ],
                       ),
                       Row(
                         children: [
                           LeadingIconText(
-                              text: "Kingston",
-                              icon: Icon(Icons.location_on_outlined))
+                            iconSize: Dimensions.height20,
+                            text: "Kingston",
+                            icon: Icons.location_on_outlined,
+                          )
                         ],
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: LargeText(text: 'Produce:'),
+                        padding: EdgeInsets.only(top: Dimensions.height10),
+                        child: LargeText(
+                          text: 'Produce:',
+                        ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      SizedBox(width: Dimensions.width10),
                       Expanded(
                         child: Wrap(
                           spacing: 5,
                           children: List.generate(5, (index) {
-                            return Chip(
-                              backgroundColor: Colors.white,
-                              side: BorderSide(color: Colors.black54),
-                              label: Text('Potato'),
+                            return GestureDetector(
+                              onTap: (() {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ProduceDetails();
+                                    },
+                                  ),
+                                );
+                              }),
+                              child: Chip(
+                                backgroundColor: Colors.white,
+                                side: BorderSide(color: Colors.black54),
+                                label: SmallText(
+                                  text: 'Potato',
+                                ),
+                              ),
                             );
                           }),
                         ),
                       ),
                     ],
                   ),
-                  LargeText(text: 'About'),
+                  LargeText(
+                    text: 'About',
+                    size: 17,
+                  ),
                   SizedBox(
                     height: Dimensions.height10,
                   ),
                   SmallText(
                     text:
-                        'Expert banana cultivator. Ensuring we Grow, smart. Eat smart. Supplying a better Jamaica.',
-                    size: 15,
+                        'Expert cultivator. Ensuring we Grow, smart. Eat smart. Supplying a better Jamaica.',
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -111,11 +132,13 @@ class FarmerDetails extends StatelessWidget {
                     }),
                     child: LeadingIconText(
                       text: contactNumber,
-                      icon: Icon(Icons.call_outlined),
+                      icon: Icons.call_outlined,
+                      iconSize: Dimensions.height20,
+                      color: Colors.black87,
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -133,7 +156,9 @@ class FarmerDetails extends StatelessWidget {
                     }),
                     child: LeadingIconText(
                       text: email,
-                      icon: Icon(Icons.email_outlined),
+                      color: Colors.black87,
+                      icon: Icons.email_outlined,
+                      iconSize: Dimensions.height20,
                     ),
                   ),
                 ],
@@ -168,8 +193,8 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
-          Image.network(
-            'https://rondelvillage.com/wp-content/uploads/2017/08/AdobeStock_105774492-1030x687.jpeg',
+          Image.asset(
+            'assets/images/fields.jpeg',
             fit: BoxFit.cover,
           ),
           Positioned(
@@ -191,7 +216,7 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
             ),
           ),
           Positioned(
-            top: expandedHeight / 1.45 - shrinkOffset,
+            top: expandedHeight / 1.55 - shrinkOffset,
             left: MediaQuery.of(context).size.width / 4,
             right: MediaQuery.of(context).size.width / 4,
             child: Opacity(
@@ -201,8 +226,8 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
                 radius: 75,
                 child: CircleAvatar(
                   radius: 65,
-                  backgroundImage: NetworkImage(
-                      'https://pbs.twimg.com/media/DYQsObjXUAID31O.jpg'),
+                  backgroundImage:
+                      AssetImage('assets/images/user_profile.jpeg'),
                 ),
               ),
             ),

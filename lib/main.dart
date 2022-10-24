@@ -2,18 +2,21 @@ import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/navigation/home_page.dart';
 import 'package:farmers_directory/pages/auth/login_page.dart';
 import 'package:farmers_directory/pages/auth/signup_page.dart';
+import 'package:farmers_directory/pages/farmer/main_farmer_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
-import 'package:farmers_directory/pages/home/produce_page_body.dart';
+
 import 'package:farmers_directory/pages/welcome_page.dart';
+import 'package:farmers_directory/utils/functions.dart';
 import 'package:flutter/material.dart';
-import 'package:farmers_directory/pages/home/main_farmer_page.dart';
+import 'package:farmers_directory/pages/home/main_user_page.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'helper/dependencies.dart' as dep;
 
 void main() async {
+  GlobalFunctions();
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
   runApp(const RootApp());
@@ -28,7 +31,7 @@ class RootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-          textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)),
+          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)),
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
     );

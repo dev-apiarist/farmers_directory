@@ -21,13 +21,11 @@ class ProduceDetails extends StatelessWidget {
             floating: true,
             elevation: 0,
             pinned: true,
-            backgroundColor: AppColors.mainGreen,
-            expandedHeight: 300,
+            expandedHeight: Dimensions.expandedHeight,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
                 'assets/images/apple.png',
-                width: double.maxFinite,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
             ),
             bottom: PreferredSize(
@@ -36,12 +34,15 @@ class ProduceDetails extends StatelessWidget {
                 height: 40,
                 width: double.maxFinite,
                 child: Center(
-                    child: LargeText(text: '11 Farmers are selling apples')),
+                  child: SmallText(
+                    text: '11 Farmers are selling apples',
+                    size: Dimensions.height20,
+                  ),
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(100),
                   ),
                 ),
               ),
@@ -49,15 +50,19 @@ class ProduceDetails extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Expanded(
-              child: ListView.separated(
-                separatorBuilder: ((context, index) => Divider()),
-                padding: EdgeInsets.only(top: Dimensions.height10),
-                itemCount: 10,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return FarmersList();
-                },
+              child: Column(
+                children: [
+                  ListView.separated(
+                    separatorBuilder: ((context, index) => Divider()),
+                    padding: EdgeInsets.only(top: Dimensions.height10),
+                    itemCount: 11,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return FarmersList();
+                    },
+                  ),
+                ],
               ),
             ),
           )

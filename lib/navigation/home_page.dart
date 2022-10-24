@@ -1,7 +1,7 @@
 import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/navigation/directory_page.dart';
 import 'package:farmers_directory/navigation/user_page.dart';
-import 'package:farmers_directory/pages/home/main_farmer_page.dart';
+import 'package:farmers_directory/pages/home/main_user_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List pages = [MainFarmerPage(), Directory(), Categories(), User()];
+  List pages = [MainUserPage(), Directory(), Categories(), User()];
 
   int currentIndex = 0;
   void onTap(int index) {
@@ -31,16 +31,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        unselectedFontSize: 0,
-        selectedFontSize: 0,
+        // unselectedFontSize: 0,
         type: BottomNavigationBarType.fixed,
         onTap: onTap,
         currentIndex: currentIndex,
         elevation: 1,
         selectedItemColor: Colors.black87,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded), label: "Home"),

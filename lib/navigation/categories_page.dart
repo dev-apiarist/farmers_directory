@@ -1,9 +1,12 @@
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
+import 'package:farmers_directory/pages/users/lists/produce_list.dart';
+import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/colors.dart';
 import '../utils/dimensions.dart';
 import '../widgets/sm_text.dart';
 
@@ -25,28 +28,44 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> imageUrls = [
+    final List<String> inSeasonImages = [
       'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
       'https://cdn.shopify.com/s/files/1/0431/5214/6584/products/image_c4b44c20-2e5c-47db-8b20-922942e50e42_1024x1024@2x.jpg?v=1623782661',
       'https://upload.wikimedia.org/wikipedia/commons/4/46/Litchi_chinensis_fruits.JPG'
     ];
+
+    final List<String> livestockImages = [
+      'https://www.jddb.gov.jm/sites/default/files/styles/max_1300x1300/public/inline-images/Jamaica%20Hope%20Calves_0.JPG?itok=wDQaxLcx',
+      'https://loopnewslive.blob.core.windows.net/liveimage/sites/default/files/2018-04/ggwsIv7oNp.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUcoHJKf0M1qxbU6VIZcSdYrST4lz2Q-YolEwqO6lIHuqxJq6DKLw6fufDyl-TfE3jKc&usqp=CAU'
+    ];
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: LargeText(text: 'Categories'),
+        title: LargeText(
+          text: 'Categories',
+          color: Colors.white,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
+          )
+        ],
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.mainGreen,
       ),
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(bottom: Dimensions.height10),
             child: Align(
               alignment: Alignment.centerLeft,
               child: TabBar(
-                indicator: CircleTabIndicator(color: Colors.black, radius: 4),
+                // indicator: CircleTabIndicator(color: Colors.black, radius: 4),
+                indicatorColor: Colors.lightGreen,
                 isScrollable: true,
-                labelPadding: EdgeInsets.symmetric(horizontal: 20),
+                labelPadding:
+                    EdgeInsets.symmetric(horizontal: Dimensions.width20),
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.grey,
                 controller: tabController,
@@ -55,33 +74,120 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                     text: 'Crops',
                   ),
                   Tab(
-                    text: 'Farmers',
+                    text: 'Livestock',
                   ),
                 ],
               ),
             ),
           ),
           Expanded(
-            child: Container(
+            child: SizedBox(
               width: double.maxFinite,
               child: TabBarView(
                 physics: NeverScrollableScrollPhysics(),
                 controller: tabController,
                 children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LargeText(text: 'In Season'),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ProduceDetails();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 200,
+                              width: double.maxFinite,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: inSeasonImages.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        right: Dimensions.width15,
+                                        top: Dimensions.height10),
+                                    width: 160,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              inSeasonImages[index]),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        backgroundColor: AppColors.mainGreen),
+                                    onPressed: () {},
+                                    child: LargeText(
+                                      text: 'Fruits',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  OutlinedButton(
+                                    onPressed: () {},
+                                    child: LargeText(
+                                        text: 'Vegetables',
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: (() =>
+                                    GlobalFunctions.botomSheet(context)),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.sort),
+                                    SmallText(text: 'Sort By')
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          Expanded(child: ProduceList()),
+                        ],
+                      ),
+                    ),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 20),
-                        child: LargeText(text: ' In Season'),
+                        child: LargeText(text: 'Livestock Breeding'),
                       ),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return ProduceDetails();
-                          }));
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProduceDetails();
+                              },
+                            ),
+                          );
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -90,7 +196,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                           child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemCount: imageUrls.length,
+                              itemCount: livestockImages.length,
                               itemBuilder: (context, index) {
                                 return Container(
                                   margin: EdgeInsets.only(right: 15, top: 10),
@@ -98,7 +204,8 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     image: DecorationImage(
-                                        image: NetworkImage(imageUrls[index]),
+                                        image: NetworkImage(
+                                            livestockImages[index]),
                                         fit: BoxFit.cover),
                                   ),
                                 );
@@ -106,83 +213,12 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                         ),
                       ),
                       SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(''),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(''),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(''),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              _filter(context);
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                LargeText(text: 'Filter'),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Icon(
-                                  Icons.sort,
-                                  color: Colors.black87,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          separatorBuilder: ((context, index) => Divider()),
-                          padding: EdgeInsets.only(top: Dimensions.height10),
-                          itemCount: 10,
-                          shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return FarmersList();
-                          },
-                        ),
-                      ),
                     ],
                   ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -214,45 +250,4 @@ class _CirclePainter extends BoxPainter {
         configuration.size!.width / 2 - radius / 2, configuration.size!.height);
     canvas.drawCircle(offset + circleOffset, radius, paint);
   }
-}
-
-void _filter(context) {
-  showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(40),
-        topRight: Radius.circular(40),
-      )),
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Stack(
-                  children: [
-                    LargeText(
-                      align: TextAlign.center,
-                      text: 'Filters',
-                      size: 25,
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(Icons.close),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            )
-          ]),
-        );
-      });
 }

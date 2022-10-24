@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class LeadingIconText extends StatelessWidget {
-  Icon icon;
+  IconData icon;
   Color? color;
   final String text;
-  double size;
+  double textSize;
+  double iconSize;
   LeadingIconText(
       {super.key,
       required this.text,
       this.color,
-      this.size = 8,
+      this.textSize = 15,
+      this.iconSize = 13,
       required this.icon});
 
   @override
@@ -17,12 +19,17 @@ class LeadingIconText extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        icon,
+        Icon(
+          icon,
+          size: iconSize,
+          color: color,
+        ),
         SizedBox(
-          width: 5,
+          width: 7,
         ),
         Text(
           text,
+          style: TextStyle(color: color, fontSize: textSize),
         ),
       ],
     );
