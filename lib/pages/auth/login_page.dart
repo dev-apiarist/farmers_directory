@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () {},
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0,),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: LargeText(
                     text: 'Sign In',
                     color: Colors.white,

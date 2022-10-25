@@ -223,10 +223,11 @@ class _MainUserPageState extends State<MainUserPage> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
-                                child: Image.asset(
-                                  e.keys.elementAt(0),
-                                  fit: BoxFit.cover,
-                                ),
+                                // child: Image.asset(
+                                //   e.keys.elementAt(0),
+                                //   fit: BoxFit.cover,
+                                // ),
+                                child:Placeholder()
                               ),
                             ),
                             SizedBox(
