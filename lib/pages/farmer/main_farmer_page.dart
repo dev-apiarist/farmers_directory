@@ -20,27 +20,27 @@ class _MainFarmerPageState extends State<MainFarmerPage> {
       drawer: Drawer(),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.only(
-            //     bottomLeft: Radius.circular(300),
-            //     bottomRight: Radius.circular(500),
-            //   ),
-            // ),
-            expandedHeight: 200,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: RichText(
-                text: TextSpan(
-                    text: 'Welcome,',
-                    style: TextStyle(color: Colors.black),
-                    children: [
-                      TextSpan(text: '\nJohn', style: TextStyle(fontSize: 20))
-                    ]),
-              ),
-            ),
-          ),
+          // SliverAppBar(
+          //   backgroundColor: Colors.lightGreen,
+          //   // shape: RoundedRectangleBorder(
+          //   //   borderRadius: BorderRadius.only(
+          //   //     bottomLeft: Radius.circular(300),
+          //   //     bottomRight: Radius.circular(500),
+          //   //   ),
+          //   // ),
+          //   expandedHeight: 200,
+          //   pinned: true,
+          //   flexibleSpace: FlexibleSpaceBar(
+          //     title: RichText(
+          //       text: TextSpan(
+          //           text: 'Welcome,',
+          //           style: TextStyle(color: Colors.black),
+          //           children: [
+          //             TextSpan(text: '\nJohn', style: TextStyle(fontSize: 20))
+          //           ]),
+          //     ),
+          //   ),
+          // ),
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

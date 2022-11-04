@@ -1,3 +1,5 @@
+import 'package:farmers_directory/navigation/user_page.dart';
+import 'package:farmers_directory/pages/edit/edit_profile.dart';
 import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/navigation/home_page.dart';
 import 'package:farmers_directory/pages/auth/login_page.dart';
@@ -7,6 +9,7 @@ import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 
 import 'package:farmers_directory/pages/welcome_page.dart';
+
 import 'package:farmers_directory/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:farmers_directory/pages/home/main_user_page.dart';

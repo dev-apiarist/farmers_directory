@@ -11,6 +11,7 @@ class FarmerProduceList extends StatefulWidget {
 
 class _FarmerProduceListState extends State<FarmerProduceList> {
   List<String> _produce = ["Apples", "Banana", "Yam"];
+
   late List<bool> _isChecked;
 
   @override
@@ -59,13 +60,14 @@ class _FarmerProduceListState extends State<FarmerProduceList> {
             );
           },
           child: CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
             value: _isChecked[index],
             onChanged: (value) {
               setState() {
-                // _isChecked[index] = value;
+                _isChecked[index] = !value!;
               }
             },
-            title: LargeText(text: 'Apples'),
+            title: LargeText(text: _produce[index]),
           ),
         );
       },
