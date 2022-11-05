@@ -208,7 +208,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: categories.map(
-                      (e) {
+                      (Map<String, String> e) {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -223,19 +223,20 @@ class _MainUserPageState extends State<MainUserPage> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
+
+                                child:Placeholder()
                                 // child: Image.asset(
-                                //   e.keys.elementAt(0),
+                                //   e['categoryImg']!,
                                 //   fit: BoxFit.cover,
                                 // ),
-                                child:Placeholder()
                               ),
                             ),
                             SizedBox(
                               height: 10,
                             ),
-                            // SmallText(
-                            //   text: ,
-                            // )
+                            SmallText(
+                              text: e['categoryName']!,
+                            )
                           ],
                         );
                       },
@@ -266,6 +267,9 @@ class _MainUserPageState extends State<MainUserPage> {
                           return _buildPageItem(position);
                         },
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     DotsIndicator(
                       dotsCount: 3,
@@ -304,7 +308,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width20),
+                            horizontal: Dimensions.width10),
                         height: 200,
                         width: double.maxFinite,
                         child: ListView.builder(
@@ -348,6 +352,9 @@ class _MainUserPageState extends State<MainUserPage> {
     // 'St. Mary',
     // 'St. Catherine',
     // 'Trelawny',
+    // 'Westmoreland',
+    // 'St.Thomas',
+    // 'Hanover',
     // 'Westmoreland',
     // 'St.Thomas',
     // 'Hanover',

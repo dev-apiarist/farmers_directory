@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List pages = [MainUserPage(), Directory(), Categories(), User()];
+  List pages = [MainUserPage(), Directory(), Categories(), UserProfile()];
 
   int currentIndex = 0;
   void onTap(int index) {

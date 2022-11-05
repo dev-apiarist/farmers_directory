@@ -13,7 +13,7 @@ class ProduceList extends StatelessWidget {
         return Divider();
       }),
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(),
       itemCount: 10,
       itemBuilder: ((context, index) {
         return ListTile(
