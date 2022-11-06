@@ -11,6 +11,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../../models/user.model.dart';
+import '../../navigation/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
     SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
     SecureStore.createUser(responseMap["data"]["user"]);
     Future.delayed(Duration.zero, () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> MainUserPage()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomePage()));
     });
 
   }
