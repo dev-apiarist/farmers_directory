@@ -24,68 +24,43 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
-
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final User user = User(address: {"street": "", "city": "", "parish":""});
+  Future<String>? authenticateUser;
 
-  Map _requestState = {
-    "hasError" : false,
-    "message": "",
-    "pending": false,
-  };
-
-  submitLogin() async{
-    Map body ={
-      "email": user.email,
-      "password": user.password,
-    };
-    try{
-      setState(() {
-      _requestState["pending"] = true;
-      });
-      String responseString = await NetworkHandler.post("/users/login", body);
-      Map<String, dynamic> responseMap = jsonDecode(responseString);
-      SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
-      SecureStore.createUser(responseMap["data"]["user"]);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> MainUserPage()));
-
-    }catch(error){
-      setState(() {
-        _requestState["pending"] = false;
-        _requestState["hasError"] = true;
-        _requestState["message"] = error.toString();
-      });
-    }
-  }
+  submitLogin(snapshot){
+      Map body ={
+        "email": emailController.text,
+        "password": passwordController.text,
+      };
+        setState(() {
+          authenticateUser = NetworkHandler.post("/users/login", body);
+        });
+      }
 
 
-  @override
-  Widget build(BuildContext context) {
+
+  Widget buildForm(AsyncSnapshot<String?> snapshot, String? error){
     return Scaffold(
-      body: (_requestState["pending"]) ? Center(child: CircularProgressIndicator()): (_requestState["hasError"])? showError(_requestState, setState, submitLogin) : Form(
+      body: Form(
         key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            (error == "null" || error == null) ? Text("") : Text(error),
             TextFormField(
+              controller: emailController,
               validator: ((value) {
                 if (value!.isEmpty || RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                   return "Enter valid email";
                 }
               }),
-              onChanged: (value){
-                setState(() {
-                  user.email = value;
-                });
-              },
               decoration: InputDecoration(labelText: 'Email', helperText: " "),
             ),
             TextFormField(
+              controller: passwordController,
               obscureText: true,
-              onChanged: (value){
-                setState(() {
-                  user.password = value;
-                });
-              },
               decoration: InputDecoration(labelText: 'Password'),
             ),
             SizedBox(
@@ -94,9 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                   shape: StadiumBorder(),
                   backgroundColor: Colors.black87,
                 ),
-                onPressed: () {
-                    submitLogin();
-                },
+                onPressed:(){
+                  submitLogin(snapshot);
+                }
+                ,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: LargeText(
@@ -111,8 +87,44 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
 
+  void getUserData(String responseString){
+    Map<String, dynamic> responseMap = jsonDecode(responseString);
+    SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
+    SecureStore.createUser(responseMap["data"]["user"]);
+    Future.delayed(Duration.zero, () {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> MainUserPage()));
+    });
+
+  }
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+    authenticateUser = null;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: authenticateUser,
+      builder: (context, snapshot) {
+        print(snapshot);
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        if (snapshot.hasData) {
+          getUserData(snapshot.data!);
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        } else {
+          return buildForm(snapshot, snapshot.error.toString());
+        }
+      }
+    );
+  }
+}
 
 Widget showError(state, updateState, submitFunc){
 
@@ -141,3 +153,5 @@ Widget showError(state, updateState, submitFunc){
       )
   );
 }
+
+
