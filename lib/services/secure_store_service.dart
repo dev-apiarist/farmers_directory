@@ -20,10 +20,18 @@ class SecureStore{
   }
 
   static Future<User> getUser() async{
-    String? userData = await getToken("user"); //get token can return null so we need to tell dart that it may be;
-    User user = User.fromJson(jsonDecode(userData!));
-    print(user.first_name);
-    return user;
+    String? userData = await getToken("user");
+    print(userData);
+    if(userData != "null" && userData != null){
+      User user = User.fromJson(jsonDecode(userData));
+      print(user.first_name);
+      return user;
+    }
+    throw Exception("No User Found");
+  }
+
+  static void readAll() async{
+    print(await _storage.readAll());
   }
 
   static logout() async {

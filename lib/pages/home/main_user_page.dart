@@ -2,13 +2,16 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
+import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/colors.dart';
+import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/custom_dropdown.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/produce.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import '../../models/user.model.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/lg_text.dart';
 import '../../widgets/sm_text.dart';
@@ -22,14 +25,17 @@ class MainUserPage extends StatefulWidget {
 
 class _MainUserPageState extends State<MainUserPage> {
   PageController pageController = PageController(viewportFraction: 1);
-
+  late Future <User> currentUser;
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
+  getUser() async{
+    print(await SecureStore.getUser());
+  }
   final double _height = Dimensions.pageViewContainer;
-
   @override
   void initState() {
     super.initState();
+    currentUser = SecureStore.getUser();
 
     pageController.addListener(
       () {
@@ -82,264 +88,276 @@ class _MainUserPageState extends State<MainUserPage> {
 
     return Scaffold(
       // drawer: Drawer(),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Row(
-              children: [
-                Icon(Icons.location_on),
-                SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField2(
-                      style: TextStyle(color: Colors.white),
-                      dropdownElevation: 1,
-                      dropdownMaxHeight: 200,
-                      dropdownDecoration:
-                          BoxDecoration(color: AppColors.mainBlue),
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
+      body: FutureBuilder<User>(
+        future:currentUser,
+        builder: (context,snapshot) {
+          if(snapshot.hasData){
+            print("Image Value is: ${snapshot.data!.image}");
+            print("Type of image is: ${snapshot.data!.image.runtimeType}");
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  title: Row(
+                    children: [
+                      Icon(Icons.location_on),
+                      SizedBox(
+                        width: 10,
                       ),
-                      hint: LargeText(
-                        text: 'Location',
-                        color: Colors.white,
-                      ),
-                      iconEnabledColor: Colors.white,
-                      items: locations
-                          .map(
-                            (location) => DropdownMenuItem(
-                              value: location,
-                              child: LargeText(
-                                text: location,
-                                color: Colors.white,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField2(
+                            style: TextStyle(color: Colors.white),
+                            dropdownElevation: 1,
+                            dropdownMaxHeight: 200,
+                            dropdownDecoration:
+                            BoxDecoration(color: AppColors.mainBlue),
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                             ),
-                          )
-                          .toList(),
-                      value: selectedLocation,
-                      onChanged: (location) {
-                        setState(() {
-                          selectedLocation = location as String;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            pinned: true,
-            floating: true,
-            titleSpacing: 15,
-            toolbarHeight: 55,
-            collapsedHeight: 60,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15.0, top: 5),
-                child: CircleAvatar(
-                    backgroundColor: Colors.white54,
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/images/profile.jpg')),
-              )
-              // IconButton(
-              //   onPressed: () {
-              //     showSearch(
-              //       context: context,
-              //       delegate: CustomSearchDelegate(),
-              //     );
-              //   },
-              //   icon: Icon(Icons.search),
-              // ),
-            ],
-            backgroundColor: AppColors.mainGreen,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 80),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          focusColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 0, style: BorderStyle.none),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search for Fruits, Vegetable, Livestock',
-                          fillColor: Colors.white,
-                          filled: true),
-                      readOnly: true,
-                      onTap: () {
-                        showSearch(
-                          context: context,
-                          delegate: CustomSearchDelegate(),
-                        );
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            expandedHeight: 170,
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.only(
-            //     bottomRight: Radius.circular(10),
-            //     bottomLeft: Radius.circular(10),
-            //   ),
-            // ),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: categories.map(
-                      (Map<String, String> e) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(7),
-                              clipBehavior: Clip.hardEdge,
-                              width: 75,
-                              height: 75,
-                              decoration: BoxDecoration(
-                                color: AppColors.mainGreen.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(37.5),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-
-                                child:Placeholder()
-                                // child: Image.asset(
-                                //   e['categoryImg']!,
-                                //   fit: BoxFit.cover,
-                                // ),
-                              ),
+                            hint: LargeText(
+                              text: 'Location',
+                              color: Colors.white,
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            SmallText(
-                              text: e['categoryName']!,
+                            iconEnabledColor: Colors.white,
+                            items: locations
+                                .map(
+                                  (location) => DropdownMenuItem(
+                                value: location,
+                                child: LargeText(
+                                  text: location,
+                                  color: Colors.white,
+                                ),
+                              ),
                             )
-                          ],
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          LargeText(
-                            text: 'In Season',
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 240,
-                      child: PageView.builder(
-                        padEnds: false,
-                        controller: pageController,
-                        itemCount: 3,
-                        itemBuilder: (BuildContext context, position) {
-                          return _buildPageItem(position);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    DotsIndicator(
-                      dotsCount: 3,
-                      position: _currPageValue,
-                      decorator: DotsDecorator(
-                        color: Colors.black12, // Inactive
-                        size: const Size.square(9.0),
-                        activeSize: const Size(18.0, 9.0),
-                        activeColor: AppColors.mainBlue,
-                        activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          LargeText(
-                            text: 'Nearby Farmers',
-                            size: 17,
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return FarmerDetails();
+                                .toList(),
+                            value: selectedLocation,
+                            onChanged: (location) {
+                              setState(() {
+                                selectedLocation = location as String;
+                              });
                             },
                           ),
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.width10),
-                        height: 200,
-                        width: double.maxFinite,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: imageUrls.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  right: Dimensions.width15,
-                                  top: Dimensions.height10),
-                              width: 130,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.height20),
-                                image: DecorationImage(
-                                    image: NetworkImage(imageUrls[index]),
-                                    fit: BoxFit.cover),
-                              ),
-                            );
-                          },
                         ),
                       ),
+                    ],
+                  ),
+                  pinned: true,
+                  floating: true,
+                  titleSpacing: 15,
+                  toolbarHeight: 55,
+                  collapsedHeight: 60,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0, top: 5),
+                      child: CircleAvatar(
+                          backgroundColor: Colors.white54,
+                          radius: 30,
+                          backgroundImage: setProfileImage(snapshot.data!.image)
                     ),
+                    )
+                    // IconButton(
+                    //   onPressed: () {
+                    //     showSearch(
+                    //       context: context,
+                    //       delegate: CustomSearchDelegate(),
+                    //     );
+                    //   },
+                    //   icon: Icon(Icons.search),
+                    // ),
                   ],
+                  backgroundColor: AppColors.mainGreen,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 80),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          child: TextField(
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                focusColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(width: 0, style: BorderStyle.none),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                prefixIcon: Icon(Icons.search),
+                                hintText: 'Search for Fruits, Vegetable, Livestock',
+                                fillColor: Colors.white,
+                                filled: true),
+                            readOnly: true,
+                            onTap: () {
+                              showSearch(
+                                context: context,
+                                delegate: CustomSearchDelegate(),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  expandedHeight: 170,
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.only(
+                  //     bottomRight: Radius.circular(10),
+                  //     bottomLeft: Radius.circular(10),
+                  //   ),
+                  // ),
                 ),
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: categories.map(
+                                (Map<String, String> e) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(7),
+                                    clipBehavior: Clip.hardEdge,
+                                    width: 75,
+                                    height: 75,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.mainGreen.withOpacity(0.4),
+                                      borderRadius: BorderRadius.circular(37.5),
+                                    ),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(30),
+
+                                        child:Placeholder()
+                                      // child: Image.asset(
+                                      //   e['categoryImg']!,
+                                      //   fit: BoxFit.cover,
+                                      // ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  SmallText(
+                                    text: e['categoryName']!,
+                                  )
+                                ],
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                LargeText(
+                                  text: 'In Season',
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 240,
+                            child: PageView.builder(
+                              padEnds: false,
+                              controller: pageController,
+                              itemCount: 3,
+                              itemBuilder: (BuildContext context, position) {
+                                return _buildPageItem(position);
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          DotsIndicator(
+                            dotsCount: 3,
+                            position: _currPageValue,
+                            decorator: DotsDecorator(
+                              color: Colors.black12, // Inactive
+                              size: const Size.square(9.0),
+                              activeSize: const Size(18.0, 9.0),
+                              activeColor: AppColors.mainBlue,
+                              activeShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                LargeText(
+                                  text: 'Nearby Farmers',
+                                  size: 17,
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return FarmerDetails();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.width10),
+                              height: 200,
+                              width: double.maxFinite,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: imageUrls.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        right: Dimensions.width15,
+                                        top: Dimensions.height10),
+                                    width: 130,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(Dimensions.height20),
+                                      image: DecorationImage(
+                                          image: NetworkImage(imageUrls[index]),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
-            ),
-          )
-        ],
-      ),
+            );
+          }else{
+            return Center(child:CircularProgressIndicator());
+          }
+        }
+      )
     );
   }
 
