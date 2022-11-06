@@ -20,7 +20,11 @@ class User {
       first_name: json["first_name"],
       last_name: json["last_name"],
       email:json["email"],
-      address: json["address"],
+      address: json["address"] ?? {
+        "city": "",
+        "street": "",
+        "parish": ""
+      },
       image: json["image"] ?? "",
       isSuperAdmin: json["isSuperAdmin"] ?? false,
       phone: json["phone"] ?? "",
