@@ -47,3 +47,17 @@ class GlobalFunctions {
         });
   }
 }
+
+
+ImageProvider useAssetIfImageNull({String assetUri= "" , String? imgPath}){
+  print(imgPath);
+  if(imgPath == "" || imgPath == null){
+    return AssetImage(assetUri);
+  }else{
+    return NetworkImage(imgPath);
+  }
+}
+
+ImageProvider setProfileImage(String? uri){
+  return useAssetIfImageNull(assetUri:"assets/images/defaultProfile.png", imgPath: uri);
+}
