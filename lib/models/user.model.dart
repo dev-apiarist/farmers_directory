@@ -1,5 +1,6 @@
 
 class User {
+  String? id = "";
   String? first_name = "";
   String? last_name = "";
   String? image = "";
@@ -13,10 +14,11 @@ class User {
   bool? isSuperAdmin = false;
   String? password = "";
 
-  User({this.first_name, this.last_name, this.email, required this.address,this.image, this.isSuperAdmin, this.phone });
+  User({this.id,this.first_name, this.last_name, this.email, required this.address,this.image, this.isSuperAdmin, this.phone });
 
   factory User.fromJson(Map<String, dynamic> json){
     return User(
+      id: json["_id"],
       first_name: json["first_name"],
       last_name: json["last_name"],
       email:json["email"],
