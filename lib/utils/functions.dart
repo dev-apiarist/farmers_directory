@@ -58,6 +58,10 @@ ImageProvider useAssetIfImageNull({String assetUri= "" , String? imgPath}){
   }
 }
 
+ImageProvider setProduceImage(String? uri){
+  return useAssetIfImageNull(assetUri: "assets/images/logo.png", imgPath: uri)
+}
+
 ImageProvider setProfileImage(String? uri){
   return useAssetIfImageNull(assetUri:"assets/images/defaultProfile.png", imgPath: uri);
 }
