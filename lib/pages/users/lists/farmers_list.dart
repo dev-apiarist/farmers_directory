@@ -17,7 +17,7 @@ class FarmersList extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return FarmerDetails();
+          return FarmerDetails(farmer: farmer);
         }));
       },
       isThreeLine: true,
