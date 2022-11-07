@@ -11,6 +11,7 @@ class Farmer {
   final String phone;
   final String id_number;
   final String password;
+  List<String> products = [];
 
   Farmer({
     this.id = "",
@@ -24,7 +25,7 @@ class Farmer {
     this.id_number="",
     this.phone="",
     this.socials=const{},
-    this.password = ""
+    this.password = "", required products
   });
 
   factory Farmer.fromJson(Map<String, dynamic> json){
@@ -40,6 +41,7 @@ class Farmer {
       phone: json["phone"],
       socials: json["socials"] ?? {"instagram": "", "website":"", "facebook": ""},
       address: json["address"] ?? {"street": "", "city":"", "parish": ""},
+      products: json["products"]
     );
   }
 
@@ -56,6 +58,7 @@ class Farmer {
       "socials": this.socials,
       "address": this.address,
       "password": this.password,
+      "products": this.products,
     };
   }
 }
