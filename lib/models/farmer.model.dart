@@ -1,3 +1,5 @@
+import 'package:farmers_directory/models/product.model.dart';
+
 class Farmer {
   final String id;
   final String fname;
@@ -11,7 +13,7 @@ class Farmer {
   final String phone;
   final String id_number;
   final String password;
-  List<String> products = [];
+  List<Product> products = [];
 
   Farmer({
     this.id = "",
