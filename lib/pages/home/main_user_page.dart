@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:farmers_directory/models/category.model.dart';
 import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
+import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/colors.dart';
 import 'package:farmers_directory/utils/functions.dart';
@@ -11,6 +15,8 @@ import 'package:farmers_directory/widgets/produce.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import '../../models/farmer.model.dart';
+import '../../models/product.model.dart';
 import '../../models/user.model.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/lg_text.dart';
@@ -28,13 +34,54 @@ class _MainUserPageState extends State<MainUserPage> {
   late Future <User> currentUser;
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
-  getUser() async{
-    print(await SecureStore.getUser());
+  List<Category> categories = [];
+  List<Farmer> farmers = [];
+  List<Product> products = [];
+  List<Farmer> nearbyFarmers = [];
+
+
+  getFarmers() async{
+    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/farmers"));
+    List farmersList = response["data"];
+    setState((){
+      farmers = farmersList.map((farmer){
+        return Farmer.fromJson(farmer);
+      }).toList();
+    });
   }
+  getProducts() async{
+    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/products"));
+    List productsList = response["data"];
+    setState((){
+      products = productsList.map((product){
+        return Product.fromJson(product);
+      }).toList();
+    });
+  }
+  getCategories() async{
+    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/categories"));
+    List categoryList = response["data"];
+    setState((){
+      categories = categoryList.map((category){
+        return Category.fromJson(category);
+      }).toList();
+    });
+  }
+  getData() async{
+      try{
+         getFarmers();
+         getCategories();
+         getProducts();
+      }catch(error){
+          print(error);
+      }
+  }
+
   final double _height = Dimensions.pageViewContainer;
   @override
   void initState() {
     super.initState();
+    getData();
     currentUser = SecureStore.getUser();
 
     pageController.addListener(
@@ -56,24 +103,6 @@ class _MainUserPageState extends State<MainUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> imageUrls = [
-      'https://religionnews.com/wp-content/uploads/2021/08/Busisiwe-Mgangxela-seed-saver-and-agroecologist-from-the-Eastern-Cape-scaled-1.jpeg',
-      'https://pbs.twimg.com/media/DYQsObjXUAID31O.jpg',
-      'https://i2.wp.com/www.largeup.com/wp-content/uploads/2017/03/birdheye-view-all-peoples-medicine-38-b.jpg?fit=1200%2C800&ssl=1&w=640'
-    ];
-
-    final List<Map<String, String>> categories = [
-      {'categoryName': 'Fruits', "categoryImg": "assets/images/fruits.png"},
-      {
-        'categoryName': 'Vegetables',
-        "categoryImg": "assets/images/vegetables.png"
-      },
-      {
-        'categoryName': 'Livestock',
-        "categoryImg": "assets/images/livestock.png"
-      },
-    ];
-
     List<String> locations = [
       'Clarendon',
       'Kingston',
@@ -92,8 +121,8 @@ class _MainUserPageState extends State<MainUserPage> {
         future:currentUser,
         builder: (context,snapshot) {
           if(snapshot.hasData){
-            print("Image Value is: ${snapshot.data!.image}");
-            print("Type of image is: ${snapshot.data!.image.runtimeType}");
+            nearbyFarmers = farmers.where((farmer) => farmer.address["parish"] == snapshot.data!.address["parish"]).toList();
+            print(nearbyFarmers);
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -221,7 +250,7 @@ class _MainUserPageState extends State<MainUserPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: categories.map(
-                                (Map<String, String> e) {
+                                (Category c) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
@@ -237,18 +266,14 @@ class _MainUserPageState extends State<MainUserPage> {
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(30),
 
-                                        child:Placeholder()
-                                      // child: Image.asset(
-                                      //   e['categoryImg']!,
-                                      //   fit: BoxFit.cover,
-                                      // ),
+                                        child:Image.network(c.category_img),
                                     ),
                                   ),
                                   SizedBox(
                                     height: 10,
                                   ),
                                   SmallText(
-                                    text: e['categoryName']!,
+                                    text: c.category_name,
                                   )
                                 ],
                               );
@@ -275,9 +300,10 @@ class _MainUserPageState extends State<MainUserPage> {
                             child: PageView.builder(
                               padEnds: false,
                               controller: pageController,
-                              itemCount: 3,
+                              itemCount: (products.length >= 3)? 3 : products.length,
                               itemBuilder: (BuildContext context, position) {
-                                return _buildPageItem(position);
+                                print(position);
+                                return _buildPageItem(position, products[position]);
                               },
                             ),
                           ),
@@ -309,41 +335,44 @@ class _MainUserPageState extends State<MainUserPage> {
                               ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return FarmerDetails();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Container(
+                          Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: Dimensions.width10),
+                              horizontal: Dimensions.width10),
                               height: 200,
                               width: double.maxFinite,
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: imageUrls.length,
+                                itemCount: (nearbyFarmers.length >= 5)? 5 : nearbyFarmers.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.only(
-                                        right: Dimensions.width15,
-                                        top: Dimensions.height10),
-                                    width: 130,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(Dimensions.height20),
-                                      image: DecorationImage(
-                                          image: NetworkImage(imageUrls[index]),
-                                          fit: BoxFit.cover),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return FarmerDetails(
+                                                farmer: nearbyFarmers[index]);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          right: Dimensions.width15,
+                                          top: Dimensions.height10),
+                                      width: 130,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            Dimensions.height20),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                nearbyFarmers[index].image),
+                                            fit: BoxFit.cover),
+                                      ),
                                     ),
                                   );
-                                },
-                              ),
+                                }
                             ),
                           ),
                         ],
@@ -378,7 +407,8 @@ class _MainUserPageState extends State<MainUserPage> {
     // 'Hanover',
   ];
 //pageview slider
-  Widget _buildPageItem(int index) {
+  Widget _buildPageItem( int index, Product product) {
+
     Matrix4 matrix = Matrix4.identity();
 
     // if current page
@@ -441,10 +471,7 @@ class _MainUserPageState extends State<MainUserPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.35,
                 height: double.maxFinite,
-                child: Image.network(
-                  'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child: Image(image: setProduceImage(product.prod_img)),
               ),
               Expanded(
                 child: Container(
@@ -455,7 +482,7 @@ class _MainUserPageState extends State<MainUserPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LargeText(
-                        text: 'Ackee',
+                        text: '${product.prod_name}',
                         size: Dimensions.height20,
                       ),
                       SizedBox(
@@ -493,7 +520,7 @@ class _MainUserPageState extends State<MainUserPage> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
-                                return ProduceDetails();
+                                return ProduceDetails(product: product);
                               }),
                             );
                           },
