@@ -122,7 +122,6 @@ class _MainUserPageState extends State<MainUserPage> {
         builder: (context,snapshot) {
           if(snapshot.hasData){
             nearbyFarmers = farmers.where((farmer) => farmer.address["parish"] == snapshot.data!.address["parish"]).toList();
-            print(nearbyFarmers);
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -302,7 +301,6 @@ class _MainUserPageState extends State<MainUserPage> {
                               controller: pageController,
                               itemCount: (products.length >= 3)? 3 : products.length,
                               itemBuilder: (BuildContext context, position) {
-                                print(position);
                                 return _buildPageItem(position, products[position]);
                               },
                             ),

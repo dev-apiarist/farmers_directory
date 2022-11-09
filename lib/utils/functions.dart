@@ -50,7 +50,6 @@ class GlobalFunctions {
 
 
 ImageProvider useAssetIfImageNull({String assetUri= "" , String? imgPath}){
-  print(imgPath);
   if(imgPath == "" || imgPath == null){
     return AssetImage(assetUri);
   }else{

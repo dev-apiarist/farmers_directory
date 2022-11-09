@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            (error == "null" || error == null) ? Text("") : Text(error),
+            (error == "null" || error == null) ? SizedBox.shrink() : Text(error),
             TextFormField(
               controller: emailController,
               validator: ((value) {
@@ -112,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
     return FutureBuilder(
       future: authenticateUser,
       builder: (context, snapshot) {
-        print(snapshot);
         if(snapshot.connectionState == ConnectionState.waiting){
           return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
@@ -127,27 +126,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Widget showError(state, updateState, submitFunc){
+Widget showError(message,state, updateState, submitFunc, context){
 
   return Center(
       child: AlertDialog(
-        title: Text("Signup Failed!"),
+        title: Text("An Error occured"),
         icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
-        content: Text(state["message"].toString()),
+        content: Text(message.toString()),
         shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(10.0))),
 
         actions: [
           TextButton(onPressed: (){
             updateState((){
-              state["hasError"] = false;
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginPage()));
             });
           }, child: Text("Cancel")),
 
           TextButton(onPressed: (){
-            submitFunc();
             updateState((){
-              state["hasError"] = false;
-              state["pending"] = true;
+              state = submitFunc();
             });
           }, child: Text("Retry")),
         ],
