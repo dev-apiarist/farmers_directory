@@ -1,14 +1,18 @@
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/utils/dimensions.dart';
+import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class FarmerDetails extends StatelessWidget {
-  const FarmerDetails({super.key});
+import '../../../models/farmer.model.dart';
 
+class FarmerDetails extends StatelessWidget {
+  const FarmerDetails({super.key, required this.farmer});
+
+  final Farmer farmer;
   @override
   Widget build(BuildContext context) {
     String contactNumber = '+1 876 286-8246';
@@ -20,7 +24,7 @@ class FarmerDetails extends StatelessWidget {
         slivers: [
           SliverPersistentHeader(
             delegate:
-                CustomSliverAppBar(expandedHeight: Dimensions.expandedHeight),
+                CustomSliverAppBar(expandedHeight: Dimensions.expandedHeight, profile_img: farmer.image),
             pinned: true,
             floating: true,
           ),
@@ -35,7 +39,7 @@ class FarmerDetails extends StatelessWidget {
                   Align(
                     alignment: AlignmentDirectional.center,
                     child: LargeText(
-                      text: 'Debra Passie',
+                      text: '${farmer.fname} ${farmer.lname}',
                       size: 30,
                     ),
                   ),
@@ -49,7 +53,7 @@ class FarmerDetails extends StatelessWidget {
                         children: [
                           LeadingIconText(
                             iconSize: Dimensions.height20,
-                            text: 'Organic Cultivator',
+                            text: '${farmer.farmer_type} Cultivator',
                             icon: Icons.work_outline,
                           )
                         ],
@@ -81,13 +85,13 @@ class FarmerDetails extends StatelessWidget {
                       Expanded(
                         child: Wrap(
                           spacing: 5,
-                          children: List.generate(5, (index) {
+                          children: List.generate(farmer.products.length, (index) {
                             return GestureDetector(
                               onTap: (() {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return ProduceDetails();
+                                      return ProduceDetails(product: farmer.products[index]);
                                     },
                                   ),
                                 );
@@ -96,7 +100,7 @@ class FarmerDetails extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 side: BorderSide(color: Colors.black54),
                                 label: SmallText(
-                                  text: 'Potato',
+                                  text: '${farmer.products[index]}',
                                 ),
                               ),
                             );
@@ -114,7 +118,7 @@ class FarmerDetails extends StatelessWidget {
                   ),
                   SmallText(
                     text:
-                        'Expert cultivator. Ensuring we Grow, smart. Eat smart. Supplying a better Jamaica.',
+                        '${farmer.description}',
                   ),
                   SizedBox(
                     height: 30,
@@ -122,7 +126,7 @@ class FarmerDetails extends StatelessWidget {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: (() async {
-                      String url = 'tel:$contactNumber';
+                      String url = 'tel:${farmer.phone}';
                       final parseUrl = Uri.parse(url);
                       if (await canLaunchUrl(parseUrl)) {
                         await launchUrl(
@@ -146,7 +150,7 @@ class FarmerDetails extends StatelessWidget {
                       String subject = '';
                       String body = '';
                       String emailUrl =
-                          'mailto:$email?subject=$subject=$subject&body=$body';
+                          'mailto:${farmer.email}?subject=$subject=$subject&body=$body';
                       final parseUrl = Uri.parse(emailUrl);
                       if (await canLaunchUrl(parseUrl)) {
                         await launchUrl(
@@ -173,7 +177,9 @@ class FarmerDetails extends StatelessWidget {
 
 class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  CustomSliverAppBar({required this.expandedHeight});
+  final String profile_img;
+  CustomSliverAppBar({required this.expandedHeight, required this.profile_img});
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -226,8 +232,7 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
                 radius: 75,
                 child: CircleAvatar(
                   radius: 65,
-                  backgroundImage:
-                      AssetImage('assets/images/user_profile.jpeg'),
+                  backgroundImage:setProfileImage(profile_img),
                 ),
               ),
             ),

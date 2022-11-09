@@ -47,3 +47,20 @@ class GlobalFunctions {
         });
   }
 }
+
+
+ImageProvider useAssetIfImageNull({String assetUri= "" , String? imgPath}){
+  if(imgPath == "" || imgPath == null){
+    return AssetImage(assetUri);
+  }else{
+    return NetworkImage(imgPath);
+  }
+}
+
+ImageProvider setProduceImage(String? uri){
+  return useAssetIfImageNull(assetUri: "assets/images/logo.png", imgPath: uri);
+}
+
+ImageProvider setProfileImage(String? uri){
+  return useAssetIfImageNull(assetUri:"assets/images/defaultProfile.png", imgPath: uri);
+}
