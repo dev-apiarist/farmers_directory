@@ -8,8 +8,8 @@ class Farmer {
   final String image;
   final String email;
   final String description;
-  final Map<String, String> address;
-  final Map<String, String> socials;
+  final Map<String, dynamic> address;
+  final Map<String, dynamic> socials;
   final String phone;
   final String id_number;
   final String password;
