@@ -5,6 +5,7 @@ import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
 import 'package:farmers_directory/pages/users/lists/produce_list.dart';
 import 'package:farmers_directory/utils/functions.dart';
+import 'package:farmers_directory/widgets/category_buttons.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 
@@ -103,6 +104,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                     ),
                   ),
                   Expanded(
+
                     child: SizedBox(
                       width: double.maxFinite,
                       child: TabBarView(
@@ -122,6 +124,60 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LargeText(text: 'In Season'),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ProduceDetails();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 200,
+                              width: double.maxFinite,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: inSeasonImages.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                        right: Dimensions.width15,
+                                        top: Dimensions.height10),
+                                    width: 160,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              inSeasonImages[index]),
+                                          fit: BoxFit.cover),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CategoryToggle(),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: (() =>
+                                    GlobalFunctions.botomSheet(context)),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+
                                   children: [
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,

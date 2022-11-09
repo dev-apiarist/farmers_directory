@@ -19,6 +19,7 @@ import '../../models/farmer.model.dart';
 import '../../models/product.model.dart';
 import '../../models/user.model.dart';
 import '../../utils/dimensions.dart';
+import '../../utils/search.dart';
 import '../../widgets/lg_text.dart';
 import '../../widgets/sm_text.dart';
 
@@ -116,6 +117,7 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
+
       // drawer: Drawer(),
       body: FutureBuilder<User>(
         future:currentUser,
@@ -130,6 +132,34 @@ class _MainUserPageState extends State<MainUserPage> {
                       Icon(Icons.location_on),
                       SizedBox(
                         width: 10,
+
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Row(
+              children: [
+                Icon(Icons.location_on),
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField2(
+                      style: TextStyle(color: Colors.white),
+                      dropdownElevation: 1,
+                      dropdownMaxHeight: 200,
+                      dropdownDecoration:
+                          BoxDecoration(color: AppColors.mainBlue),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                      hint: LargeText(
+                        text: 'Location',
+                        color: Colors.white,
+
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.3,
@@ -145,6 +175,7 @@ class _MainUserPageState extends State<MainUserPage> {
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
                             ),
+
                             hint: LargeText(
                               text: 'Location',
                               color: Colors.white,
@@ -157,6 +188,116 @@ class _MainUserPageState extends State<MainUserPage> {
                                 child: LargeText(
                                   text: location,
                                   color: Colors.white,
+
+                          )
+                          .toList(),
+                      value: selectedLocation,
+                      onChanged: (location) {
+                        setState(() {
+                          selectedLocation = location as String;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            pinned: true,
+            floating: true,
+            titleSpacing: 15,
+            toolbarHeight: 55,
+            collapsedHeight: 60,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0, top: 5),
+                child: CircleAvatar(
+                    backgroundColor: Colors.white54,
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/profile.jpg')),
+              )
+              // IconButton(
+              //   onPressed: () {
+              //     showSearch(
+              //       context: context,
+              //       delegate: CustomSearchDelegate(),
+              //     );
+              //   },
+              //   icon: Icon(Icons.search),
+              // ),
+            ],
+            backgroundColor: AppColors.mainGreen,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 80),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
+                          focusColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 0, style: BorderStyle.none),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search for Fruits, Vegetable, Livestock',
+                          fillColor: Colors.white,
+                          filled: true),
+                      readOnly: true,
+                      onTap: () {
+                        showSearch(
+                          context: context,
+                          delegate:
+                              CustomSearchDelegate(searchTerms: locations),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            expandedHeight: 170,
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.only(
+            //     bottomRight: Radius.circular(10),
+            //     bottomLeft: Radius.circular(10),
+            //   ),
+            // ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: categories.map(
+                      (Map<String, String> e) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(7),
+                              clipBehavior: Clip.hardEdge,
+                              width: 75,
+                              height: 75,
+                              decoration: BoxDecoration(
+                                color: AppColors.mainGreen.withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(37.5),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Image.asset(
+                                  e['categoryImg']!,
+                                  fit: BoxFit.cover,
+
                                 ),
                               ),
                             )
@@ -168,7 +309,22 @@ class _MainUserPageState extends State<MainUserPage> {
                               });
                             },
                           ),
+
                         ),
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 300,
+                      child: PageView.builder(
+                        padEnds: false,
+                        controller: pageController,
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, position) {
+                          return _buildPageItem(position);
+                        },
+
                       ),
                     ],
                   ),
@@ -393,10 +549,10 @@ class _MainUserPageState extends State<MainUserPage> {
     'Kingston',
     'St. Ann',
     'St. James',
-    // 'Portland',
-    // 'St. Mary',
-    // 'St. Catherine',
-    // 'Trelawny',
+    'Portland',
+    'St. Mary',
+    'St. Catherine',
+    'Trelawny',
     // 'Westmoreland',
     // 'St.Thomas',
     // 'Hanover',
@@ -467,7 +623,7 @@ class _MainUserPageState extends State<MainUserPage> {
                 color: Colors.white),
             child: Row(children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: MediaQuery.of(context).size.width * 0.3,
                 height: double.maxFinite,
                 child: Image(image: setProduceImage(product.prod_img)),
               ),
@@ -537,74 +693,5 @@ class _MainUserPageState extends State<MainUserPage> {
         ],
       ),
     );
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = [
-    'Apples',
-    'Banana',
-    'Yam',
-    'Potato',
-    'Tomato',
-    'Lychee',
-    'Orange',
-  ];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: Icon(Icons.clear),
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          close(context, null);
-        },
-        icon: Icon(Icons.arrow_back));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
   }
 }

@@ -14,7 +14,7 @@ class FarmerProduce extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           childAspectRatio: 0.9 / .3,
           crossAxisCount: 4,
-          children: produce.map((String value) {
+          children: farmerProduce.map((String value) {
             return Row(
               children: [
                 Icon(
@@ -34,7 +34,7 @@ class FarmerProduce extends StatelessWidget {
   }
 }
 
-List<String> produce = [
+List<String> farmerProduce = [
   'Weed',
   'Tomato',
   'Pumpkin',

@@ -5,7 +5,11 @@ class FarmerProduceRepo extends GetxService {
   final ApiClient apiClient;
 
   FarmerProduceRepo({required this.apiClient});
+
+
   Future<Response> getFarmerProduceList() async {
-    return await apiClient.getData('api/farmers/produce/list');
+    return await apiClient.getData('api/produce');
   }
+
+  
 }

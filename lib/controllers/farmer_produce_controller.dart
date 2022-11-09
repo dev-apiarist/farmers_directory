@@ -5,7 +5,7 @@ class FarmerProduceController extends GetxController {
   final FarmerProduceRepo farmerProduceRepo;
 
   FarmerProduceController({required this.farmerProduceRepo});
-  
+
 //access with Get for Ui
   List<dynamic> get farmerProduceList => _farmerProduceList;
 
@@ -18,7 +18,7 @@ class FarmerProduceController extends GetxController {
       //initialize as null to avoid duplicate
       _farmerProduceList = [];
       //  _farmerProduceList.addAll();
-      update();
+      update(); //similar to setState for ui
     } else {}
   }
 }
