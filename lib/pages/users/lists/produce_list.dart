@@ -3,9 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class ProduceList extends StatelessWidget {
-  const ProduceList({super.key});
+import '../../../models/category.model.dart';
+import '../../../models/product.model.dart';
 
+class ProduceList extends StatelessWidget {
+  ProduceList({super.key ,this.category="", required this.productList});
+
+  final String category;
+  final List<Product> productList;
+  late List<Product> filteredProduct;
+
+
+  @override
+  initState(){
+    filteredProduct = productList.where((product){
+      return product.category == category;
+    }).toList();
+  }
   @override
   Widget build(BuildContext context) {
     return ListView.separated(

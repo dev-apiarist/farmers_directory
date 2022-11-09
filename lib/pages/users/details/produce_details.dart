@@ -25,12 +25,20 @@ class ProduceDetails extends StatefulWidget {
 class _ProduceDetailsState extends State<ProduceDetails> {
 
   late Future<List<Farmer>> farmers;
-  getFarmers() async{
+  Future<List<Farmer>> getFarmers() async{
     Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint: "/farmers", queryParams:"product=${widget.product.id}" ));
+    print(response);
     List farmers = response["data"];
     return farmers.map((farmer){
       return Farmer.fromJson(farmer);
     }).toList();
+
+  }
+
+  @override
+  void initState() {
+    farmers = getFarmers();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -93,6 +101,7 @@ class _ProduceDetailsState extends State<ProduceDetails> {
               ],
             );
           }else{
+            print(snapshot.error);
             return Center(child: Text('${snapshot.error}'));
           }
         },
