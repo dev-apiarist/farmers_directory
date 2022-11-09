@@ -1,4 +1,5 @@
 import 'package:farmers_directory/pages/auth/login_page.dart';
+import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -38,7 +39,7 @@ class UserProfile extends StatelessWidget {
         children: [
           Container(
             width: double.maxFinite,
-            margin: EdgeInsets.only(top: 40),
+            margin: EdgeInsets.only(top: Dimensions.height40),
             child: Column(
               children: [
                 CircleAvatar(
@@ -47,14 +48,14 @@ class UserProfile extends StatelessWidget {
                   backgroundColor: Colors.white60,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: Dimensions.height10,
                 ),
                 LargeText(
                   text: "John Brown",
                   size: 20,
                 ),
                 SizedBox(
-                  height: 10,
+                  height: Dimensions.height10,
                 ),
                 LeadingIconText(
                   text: 'Kingston',
@@ -66,13 +67,13 @@ class UserProfile extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: Dimensions.width40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   LargeText(text: 'Produce'),
                   SizedBox(
-                    height: 5,
+                    height: Dimensions.height5,
                   ),
                   Row(
                     children: [
@@ -86,7 +87,7 @@ class UserProfile extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: Dimensions.height10,
                   ),
                   Row(
                     children: [
@@ -100,26 +101,26 @@ class UserProfile extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   LargeText(text: 'About'),
                   SizedBox(
-                    height: 10,
+                    height: Dimensions.height10,
                   ),
                   SmallText(
                       text:
                           'Expert farmer. Ensuring we Grow, smart, Eat smart. Supplying a better jamaica'),
                   SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   LeadingIconText(text: '+1 876 567-7662', icon: Icons.call),
                   SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   LeadingIconText(
                       text: 'rchydroponics11@gmail.com', icon: Icons.email),
                   SizedBox(
-                    height: 40,
+                    height: Dimensions.height40,
                   ),
                   Align(
                     alignment: Alignment.center,

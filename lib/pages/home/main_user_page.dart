@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../utils/dimensions.dart';
+import '../../utils/search.dart';
 import '../../widgets/lg_text.dart';
 import '../../widgets/sm_text.dart';
 
@@ -81,7 +82,6 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
-      // drawer: Drawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -184,7 +184,8 @@ class _MainUserPageState extends State<MainUserPage> {
                       onTap: () {
                         showSearch(
                           context: context,
-                          delegate: CustomSearchDelegate(),
+                          delegate:
+                              CustomSearchDelegate(searchTerms: locations),
                         );
                       },
                     ),
@@ -256,7 +257,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 240,
+                      height: 300,
                       child: PageView.builder(
                         padEnds: false,
                         controller: pageController,
@@ -346,10 +347,10 @@ class _MainUserPageState extends State<MainUserPage> {
     'Kingston',
     'St. Ann',
     'St. James',
-    // 'Portland',
-    // 'St. Mary',
-    // 'St. Catherine',
-    // 'Trelawny',
+    'Portland',
+    'St. Mary',
+    'St. Catherine',
+    'Trelawny',
     // 'Westmoreland',
     // 'St.Thomas',
     // 'Hanover',
@@ -419,7 +420,7 @@ class _MainUserPageState extends State<MainUserPage> {
                 color: Colors.white),
             child: Row(children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: MediaQuery.of(context).size.width * 0.3,
                 height: double.maxFinite,
                 child: Image.network(
                   'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
@@ -492,74 +493,5 @@ class _MainUserPageState extends State<MainUserPage> {
         ],
       ),
     );
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = [
-    'Apples',
-    'Banana',
-    'Yam',
-    'Potato',
-    'Tomato',
-    'Lychee',
-    'Orange',
-  ];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: Icon(Icons.clear),
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          close(context, null);
-        },
-        icon: Icon(Icons.arrow_back));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
-      }
-    }
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return ListTile(
-            title: Text(result),
-          );
-        });
   }
 }

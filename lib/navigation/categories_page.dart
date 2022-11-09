@@ -3,6 +3,7 @@ import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
 import 'package:farmers_directory/pages/users/lists/produce_list.dart';
 import 'package:farmers_directory/utils/functions.dart';
+import 'package:farmers_directory/widgets/category_buttons.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 
@@ -133,25 +134,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: AppColors.mainGreen),
-                                    onPressed: () {},
-                                    child: LargeText(
-                                      text: 'Fruits',
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () {},
-                                    child: LargeText(
-                                        text: 'Vegetables',
-                                        color: Colors.black54),
-                                  ),
-                                ],
-                              ),
+                              CategoryToggle(),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: (() =>
