@@ -44,6 +44,26 @@ class NetworkHandler {
 
   }
 
+  static Future <String> postMultipart(String endpoint, Map<String, String> body, List<Map<String, dynamic>> streams) async{
+    token = await getToken("jwt-auth");
+    http.MultipartRequest request = http.MultipartRequest("POST",buildUrl(segment: endpoint));
+    request.headers.addAll(_headers);
+    var multipartFileList = streams.map((element) {
+      File _file = File(element["data"].path);
+      return http.MultipartFile(element["field"], _file.readAsBytes().asStream(),_file.lengthSync(), filename: _file.path.split('/').last );
+    });
+    request.files.addAll(multipartFileList);
+    request.fields.addAll(body);
+
+    http.StreamedResponse response = await request.send();
+    var streamToString = await response.stream.bytesToString();
+    if(response.statusCode == 200 || response.statusCode == 201){
+      return streamToString;
+    }else{
+      throw Exception(jsonDecode(streamToString)["error"]);
+    }
+  }
+
   static Future<String> patch(String endpoint, var changes) async {
     token = await getToken("jwt-auth");
 
