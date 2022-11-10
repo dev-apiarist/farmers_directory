@@ -469,7 +469,7 @@ class _MainUserPageState extends State<MainUserPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.35,
                 height: double.maxFinite,
-                child: Image(image: setProduceImage(product.prod_img)),
+                child: Image(image: setProduceImage(product.prod_img), fit: BoxFit.cover,),
               ),
               Expanded(
                 child: Container(

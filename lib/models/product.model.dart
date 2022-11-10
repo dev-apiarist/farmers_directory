@@ -12,7 +12,6 @@ class Product{
   Product({this.prod_name = "", this.id="", this.prod_img="", this.category = "", this.inSeason = false});
 
   factory Product.fromJson(Map<String, dynamic> json){
-    print(json["inSeason"].runtimeType);
     return Product(
       prod_img: json["prod_img"],
       prod_name: json["prod_name"],
