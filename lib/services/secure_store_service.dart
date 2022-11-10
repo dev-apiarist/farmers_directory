@@ -21,17 +21,15 @@ class SecureStore{
 
   static Future<User> getUser() async{
     String? userData = await getToken("user");
-    print(userData);
     if(userData != "null" && userData != null){
       User user = User.fromJson(jsonDecode(userData));
-      print(user.first_name);
       return user;
     }
     throw Exception("No User Found");
   }
 
   static void readAll() async{
-    print(await _storage.readAll());
+    await _storage.readAll();
   }
 
   static logout() async {

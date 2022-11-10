@@ -135,7 +135,7 @@ class FarmerDetails extends StatelessWidget {
                       }
                     }),
                     child: LeadingIconText(
-                      text: contactNumber,
+                      text: farmer.phone,
                       icon: Icons.call_outlined,
                       iconSize: Dimensions.height20,
                       color: Colors.black87,
@@ -159,7 +159,7 @@ class FarmerDetails extends StatelessWidget {
                       }
                     }),
                     child: LeadingIconText(
-                      text: email,
+                      text: farmer.email,
                       color: Colors.black87,
                       icon: Icons.email_outlined,
                       iconSize: Dimensions.height20,

@@ -46,7 +46,10 @@ class _UserProfileState extends State<UserProfile> {
             onPressed: () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: ((context) => LoginPage()),
+                builder: (context) {
+                  SecureStore.logout();
+                  return LoginPage();
+                },
               ),
             ),
             icon: Icon(

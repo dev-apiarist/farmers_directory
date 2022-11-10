@@ -39,8 +39,6 @@ class NetworkHandler {
 
   static Future<String> get({String endpoint = "", String queryParams = ""}) async {
     token = await getToken("jwt-auth");
-    print(_headers);
-
     var response = await client.get(buildUrl(segment: endpoint, query: queryParams), headers: _headers);
     return _handleResponse(response);
 
