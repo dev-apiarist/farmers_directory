@@ -53,7 +53,7 @@ class FarmerDetails extends StatelessWidget {
                         children: [
                           LeadingIconText(
                             iconSize: Dimensions.height20,
-                            text: '${farmer.farmer_type} Cultivator',
+                            text: '${farmer.farmer_type}',
                             icon: Icons.work_outline,
                           )
                         ],
@@ -62,7 +62,7 @@ class FarmerDetails extends StatelessWidget {
                         children: [
                           LeadingIconText(
                             iconSize: Dimensions.height20,
-                            text: "Kingston",
+                            text: "${farmer.address["parish"]}",
                             icon: Icons.location_on_outlined,
                           )
                         ],

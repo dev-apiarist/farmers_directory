@@ -27,7 +27,6 @@ class _ProduceDetailsState extends State<ProduceDetails> {
   late Future<List<Farmer>> farmers;
   Future<List<Farmer>> getFarmers() async{
     Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint: "/farmers", queryParams:"product=${widget.product.id}" ));
-    print(response);
     List farmers = response["data"];
     return farmers.map((farmer){
       return Farmer.fromJson(farmer);
@@ -81,21 +80,19 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Expanded(
-                    child: Column(
-                      children: [
-                        ListView.separated(
-                          separatorBuilder: ((context, index) => Divider()),
-                          padding: EdgeInsets.only(top: Dimensions.height10),
-                          itemCount: snapshot.data!.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return FarmersList(farmer: snapshot.data![index]);
-                          },
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      ListView.separated(
+                        separatorBuilder: ((context, index) => Divider()),
+                        padding: EdgeInsets.only(top: Dimensions.height10),
+                        itemCount: snapshot.data!.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return FarmersList(farmer: snapshot.data![index]);
+                        },
+                      ),
+                    ],
                   ),
                 )
               ],
