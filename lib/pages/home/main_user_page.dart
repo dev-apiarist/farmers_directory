@@ -113,57 +113,56 @@ class _MainUserPageState extends State<MainUserPage> {
             ],
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              background: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: 15.0,
+              background: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 15.0,
+                        ),
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white54,
+                            radius: 30,
+                            backgroundImage:
+                                AssetImage('assets/images/profile.jpg')),
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          focusColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+
+                              // borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                          border: OutlineInputBorder(
+                            // borderSide:
+                            // BorderSide(width: 0, style: BorderStyle.none),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.white54,
-                              radius: 30,
-                              backgroundImage:
-                                  AssetImage('assets/images/profile.jpg')),
-                        )
-                      ],
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search ',
+                          fillColor: Colors.white,
+                          filled: true),
+                      readOnly: true,
+                      onTap: () {
+                        showSearch(
+                          context: context,
+                          delegate:
+                              CustomSearchDelegate(searchTerms: locations),
+                        );
+                      },
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20),
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            focusColor: Colors.white,
-                            focusedBorder: OutlineInputBorder(
-                                // borderSide: BorderSide(color: Colors.transparent),
-                                ),
-                            border: OutlineInputBorder(
-                              // borderSide:
-                              // BorderSide(width: 0, style: BorderStyle.none),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            prefixIcon: Icon(Icons.search),
-                            hintText: 'Search ',
-                            fillColor: Colors.white,
-                            filled: true),
-                        readOnly: true,
-                        onTap: () {
-                          showSearch(
-                            context: context,
-                            delegate:
-                                CustomSearchDelegate(searchTerms: locations),
-                          );
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
             expandedHeight: 150,
