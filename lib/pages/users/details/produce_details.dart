@@ -18,20 +18,40 @@ class ProduceDetails extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            backgroundColor: AppColors.mainGreen,
             floating: true,
             elevation: 0,
             pinned: true,
             expandedHeight: Dimensions.expandedHeight,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                'assets/images/apple.png',
-                fit: BoxFit.cover,
+              background: Stack(
+                children: [
+                  Positioned(
+                    top: 110,
+                    left: 80,
+                    child: CircleAvatar(
+                      radius: 200,
+                      backgroundColor: Colors.black26,
+                    ),
+                  ),
+                  Positioned(
+                      left: 80,
+                      top: 60,
+                      child: SizedBox(
+                        width: 300,
+                        height: 250,
+                        child: Image.asset(
+                          'assets/images/apple.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ))
+                ],
               ),
             ),
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(40),
+              preferredSize: Size.fromHeight(Dimensions.height40),
               child: Container(
-                height: 40,
+                height: Dimensions.height40,
                 width: double.maxFinite,
                 child: Center(
                   child: SmallText(

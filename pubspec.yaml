@@ -37,7 +37,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/images/logo.png
+    - assets/icons/logo.png
 
   fonts:
     - family: Pacifico

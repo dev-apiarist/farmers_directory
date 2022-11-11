@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/dimensions.dart';
+
 class LeadingIconText extends StatelessWidget {
   IconData icon;
   Color? color;
@@ -10,8 +12,8 @@ class LeadingIconText extends StatelessWidget {
       {super.key,
       required this.text,
       this.color,
-      this.textSize = 15,
-      this.iconSize = 13,
+      this.textSize = 0,
+      this.iconSize = 0,
       required this.icon});
 
   @override
@@ -21,15 +23,17 @@ class LeadingIconText extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: iconSize,
+          size: iconSize == 0 ? Dimensions.font14 - 1 : iconSize,
           color: color,
         ),
         SizedBox(
-          width: 7,
+          width: Dimensions.width5,
         ),
         Text(
           text,
-          style: TextStyle(color: color, fontSize: textSize),
+          style: TextStyle(
+              color: color,
+              fontSize: textSize == 0 ? Dimensions.font14 + 1 : textSize),
         ),
       ],
     );

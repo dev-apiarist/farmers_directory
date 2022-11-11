@@ -46,7 +46,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   children: [
                     RichText(
                       text: TextSpan(
-                        text: 'Get Connected'.toUpperCase(),
+                        text: 'Meet Local Farmers'.toUpperCase(),
                         style: TextStyle(
                             color: Colors.black87,
                             fontSize: 35,
@@ -54,7 +54,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         children: [
                           TextSpan(
                               text: '\nWith Real Farmers'.toUpperCase(),
-                              style: TextStyle(fontSize: 28)),
+                              style: TextStyle(fontSize: 20)),
                         ],
                       ),
                     ),

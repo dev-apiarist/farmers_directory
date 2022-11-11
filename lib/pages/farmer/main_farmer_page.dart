@@ -2,6 +2,7 @@ import 'package:farmers_directory/pages/farmer/lists/farmer_produce_list.dart';
 import 'package:farmers_directory/pages/users/lists/produce_list.dart';
 import 'package:farmers_directory/resources/produce.dart';
 import 'package:farmers_directory/utils/colors.dart';
+import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/category_buttons.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
@@ -93,7 +94,7 @@ class _MainFarmerPageState extends State<MainFarmerPage> {
                               children: [
                                 Icon(Icons.sort),
                                 SizedBox(
-                                  width: 10,
+                                  width: Dimensions.width10,
                                 ),
                                 SmallText(text: 'Sort by')
                               ],

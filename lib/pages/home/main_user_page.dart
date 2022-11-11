@@ -82,69 +82,25 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
+      backgroundColor: Colors.white,
+      drawer: Drawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Row(
-              children: [
-                Icon(Icons.location_on),
-                SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField2(
-                      style: TextStyle(color: Colors.white),
-                      dropdownElevation: 1,
-                      dropdownMaxHeight: 200,
-                      dropdownDecoration:
-                          BoxDecoration(color: AppColors.mainBlue),
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                      ),
-                      hint: LargeText(
-                        text: 'Location',
-                        color: Colors.white,
-                      ),
-                      iconEnabledColor: Colors.white,
-                      items: locations
-                          .map(
-                            (location) => DropdownMenuItem(
-                              value: location,
-                              child: LargeText(
-                                text: location,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      value: selectedLocation,
-                      onChanged: (location) {
-                        setState(() {
-                          selectedLocation = location as String;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            centerTitle: true,
+            title: SizedBox(
+                width: 60,
+                child: Image.asset(
+                  'assets/icons/logo.png',
+                  fit: BoxFit.cover,
+                )),
+            foregroundColor: Colors.black,
             pinned: true,
             floating: true,
             titleSpacing: 15,
-            toolbarHeight: 55,
-            collapsedHeight: 60,
+            toolbarHeight: 60,
+            collapsedHeight: 65,
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15.0, top: 5),
-                child: CircleAvatar(
-                    backgroundColor: Colors.white54,
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/images/profile.jpg')),
-              )
               // IconButton(
               //   onPressed: () {
               //     showSearch(
@@ -155,45 +111,63 @@ class _MainUserPageState extends State<MainUserPage> {
               //   icon: Icon(Icons.search),
               // ),
             ],
-            backgroundColor: AppColors.mainGreen,
+            backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              background: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 80),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                          focusColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 0, style: BorderStyle.none),
-                            borderRadius: BorderRadius.circular(8),
+              background: Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            right: 15.0,
                           ),
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search for Fruits, Vegetable, Livestock',
-                          fillColor: Colors.white,
-                          filled: true),
-                      readOnly: true,
-                      onTap: () {
-                        showSearch(
-                          context: context,
-                          delegate:
-                              CustomSearchDelegate(searchTerms: locations),
-                        );
-                      },
+                          child: CircleAvatar(
+                              backgroundColor: Colors.white54,
+                              radius: 30,
+                              backgroundImage:
+                                  AssetImage('assets/images/profile.jpg')),
+                        )
+                      ],
                     ),
-                  )
-                ],
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: TextField(
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            focusColor: Colors.white,
+                            focusedBorder: OutlineInputBorder(
+                                // borderSide: BorderSide(color: Colors.transparent),
+                                ),
+                            border: OutlineInputBorder(
+                              // borderSide:
+                              // BorderSide(width: 0, style: BorderStyle.none),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            prefixIcon: Icon(Icons.search),
+                            hintText: 'Search ',
+                            fillColor: Colors.white,
+                            filled: true),
+                        readOnly: true,
+                        onTap: () {
+                          showSearch(
+                            context: context,
+                            delegate:
+                                CustomSearchDelegate(searchTerms: locations),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-            expandedHeight: 170,
+            expandedHeight: 150,
+            elevation: 1,
             // shape: RoundedRectangleBorder(
             //   borderRadius: BorderRadius.only(
             //     bottomRight: Radius.circular(10),
@@ -205,7 +179,9 @@ class _MainUserPageState extends State<MainUserPage> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  color: AppColors.mainGreen.withOpacity(0.3),
+                  margin: EdgeInsets.only(top: Dimensions.height20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: categories.map(
@@ -214,12 +190,10 @@ class _MainUserPageState extends State<MainUserPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              padding: EdgeInsets.all(7),
                               clipBehavior: Clip.hardEdge,
-                              width: 75,
-                              height: 75,
+                              width: 80,
+                              height: 80,
                               decoration: BoxDecoration(
-                                color: AppColors.mainGreen.withOpacity(0.4),
                                 borderRadius: BorderRadius.circular(37.5),
                               ),
                               child: ClipRRect(
@@ -230,10 +204,8 @@ class _MainUserPageState extends State<MainUserPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             SmallText(
+                              color: Colors.black87,
                               text: e['categoryName']!,
                             )
                           ],
@@ -245,7 +217,7 @@ class _MainUserPageState extends State<MainUserPage> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -257,7 +229,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 300,
+                      height: 290,
                       child: PageView.builder(
                         padEnds: false,
                         controller: pageController,
@@ -267,33 +239,24 @@ class _MainUserPageState extends State<MainUserPage> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     DotsIndicator(
                       dotsCount: 3,
                       position: _currPageValue,
                       decorator: DotsDecorator(
-                        color: Colors.black12, // Inactive
-                        size: const Size.square(9.0),
-                        activeSize: const Size(18.0, 9.0),
-                        activeColor: AppColors.mainBlue,
-                        activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
+                          color: Colors.black12, // Inactive
+                          size: const Size.square(9.0),
+                          activeColor: AppColors.mainGreen),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          LargeText(
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: Dimensions.width10),
+                          child: LargeText(
                             text: 'Nearby Farmers',
-                            size: 17,
+                            size: Dimensions.font17,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     GestureDetector(
                       onTap: () {
@@ -306,6 +269,9 @@ class _MainUserPageState extends State<MainUserPage> {
                         );
                       },
                       child: Container(
+                        margin: EdgeInsets.only(
+                            top: Dimensions.height10,
+                            bottom: Dimensions.height20),
                         padding: EdgeInsets.symmetric(
                             horizontal: Dimensions.width10),
                         height: 200,
@@ -317,12 +283,11 @@ class _MainUserPageState extends State<MainUserPage> {
                           itemBuilder: (context, index) {
                             return Container(
                               margin: EdgeInsets.only(
-                                  right: Dimensions.width15,
+                                  right: Dimensions.width10,
                                   top: Dimensions.height10),
                               width: 130,
                               decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.height20),
+                                borderRadius: BorderRadius.circular(5),
                                 image: DecorationImage(
                                     image: NetworkImage(imageUrls[index]),
                                     fit: BoxFit.cover),
@@ -403,21 +368,17 @@ class _MainUserPageState extends State<MainUserPage> {
       child: Stack(
         children: [
           Container(
+            height: 270,
             // height: Dimensions.pageView,
             clipBehavior: Clip.hardEdge,
             margin: EdgeInsets.symmetric(horizontal: Dimensions.width15),
-            decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                    offset: Offset(0, 5),
-                    blurRadius: 5.0,
-                    color: Color(0xFFF4F4F4),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(
-                  Dimensions.radius10,
-                ),
-                color: Colors.white),
+            decoration: BoxDecoration(boxShadow: const [
+              BoxShadow(
+                offset: Offset(0, 5),
+                blurRadius: 5.0,
+                color: Color(0xFFF4F4F4),
+              ),
+            ], borderRadius: BorderRadius.circular(5), color: Colors.white),
             child: Row(children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.3,
@@ -443,33 +404,34 @@ class _MainUserPageState extends State<MainUserPage> {
                         height: Dimensions.height5,
                       ),
                       LargeText(
-                        text: "Regions",
+                        text: "Regions:",
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 1.5, left: 2),
-                        child: Wrap(
-                          spacing: Dimensions.width10,
-                          runSpacing: 5,
-                          children: List.generate(
-                            locations.length,
-                            (index) {
-                              return LeadingIconText(
-                                text: locations[index],
-                                iconSize: Dimensions.height10,
-                                textSize: Dimensions.height15,
-                                icon: Icons.fiber_manual_record,
-                                color: Colors.black87,
-                              );
-                            },
+                      SizedBox(
+                        height: 5,
+                      ),
+                      GridView.builder(
+                        itemCount: locations.length,
+                        itemBuilder: (context, index) => SizedBox(
+                          height: 4,
+                          child: SmallText(
+                            text: locations[index],
                           ),
                         ),
+                        padding: EdgeInsets.all(0),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisSpacing: 0,
+                            mainAxisExtent: 24,
+                            crossAxisCount: 2,
+                            childAspectRatio: 3,
+                            crossAxisSpacing: 10),
                       ),
                       Spacer(),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            backgroundColor: AppColors.mainBlue,
+                            backgroundColor: Colors.black87,
                           ),
                           onPressed: () {
                             Navigator.of(context).push(
