@@ -1,23 +1,14 @@
-import 'dart:convert';
-
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:farmers_directory/models/category.model.dart';
 import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
-import 'package:farmers_directory/services/network_handler_service.dart';
-import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/colors.dart';
-import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/custom_dropdown.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/produce.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import '../../models/farmer.model.dart';
-import '../../models/product.model.dart';
-import '../../models/user.model.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/search.dart';
 import '../../widgets/lg_text.dart';
@@ -32,58 +23,14 @@ class MainUserPage extends StatefulWidget {
 
 class _MainUserPageState extends State<MainUserPage> {
   PageController pageController = PageController(viewportFraction: 1);
-  late Future <User> currentUser;
+
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
-  List<Category> categories = [];
-  List<Farmer> farmers = [];
-  List<Product> products = [];
-  List<Farmer> nearbyFarmers = [];
-
-
-  getFarmers() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/farmers"));
-    List farmersList = response["data"];
-    setState((){
-      farmers = farmersList.map((farmer){
-        return Farmer.fromJson(farmer);
-      }).toList();
-    });
-  }
-  getProducts() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/products"));
-    List productsList = response["data"];
-    setState((){
-      products = productsList.map((product){
-        return Product.fromJson(product);
-      }).toList();
-    });
-  }
-  getCategories() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/categories"));
-    List categoryList = response["data"];
-    setState((){
-      categories = categoryList.map((category){
-        return Category.fromJson(category);
-      }).toList();
-    });
-  }
-  getData() async{
-      try{
-         getFarmers();
-         getCategories();
-         getProducts();
-      }catch(error){
-          print(error);
-      }
-  }
-
   final double _height = Dimensions.pageViewContainer;
+
   @override
   void initState() {
     super.initState();
-    getData();
-    currentUser = SecureStore.getUser();
 
     pageController.addListener(
       () {
@@ -104,6 +51,24 @@ class _MainUserPageState extends State<MainUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> imageUrls = [
+      'https://religionnews.com/wp-content/uploads/2021/08/Busisiwe-Mgangxela-seed-saver-and-agroecologist-from-the-Eastern-Cape-scaled-1.jpeg',
+      'https://pbs.twimg.com/media/DYQsObjXUAID31O.jpg',
+      'https://i2.wp.com/www.largeup.com/wp-content/uploads/2017/03/birdheye-view-all-peoples-medicine-38-b.jpg?fit=1200%2C800&ssl=1&w=640'
+    ];
+
+    final List<Map<String, String>> categories = [
+      {'categoryName': 'Fruits', "categoryImg": "assets/images/fruits.png"},
+      {
+        'categoryName': 'Vegetables',
+        "categoryImg": "assets/images/vegetables.png"
+      },
+      {
+        'categoryName': 'Livestock',
+        "categoryImg": "assets/images/livestock.png"
+      },
+    ];
+
     List<String> locations = [
       'Clarendon',
       'Kingston',
@@ -117,22 +82,6 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
-
-      // drawer: Drawer(),
-      body: FutureBuilder<User>(
-        future:currentUser,
-        builder: (context,snapshot) {
-          if(snapshot.hasData){
-            nearbyFarmers = farmers.where((farmer) => farmer.address["parish"] == snapshot.data!.address["parish"]).toList();
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  title: Row(
-                    children: [
-                      Icon(Icons.location_on),
-                      SizedBox(
-                        width: 10,
-
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -159,36 +108,17 @@ class _MainUserPageState extends State<MainUserPage> {
                       hint: LargeText(
                         text: 'Location',
                         color: Colors.white,
-
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField2(
-                            style: TextStyle(color: Colors.white),
-                            dropdownElevation: 1,
-                            dropdownMaxHeight: 200,
-                            dropdownDecoration:
-                            BoxDecoration(color: AppColors.mainBlue),
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent),
+                      iconEnabledColor: Colors.white,
+                      items: locations
+                          .map(
+                            (location) => DropdownMenuItem(
+                              value: location,
+                              child: LargeText(
+                                text: location,
+                                color: Colors.white,
                               ),
                             ),
-
-                            hint: LargeText(
-                              text: 'Location',
-                              color: Colors.white,
-                            ),
-                            iconEnabledColor: Colors.white,
-                            items: locations
-                                .map(
-                                  (location) => DropdownMenuItem(
-                                value: location,
-                                child: LargeText(
-                                  text: location,
-                                  color: Colors.white,
-
                           )
                           .toList(),
                       value: selectedLocation,
@@ -297,21 +227,32 @@ class _MainUserPageState extends State<MainUserPage> {
                                 child: Image.asset(
                                   e['categoryImg']!,
                                   fit: BoxFit.cover,
-
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SmallText(
+                              text: e['categoryName']!,
                             )
-                                .toList(),
-                            value: selectedLocation,
-                            onChanged: (location) {
-                              setState(() {
-                                selectedLocation = location as String;
-                              });
-                            },
+                          ],
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          LargeText(
+                            text: 'In Season',
+                            size: 20,
                           ),
-
-                        ),
-
                         ],
                       ),
                     ),
@@ -324,223 +265,80 @@ class _MainUserPageState extends State<MainUserPage> {
                         itemBuilder: (BuildContext context, position) {
                           return _buildPageItem(position);
                         },
-
                       ),
-                    ],
-                  ),
-                  pinned: true,
-                  floating: true,
-                  titleSpacing: 15,
-                  toolbarHeight: 55,
-                  collapsedHeight: 60,
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0, top: 5),
-                      child: CircleAvatar(
-                          backgroundColor: Colors.white54,
-                          radius: 30,
-                          backgroundImage: setProfileImage(snapshot.data!.image)
                     ),
-                    )
-                    // IconButton(
-                    //   onPressed: () {
-                    //     showSearch(
-                    //       context: context,
-                    //       delegate: CustomSearchDelegate(),
-                    //     );
-                    //   },
-                    //   icon: Icon(Icons.search),
-                    // ),
-                  ],
-                  backgroundColor: AppColors.mainGreen,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 80),
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                focusColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(width: 0, style: BorderStyle.none),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Search for Fruits, Vegetable, Livestock',
-                                fillColor: Colors.white,
-                                filled: true),
-                            readOnly: true,
-                            onTap: () {
-                              showSearch(
-                                context: context,
-                                delegate: CustomSearchDelegate(),
-                              );
-                            },
-                          ),
-                        )
-                      ],
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  expandedHeight: 170,
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.only(
-                  //     bottomRight: Radius.circular(10),
-                  //     bottomLeft: Radius.circular(10),
-                  //   ),
-                  // ),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: categories.map(
-                                (Category c) {
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(7),
-                                    clipBehavior: Clip.hardEdge,
-                                    width: 75,
-                                    height: 75,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.mainGreen.withOpacity(0.4),
-                                      borderRadius: BorderRadius.circular(37.5),
-                                    ),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(30),
-
-                                        child:Image.network(c.category_img),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  SmallText(
-                                    text: c.category_name,
-                                  )
-                                ],
-                              );
-                            },
-                          ).toList(),
+                    DotsIndicator(
+                      dotsCount: 3,
+                      position: _currPageValue,
+                      decorator: DotsDecorator(
+                        color: Colors.black12, // Inactive
+                        size: const Size.square(9.0),
+                        activeSize: const Size(18.0, 9.0),
+                        activeColor: AppColors.mainBlue,
+                        activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
                       ),
-                      Column(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                LargeText(
-                                  text: 'In Season',
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 240,
-                            child: PageView.builder(
-                              padEnds: false,
-                              controller: pageController,
-                              itemCount: (products.length >= 3)? 3 : products.length,
-                              itemBuilder: (BuildContext context, position) {
-                                return _buildPageItem(position, products[position]);
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          DotsIndicator(
-                            dotsCount: 3,
-                            position: _currPageValue,
-                            decorator: DotsDecorator(
-                              color: Colors.black12, // Inactive
-                              size: const Size.square(9.0),
-                              activeSize: const Size(18.0, 9.0),
-                              activeColor: AppColors.mainBlue,
-                              activeShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                LargeText(
-                                  text: 'Nearby Farmers',
-                                  size: 17,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                              padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width10),
-                              height: 200,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: (nearbyFarmers.length >= 5)? 5 : nearbyFarmers.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return FarmerDetails(
-                                                farmer: nearbyFarmers[index]);
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          right: Dimensions.width15,
-                                          top: Dimensions.height10),
-                                      width: 130,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            Dimensions.height20),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                nearbyFarmers[index].image),
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                  );
-                                }
-                            ),
+                          LargeText(
+                            text: 'Nearby Farmers',
+                            size: 17,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                )
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return FarmerDetails();
+                            },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.width10),
+                        height: 200,
+                        width: double.maxFinite,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: imageUrls.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                  right: Dimensions.width15,
+                                  top: Dimensions.height10),
+                              width: 130,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(Dimensions.height20),
+                                image: DecorationImage(
+                                    image: NetworkImage(imageUrls[index]),
+                                    fit: BoxFit.cover),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            );
-          }else{
-            return Center(child:CircularProgressIndicator());
-          }
-        }
-      )
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -561,8 +359,7 @@ class _MainUserPageState extends State<MainUserPage> {
     // 'Hanover',
   ];
 //pageview slider
-  Widget _buildPageItem( int index, Product product) {
-
+  Widget _buildPageItem(int index) {
     Matrix4 matrix = Matrix4.identity();
 
     // if current page
@@ -625,7 +422,10 @@ class _MainUserPageState extends State<MainUserPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.3,
                 height: double.maxFinite,
-                child: Image(image: setProduceImage(product.prod_img)),
+                child: Image.network(
+                  'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
               Expanded(
                 child: Container(
@@ -636,7 +436,7 @@ class _MainUserPageState extends State<MainUserPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LargeText(
-                        text: '${product.prod_name}',
+                        text: 'Ackee',
                         size: Dimensions.height20,
                       ),
                       SizedBox(
@@ -674,7 +474,7 @@ class _MainUserPageState extends State<MainUserPage> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
-                                return ProduceDetails(product: product);
+                                return ProduceDetails();
                               }),
                             );
                           },

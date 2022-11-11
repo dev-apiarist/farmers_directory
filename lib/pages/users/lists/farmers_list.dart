@@ -1,23 +1,20 @@
 import 'package:farmers_directory/utils/dimensions.dart';
-import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/farmer.model.dart';
 import '../../../widgets/lg_text.dart';
 import '../../../widgets/sm_text.dart';
 import '../details/farmer_details.dart';
 
 class FarmersList extends StatelessWidget {
-  const FarmersList({super.key, required this.farmer});
+  const FarmersList({super.key});
 
-  final Farmer farmer;
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return FarmerDetails(farmer: farmer);
+          return FarmerDetails();
         }));
       },
       isThreeLine: true,
@@ -30,10 +27,10 @@ class FarmersList extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Colors.white70,
         radius: 40,
-        backgroundImage: setProfileImage(farmer.image),
+        backgroundImage: AssetImage('assets/images/user_profile.jpeg'),
       ),
       title: SmallText(
-        text: '${farmer.fname} ${farmer.lname}',
+        text: 'Debra Passie',
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,10 +44,10 @@ class FarmersList extends StatelessWidget {
           ),
           Wrap(
             spacing: Dimensions.width10,
-            children: List.generate(farmer.products.length, (index) {
+            children: List.generate(5, (index) {
               return LeadingIconText(
                 icon: Icons.fiber_manual_record,
-                text: '${farmer.products[index]}',
+                text: 'Yam',
                 color: Colors.black87,
                 iconSize: Dimensions.height10,
                 textSize: Dimensions.font14,
