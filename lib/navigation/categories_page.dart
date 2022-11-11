@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
@@ -9,9 +7,6 @@ import 'package:farmers_directory/widgets/category_buttons.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 
-import '../models/category.model.dart';
-import '../models/product.model.dart';
-import '../services/network_handler_service.dart';
 import '../utils/colors.dart';
 import '../utils/dimensions.dart';
 import '../widgets/sm_text.dart';
@@ -26,41 +21,25 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
   TabController? tabController;
 
-
-
-  late Future<List<Category>> allCategories;
-  int categoryLength = 0;
-  List<Product> products = [];
-
-  getProducts() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/products"));
-    List productsList = response["data"];
-    setState((){
-      products = productsList.map((product){
-        return Product.fromJson(product);
-      }).toList();
-    });
-  }
-
-  Future<List<Category>> getCategories() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/categories"));
-    List categoryList = response["data"];
-    List<Category> categories = categoryList.map((category){
-      return Category.fromJson(category);
-    }).toList();
-    return categories;
-  }
-
   @override
   void initState() {
     super.initState();
-    getProducts();
-    allCategories = getCategories();
+    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<String> inSeasonImages = [
+      'https://ychef.files.bbci.co.uk/976x549/p099bkjt.jpg',
+      'https://cdn.shopify.com/s/files/1/0431/5214/6584/products/image_c4b44c20-2e5c-47db-8b20-922942e50e42_1024x1024@2x.jpg?v=1623782661',
+      'https://upload.wikimedia.org/wikipedia/commons/4/46/Litchi_chinensis_fruits.JPG'
+    ];
 
+    final List<String> livestockImages = [
+      'https://www.jddb.gov.jm/sites/default/files/styles/max_1300x1300/public/inline-images/Jamaica%20Hope%20Calves_0.JPG?itok=wDQaxLcx',
+      'https://loopnewslive.blob.core.windows.net/liveimage/sites/default/files/2018-04/ggwsIv7oNp.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUcoHJKf0M1qxbU6VIZcSdYrST4lz2Q-YolEwqO6lIHuqxJq6DKLw6fufDyl-TfE3jKc&usqp=CAU'
+    ];
     return Scaffold(
       appBar: AppBar(
         title: LargeText(
@@ -76,55 +55,40 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
         elevation: 0,
         backgroundColor: AppColors.mainGreen,
       ),
-      body: FutureBuilder<List<Category>>(
-          future: allCategories,
-          builder: (context, snapshot){
-            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
-              tabController = TabController(length: snapshot.data!.length, vsync: this);
-
-              return Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: Dimensions.height10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: TabBar(
-                        // indicator: CircleTabIndicator(color: Colors.black, radius: 4),
-                        indicatorColor: Colors.lightGreen,
-                        isScrollable: true,
-                        labelPadding:
-                        EdgeInsets.symmetric(horizontal: Dimensions.width20),
-                        labelColor: Colors.black,
-                        unselectedLabelColor: Colors.grey,
-                        controller: tabController,
-                        tabs: snapshot.data!.map((category){
-                          return Tab(text: category.category_name);
-                        }).toList(),
-                      ),
-                    ),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(bottom: Dimensions.height10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TabBar(
+                // indicator: CircleTabIndicator(color: Colors.black, radius: 4),
+                indicatorColor: Colors.lightGreen,
+                isScrollable: true,
+                labelPadding:
+                    EdgeInsets.symmetric(horizontal: Dimensions.width20),
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.grey,
+                controller: tabController,
+                tabs: [
+                  Tab(
+                    text: 'Crops',
                   ),
+                  Tab(
+                    text: 'Livestock',
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: SizedBox(
+              width: double.maxFinite,
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: tabController,
+                children: [
                   Expanded(
-
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-                        controller: tabController,
-
-                        children: snapshot.data!.map((category){
-                          List<Product> filteredProduct = products.where((product){
-                            return product.category == category.id;
-                          }).toList();
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ...showInSeasonWhen(category.category_name, "Livestock",filteredProduct),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
@@ -177,39 +141,68 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                                     GlobalFunctions.botomSheet(context)),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-
                                   children: [
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: (() =>
-                                          GlobalFunctions.botomSheet(context)),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.sort),
-                                          SmallText(text: 'Sort By')
-                                        ],
-                                      ),
-                                    )
+                                    Icon(Icons.sort),
+                                    SmallText(text: 'Sort By')
                                   ],
                                 ),
-                                Expanded(child: ProduceList( productList: filteredProduct,)),
-                              ],
-                            ),
-                          );
-                        }).toList()
-
+                              )
+                            ],
+                          ),
+                          Expanded(child: ProduceList()),
+                        ],
                       ),
                     ),
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: LargeText(text: 'Livestock Breeding'),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProduceDetails();
+                              },
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          height: 250,
+                          width: double.maxFinite,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: livestockImages.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(right: 15, top: 10),
+                                  width: 160,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            livestockImages[index]),
+                                        fit: BoxFit.cover),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                    ],
+                  ),
                 ],
-              );
-            }else if(snapshot.hasError){
-              return Center(child: Text("${snapshot.error}"));
-            }else{
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -241,72 +234,3 @@ class _CirclePainter extends BoxPainter {
     canvas.drawCircle(offset + circleOffset, radius, paint);
   }
 }
-
-
- columnFunction(){
-  return                           Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 10, horizontal: 20),
-        child: LargeText(text: 'Livestock Breeding'),
-      ),
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        height: 250,
-        width: double.maxFinite,
-        child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: 0,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(right: 15, top: 10),
-                width: 160,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          "",),
-                ),
-              ));
-            }),
-      ),
-      SizedBox(height: 30),
-    ],
-  );
- }
-
- List<Widget> showInSeasonWhen(constant, variable, List<Product> products){
-  var seasonProduce = products.where((element) => element.inSeason == true).toList();
-  if(constant == variable){
-    return [SizedBox.shrink()];
-  }else{
-    return [LargeText(text: 'In Season'),
-   Container(
-   height: 200,
-   width: double.maxFinite,
-   child: ListView.builder(
-     shrinkWrap: true,
-     scrollDirection: Axis.horizontal,
-     itemCount: seasonProduce.length,
-     itemBuilder: (context, index) {
-       return Container(
-         margin: EdgeInsets.only(
-             right: Dimensions.width15,
-             top: Dimensions.height10),
-         width: 160,
-         decoration: BoxDecoration(
-           borderRadius: BorderRadius.circular(20),
-           image: DecorationImage(
-               image: NetworkImage(
-                   seasonProduce[index].prod_img),
-               fit: BoxFit.cover),
-         ),
-       );
-     },
-   ),
-   ),SizedBox(height: 30),];
-  }
- }
