@@ -41,6 +41,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnUcoHJKf0M1qxbU6VIZcSdYrST4lz2Q-YolEwqO6lIHuqxJq6DKLw6fufDyl-TfE3jKc&usqp=CAU'
     ];
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: LargeText(
           text: 'Categories',
@@ -119,7 +120,8 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                                         top: Dimensions.height10),
                                     width: 160,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius20),
                                       image: DecorationImage(
                                           image: NetworkImage(
                                               inSeasonImages[index]),
@@ -132,9 +134,9 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                           ),
                           SizedBox(height: 30),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              CategoryToggle(),
+                              // CategoryToggle(),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: (() =>
@@ -143,7 +145,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(Icons.sort),
-                                    SmallText(text: 'Sort By')
+                                    SmallText(text: 'Filter')
                                   ],
                                 ),
                               )

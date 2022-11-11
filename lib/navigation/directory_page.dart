@@ -13,6 +13,7 @@ class Directory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: LargeText(
@@ -35,7 +36,7 @@ class Directory extends StatelessWidget {
                   children: [
                     LargeText(text: 'Filter'),
                     SizedBox(
-                      width: 10,
+                      width: Dimensions.width10,
                     ),
                     Icon(
                       Icons.sort,
