@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:farmers_directory/pages/edit/edit_password.dart';
 import 'package:farmers_directory/pages/edit/personal_information_page.dart';
 import 'package:farmers_directory/pages/farmer/main_farmer_page.dart';
+import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/colors.dart';
 import 'package:farmers_directory/utils/functions.dart';
@@ -33,8 +34,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController phoneCtrl = TextEditingController();
 
-  submitData(){
-
+  submitData()async{
+      Map<String, String> body = {
+        "first_name": fnameCtrl.text,
+        "last_name": lnameCtrl.text,
+        "emailCtrl": emailCtrl.text,
+        "phone": phoneCtrl.text,
+      };
+      List<Map<String, dynamic>> files = [
+        {"field": "image", "data": imgChosen}
+      ];
+      await NetworkHandler.postMultipart("/users", body, files);
+      Navigator.pop(context);
   }
 
   Future<User> getUser() async {
@@ -42,16 +53,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return currentUser;
   }
 
-
-
-
-
-  
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     user = getUser();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -82,7 +89,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       body: FutureBuilder<User>(
         future: user,
         builder: (context, snapshot) {
+
           if(snapshot.hasData){
+            emailCtrl.text = snapshot.data!.email!;
+            fnameCtrl.text = snapshot.data!.first_name!;
+            lnameCtrl.text = snapshot.data!.last_name!;
+            phoneCtrl.text = snapshot.data!.phone!;
+
             imageUrl = snapshot.data!.image!;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -120,7 +133,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     TextFormField(
                       controller: fnameCtrl,
-                      initialValue: '${snapshot.data!.first_name}',
                       maxLines: 1,
                       decoration: InputDecoration(
                         labelText: 'First Name',
@@ -128,7 +140,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     TextFormField(
                       controller: lnameCtrl,
-                      initialValue: snapshot.data!.last_name,
                       maxLines: 1,
 
                       decoration: InputDecoration(
@@ -136,94 +147,102 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         labelText: 'Last Name',
                       ),
                     ),
-                    TextFormField(
-                      maxLines: 1,
-                      decoration: InputDecoration(
-                        labelText: 'About',
-                        labelStyle: TextStyle(overflow: TextOverflow.ellipsis),
-                      ),
-                    ),
+
                     TextFormField(
                       controller: emailCtrl,
-                      initialValue: snapshot.data!.email,
                       maxLines: 1,
                       decoration: InputDecoration(labelText: 'Email'),
+                    ),
+                    TextFormField(
+                      controller: phoneCtrl,
+                      maxLines: 1,
+                      decoration: InputDecoration(labelText: 'Telephone'),
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      initialValue: "paswordprotected",
+                      enabled: false,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(overflow: TextOverflow.ellipsis),
+                      ),
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => MainFarmerPage()),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            LargeText(text: 'Update Produce'),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 20,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => PersonalInformation()),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            LargeText(text: 'Personal Information'),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 20,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) => EditPassword()),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            LargeText(text: 'Security'),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              size: 20,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   behavior: HitTestBehavior.opaque,
+                    //   onTap: () => Navigator.of(context).push(
+                    //     MaterialPageRoute(
+                    //       builder: ((context) => MainFarmerPage()),
+                    //     ),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         LargeText(text: 'Update Produce'),
+                    //         SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         Icon(
+                    //           Icons.arrow_forward,
+                    //           size: 20,
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // GestureDetector(
+                    //   behavior: HitTestBehavior.opaque,
+                    //   onTap: () => Navigator.of(context).push(
+                    //     MaterialPageRoute(
+                    //       builder: ((context) => PersonalInformation()),
+                    //     ),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         LargeText(text: 'Personal Information'),
+                    //         SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         Icon(
+                    //           Icons.arrow_forward,
+                    //           size: 20,
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // GestureDetector(
+                    //   behavior: HitTestBehavior.opaque,
+                    //   onTap: () => Navigator.of(context).push(
+                    //     MaterialPageRoute(
+                    //       builder: ((context) => EditPassword()),
+                    //     ),
+                    //   ),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         LargeText(text: 'Security'),
+                    //         SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         Icon(
+                    //           Icons.arrow_forward,
+                    //           size: 20,
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

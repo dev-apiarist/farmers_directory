@@ -103,35 +103,35 @@ class _UserProfileState extends State<UserProfile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        LargeText(text: 'Produce'),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            LargeText(text: 'Crops:'),
-                            Wrap(
-                              children: List.generate(
-                                5,
-                                    (index) => SmallText(text: 'Yam' ','),
-                              ).toList(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            LargeText(text: 'Livestock:'),
-                            Wrap(
-                              children: List.generate(
-                                2,
-                                    (index) => SmallText(text: 'Goat' ','),
-                              ).toList(),
-                            ),
-                          ],
-                        ),
+                        // LargeText(text: 'Produce'),
+                        // SizedBox(
+                        //   height: 5,
+                        // ),
+                        // Row(
+                        //   children: [
+                        //     LargeText(text: 'Crops:'),
+                        //     Wrap(
+                        //       children: List.generate(
+                        //         5,
+                        //             (index) => SmallText(text: 'Yam' ','),
+                        //       ).toList(),
+                        //     ),
+                        //   ],
+                        // ),
+                        // SizedBox(
+                        //   height: 10,
+                        // ),
+                        // Row(
+                        //   children: [
+                        //     LargeText(text: 'Livestock:'),
+                        //     Wrap(
+                        //       children: List.generate(
+                        //         2,
+                        //             (index) => SmallText(text: 'Goat' ','),
+                        //       ).toList(),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 20,
                         ),
