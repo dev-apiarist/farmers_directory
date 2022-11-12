@@ -21,9 +21,11 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Builder(
-        builder: (context) {
-          return Column(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
             children: [
               ClipPath(
                 clipper: CustomClip(),
@@ -41,22 +43,23 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: Dimensions.height20),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: Dimensions.height20),
                   width: double.maxFinite,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: 'Get Connected'.toUpperCase(),
+                            text: 'Meet Local Farmers'.toUpperCase(),
                             style: TextStyle(
                                 color: Colors.black87,
-                                fontSize: 35,
+                                fontSize: 25,
                                 fontWeight: FontWeight.w600),
                             children: [
-                              TextSpan(
-                                  text: '\nWith Real Farmers'.toUpperCase(),
-                                  style: TextStyle(fontSize: 28)),
+                              // TextSpan(
+                              //     text: '\nWith Real Farmers'.toUpperCase(),
+                              //     style: TextStyle(fontSize: 20)),
                             ],
                           ),
                         ),
@@ -82,7 +85,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                 vertical: Dimensions.height15,
                                 horizontal: Dimensions.width15),
                             child: LargeText(
-                              text: 'Get Started',
+                              text: 'Get Connected',
                               color: Colors.white,
                               size: Dimensions.height20,
                             ),
@@ -92,8 +95,32 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
               )
             ],
-          );
-        }
+          ),
+          Positioned(
+              top: 450,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.9),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 6), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  width: 100,
+                  height: 100,
+                  child: Image.asset(
+                    'assets/icons/logo.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )),
+        ],
       ),
     );
   }
