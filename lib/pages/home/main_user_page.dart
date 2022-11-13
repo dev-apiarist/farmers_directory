@@ -116,7 +116,7 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
-      // drawer: Drawer(),
+      drawer: Drawer(),
       body: FutureBuilder<User>(
         future:currentUser,
         builder: (context,snapshot) {
@@ -125,122 +125,93 @@ class _MainUserPageState extends State<MainUserPage> {
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  title: Row(
+            centerTitle: true,
+            title: SizedBox(
+                width: 70,
+                child: Image.asset(
+                  'assets/icons/logo.png',
+                  fit: BoxFit.cover,
+                )),
+            foregroundColor: Colors.black,
+            pinned: true,
+            floating: true,
+            titleSpacing: 15,
+            toolbarHeight: 70,
+            collapsedHeight: 75,
+            actions: [
+              // IconButton(
+              //   onPressed: () {
+              //     showSearch(
+              //       context: context,
+              //       delegate: CustomSearchDelegate(),
+              //     );
+              //   },
+              //   icon: Icon(Icons.search),
+              // ),
+            ],
+            backgroundColor: Colors.white,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(Icons.location_on),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField2(
-                            style: TextStyle(color: Colors.white),
-                            dropdownElevation: 1,
-                            dropdownMaxHeight: 200,
-                            dropdownDecoration:
-                            BoxDecoration(color: AppColors.mainBlue),
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.transparent),
-                              ),
-                            ),
-                            hint: LargeText(
-                              text: 'Location',
-                              color: Colors.white,
-                            ),
-                            iconEnabledColor: Colors.white,
-                            items: locations
-                                .map(
-                                  (location) => DropdownMenuItem(
-                                value: location,
-                                child: LargeText(
-                                  text: location,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            )
-                                .toList(),
-                            value: selectedLocation,
-                            onChanged: (location) {
-                              setState(() {
-                                selectedLocation = location as String;
-                              });
-                            },
-                          ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: 15.0,
                         ),
-                      ),
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white54,
+                            radius: 30,
+                            backgroundImage:setProfileImage(snapshot.data!.image)
+                                ),
+                      )
                     ],
                   ),
-                  pinned: true,
-                  floating: true,
-                  titleSpacing: 15,
-                  toolbarHeight: 55,
-                  collapsedHeight: 60,
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0, top: 5),
-                      child: CircleAvatar(
-                          backgroundColor: Colors.white54,
-                          radius: 30,
-                          backgroundImage: setProfileImage(snapshot.data!.image)
-                    ),
-                    )
-                    // IconButton(
-                    //   onPressed: () {
-                    //     showSearch(
-                    //       context: context,
-                    //       delegate: CustomSearchDelegate(),
-                    //     );
-                    //   },
-                    //   icon: Icon(Icons.search),
-                    // ),
-                  ],
-                  backgroundColor: AppColors.mainGreen,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 80),
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 15),
-                                focusColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                                border: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(width: 0, style: BorderStyle.none),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Search for Fruits, Vegetable, Livestock',
-                                fillColor: Colors.white,
-                                filled: true),
-                            readOnly: true,
-                            onTap: () {
-                              showSearch(
-                                context: context,
-                                delegate: CustomSearchDelegate(),
-                              );
-                            },
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                          focusColor: Colors.white,
+                          focusedBorder: OutlineInputBorder(
+
+                              // borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                          border: OutlineInputBorder(
+                            // borderSide:
+                            // BorderSide(width: 0, style: BorderStyle.none),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                        )
-                      ],
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search ',
+                          fillColor: Colors.white,
+                          filled: true),
+                      readOnly: true,
+                      onTap: () {
+                        showSearch(
+                          context: context,
+                          delegate:
+                          CustomSearchDelegate(query: ""),
+                        );
+                      },
                     ),
-                  ),
-                  expandedHeight: 170,
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.only(
-                  //     bottomRight: Radius.circular(10),
-                  //     bottomLeft: Radius.circular(10),
-                  //   ),
-                  // ),
-                ),
+                  )
+                ],
+              ),
+            ),
+            expandedHeight: 140,
+            elevation: 1,
+            // shape: RoundedRectangleBorder(
+            //   borderRadius: BorderRadius.only(
+            //     bottomRight: Radius.circular(10),
+            //     bottomLeft: Radius.circular(10),
+            //   ),
+            // ),
+          ),
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -553,6 +524,7 @@ class _MainUserPageState extends State<MainUserPage> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
+  CustomSearchDelegate({required this.query});
   List<String> searchTerms = [
     'Apples',
     'Banana',
@@ -562,6 +534,8 @@ class CustomSearchDelegate extends SearchDelegate {
     'Lychee',
     'Orange',
   ];
+
+  final String query;
 
   @override
   List<Widget>? buildActions(BuildContext context) {

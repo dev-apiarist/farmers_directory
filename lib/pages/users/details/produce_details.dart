@@ -68,6 +68,7 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(100),
+
                         ),
                       ),
                       child: Center(

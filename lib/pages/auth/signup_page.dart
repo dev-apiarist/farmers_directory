@@ -1,11 +1,13 @@
 import 'package:farmers_directory/pages/auth/login_page.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
+import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
 import '../../models/user.model.dart';
+import '../../utils/colors.dart';
+import '../../widgets/text_field.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({super.key});
@@ -14,6 +16,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  int _index = 0;
   final formKey = GlobalKey<FormState>();
   final User user = User(address:{"city": "", "street":"", "parish": ""});
   Map _requestState = {
@@ -57,122 +60,109 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: (_requestState["pending"])? Center(child: CircularProgressIndicator()) : (_requestState["hasError"]) ? showError(_requestState, setState, submitSignUp): Form(
-      key: formKey,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            Container(
-              child: Image.asset('assets/images/logo.png'),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stepper(
+        // type: StepperType.horizontal,
+        currentStep: _index,
+        onStepCancel: () {
+          if (_index > 0) {
+            setState(() {
+              _index -= 1;
+            });
+          }
+        },
+        onStepContinue: () {
+          if (_index <= 0) {
+            setState(() {
+              _index += 1;
+            });
+          }
+        },
+        onStepTapped: (int index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        steps: [
+          Step(
+            title: SmallText(text: 'Personal Details'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: "First Name"),
-                    onChanged: (value){
-                      setState(() {
-                        user.first_name = value;
-                      });
-                    },
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      child: CustomTextField(
+                        isPassword: true,
+                        title: 'First Name',
+                        placeholder: 'John',
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      child: CustomTextField(
+                        isPassword: true,
+                        title: 'Last Name',
+                        placeholder: 'Travolta',
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: TextFormField(
-                      decoration: InputDecoration(labelText: "Last Name"),
-                      onChanged: (value){
-                        setState(() {
-                          user.last_name = value;
-                        });
-                      }
-                  ),
+                CustomTextField(
+                  title: 'Your email address',
+                  placeholder: 'johntravolta@gmail.com',
+                ),
+                CustomTextField(
+                  isPassword: true,
+                  title: 'Password',
+                  placeholder: '************',
                 ),
               ],
             ),
-            TextFormField(
-                decoration: InputDecoration(labelText: "Email"),
-                onChanged: (value){
-                  setState(() {
-                    user.email = value;
-                  });
-                }
-            ),
-            TextFormField(
-                decoration: InputDecoration(labelText: "Street Address"),
-                onChanged: (value){
-                  setState(() {
-                    user.address["street"] = value;
-                    print(user.address["street"]);
-                  });
-                }
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          Step(
+            title: SmallText(text: 'Address'),
+            content: Column(
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: TextFormField(
-                      decoration: InputDecoration(labelText: "Parish"),
-                      onChanged: (value) {
-                        setState(() {
-                          user.address["parish"] = value;
-                        });
-                      }
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: TextFormField(
-                      decoration: InputDecoration(labelText: "City"),
-                      onChanged: (value) {
-                        setState(() {
-                          user.address["city"] = value;
-                        });
-                      }
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomTextField(
+                      title: 'Street ',
+                      placeholder: '',
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.7,
+                          child: CustomTextField(
+                            isPassword: true,
+                            title: 'Parish',
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.7,
+                          child: CustomTextField(
+                            isPassword: true,
+                            title: 'City',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
-            TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Password"),
-                onChanged: (value) {
-                  setState(() {
-                    user.password = value;
-                  });
-                }
+          ),
+          Step(
+            title: SmallText(text: 'Socials (Optional)'),
+            content: Column(
+              children: [],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                LargeText(text: 'Sign Up'),
-                SizedBox(
-                  width: 10,
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    submitSignUp();
-                  },
-                  child: Icon(
-                    Icons.arrow_forward,
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+          ),
+        ],
     ),
     );
   }

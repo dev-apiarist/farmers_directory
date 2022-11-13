@@ -17,12 +17,15 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'helper/dependencies.dart' as dep;
+import 'package:flutter/services.dart';
 
 void main() async {
   GlobalFunctions();
   WidgetsFlutterBinding.ensureInitialized();
+
   await dep.init();
   runApp(const RootApp());
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
 class RootApp extends StatelessWidget {
