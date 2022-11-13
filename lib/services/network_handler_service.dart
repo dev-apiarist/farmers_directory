@@ -13,6 +13,14 @@ class NetworkHandler {
     "Authorization": "Bearer $token"
   };
 
+  static Future<Map<String, String>> _generateHeader()async{
+    token = await getToken("jwt-auth");
+    return {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+
+  }
   // Don't really need a constructor, as we are not instantiating the Helper class
 
   //Gets token from the SecureStore if it doesn't exist instead of null it will return an empty string.
@@ -28,9 +36,8 @@ class NetworkHandler {
   static Future<String> post(String endpoint, var body) async {
     // Could actually store this in a field variable instead of calling the method for each
     //request
-    token = await getToken("jwt-auth");
     http.Response response = await client
-        .post(buildUrl(segment: endpoint), body: jsonEncode(body), headers: _headers);
+        .post(buildUrl(segment: endpoint), body: jsonEncode(body), headers: await _generateHeader());
     //Want to check here to see if the response was a success or it failed. status 200 would mean it is.
     // want to facilitate if the response is 201, like when creating an entity
     return _handleResponse(response);
@@ -38,19 +45,17 @@ class NetworkHandler {
   }
 
   static Future<String> get({String endpoint = "", String queryParams = ""}) async {
-    token = await getToken("jwt-auth");
-    var response = await client.get(buildUrl(segment: endpoint, query: queryParams), headers: _headers);
+    var response = await client.get(buildUrl(segment: endpoint, query: queryParams), headers: await _generateHeader());
     return _handleResponse(response);
 
   }
 
   static Future <String> postMultipart(String endpoint, Map<String, String> body, List<Map<String, dynamic>> streams) async{
-    token = await getToken("jwt-auth");
     http.MultipartRequest request = http.MultipartRequest("POST",buildUrl(segment: endpoint));
-    request.headers.addAll(_headers);
+    request.headers.addAll(await _generateHeader());
     var multipartFileList = streams.map((element) {
-      File _file = File(element["data"].path);
-      return http.MultipartFile(element["field"], _file.readAsBytes().asStream(),_file.lengthSync(), filename: _file.path.split('/').last );
+      File dataFile = File(element["data"].path);
+      return http.MultipartFile(element["field"], dataFile.readAsBytes().asStream(),dataFile.lengthSync(), filename: dataFile.path.split('/').last );
     });
     request.files.addAll(multipartFileList);
     request.fields.addAll(body);
@@ -65,29 +70,24 @@ class NetworkHandler {
   }
 
   static Future<String> patch(String endpoint, var changes) async {
-    token = await getToken("jwt-auth");
 
     var response = await client.patch(buildUrl(segment: endpoint),
         body: changes,
-        headers: _headers);
+        headers: await _generateHeader());
 
     return _handleResponse(response);
   }
 
   static Future<String> put(String endpoint, var changes) async {
-    token = await getToken("jwt-auth");
-
     var response = await client.put(buildUrl(segment: endpoint),
         body: changes,
-        headers: _headers);
+        headers: await _generateHeader());
 
     return _handleResponse(response);
   }
 
   static Future<String> delete(String endpoint) async {
-    token = await getToken("jwt-auth");
-
-    var response = await client.delete(buildUrl(segment: endpoint), headers: _headers);
+    var response = await client.delete(buildUrl(segment: endpoint), headers: await _generateHeader());
     return _handleResponse(response);
   }
 
