@@ -1,8 +1,8 @@
+import 'package:farmers_directory/utils/colors.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
+import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:farmers_directory/widgets/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,43 +16,115 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              validator: ((value) {
-                if (value!.isEmpty || RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                  return "Enter valid email";
-                }
-              }),
-              decoration: InputDecoration(labelText: 'Email', helperText: " "),
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(
-              width: double.maxFinite,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: StadiumBorder(),
-                  backgroundColor: Colors.black87,
-                ),
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/icons/logo.png',
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          LargeText(
+            text: 'J Farmers',
+            size: 25,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          SmallText(
+            text: 'Get connected with local farmers',
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomTextField(
+                    title: 'Your email address',
+                    placeholder: 'johntravolta@gmail.com',
                   ),
-                  child: LargeText(
-                    text: 'Sign In',
-                    color: Colors.white,
+                  CustomTextField(
+                    isPassword: true,
+                    title: 'Password',
+                    placeholder: '************',
                   ),
-                ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    height: 55,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.mainGreen,
+                        shape: StadiumBorder(),
+                      ),
+                      onPressed: () {},
+                      child: LargeText(
+                        text: 'Continue',
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SmallText(
+                        text: 'Forgot Password?',
+                        color: Colors.blueAccent,
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: LargeText(text: 'OR'),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 35,
+                        child: Image.asset(
+                          'assets/icons/google.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      ),
+                      SizedBox(
+                          width: 30,
+                          child: Image.asset(
+                            'assets/icons/facebook.png',
+                            fit: BoxFit.cover,
+                          )),
+                    ],
+                  )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

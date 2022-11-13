@@ -1,7 +1,11 @@
 import 'package:farmers_directory/widgets/lg_text.dart';
+import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
+import '../../utils/colors.dart';
+import '../../widgets/text_field.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({super.key});
@@ -10,88 +14,115 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  int _index = 0;
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              Container(
-                child: Image.asset('assets/images/logo.png'),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "First Name"),
+      body: Stepper(
+        // type: StepperType.horizontal,
+        currentStep: _index,
+        onStepCancel: () {
+          if (_index > 0) {
+            setState(() {
+              _index -= 1;
+            });
+          }
+        },
+        onStepContinue: () {
+          if (_index <= 0) {
+            setState(() {
+              _index += 1;
+            });
+          }
+        },
+        onStepTapped: (int index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        steps: [
+          Step(
+            title: SmallText(text: 'Personal Details'),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      child: CustomTextField(
+                        isPassword: true,
+                        title: 'First Name',
+                        placeholder: 'John',
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "Last Name"),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.7,
+                      child: CustomTextField(
+                        isPassword: true,
+                        title: 'Last Name',
+                        placeholder: 'Travolta',
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Email"),
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Street Address"),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "Parish"),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: TextFormField(
-                      decoration: InputDecoration(labelText: "City"),
-                    ),
-                  ),
-                ],
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Password"),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  LargeText(text: 'Sign Up'),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.arrow_forward,
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
-                    ),
-                  )
-                ],
-              )
-            ],
+                  ],
+                ),
+                CustomTextField(
+                  title: 'Your email address',
+                  placeholder: 'johntravolta@gmail.com',
+                ),
+                CustomTextField(
+                  isPassword: true,
+                  title: 'Password',
+                  placeholder: '************',
+                ),
+              ],
+            ),
           ),
-        ),
+          Step(
+            title: SmallText(text: 'Address'),
+            content: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomTextField(
+                      title: 'Street ',
+                      placeholder: '',
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.7,
+                          child: CustomTextField(
+                            isPassword: true,
+                            title: 'Parish',
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.7,
+                          child: CustomTextField(
+                            isPassword: true,
+                            title: 'City',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Step(
+            title: SmallText(text: 'Socials (Optional)'),
+            content: Column(
+              children: [],
+            ),
+          ),
+        ],
       ),
     );
   }

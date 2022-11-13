@@ -96,29 +96,30 @@ class _WelcomePageState extends State<WelcomePage> {
             ],
           ),
           Positioned(
-              top: 450,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.9),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 6), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  width: 100,
-                  height: 100,
-                  child: Image.asset(
-                    'assets/icons/logo.png',
-                    fit: BoxFit.cover,
-                  ),
+            top: 430,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.9),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 6), // changes position of shadow
+                    ),
+                  ],
                 ),
-              )),
+                width: 100,
+                height: 100,
+                child: Image.asset(
+                  'assets/icons/logo.png',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

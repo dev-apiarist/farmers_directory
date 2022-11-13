@@ -89,7 +89,7 @@ class _MainUserPageState extends State<MainUserPage> {
           SliverAppBar(
             centerTitle: true,
             title: SizedBox(
-                width: 60,
+                width: 70,
                 child: Image.asset(
                   'assets/icons/logo.png',
                   fit: BoxFit.cover,
@@ -98,8 +98,8 @@ class _MainUserPageState extends State<MainUserPage> {
             pinned: true,
             floating: true,
             titleSpacing: 15,
-            toolbarHeight: 60,
-            collapsedHeight: 65,
+            toolbarHeight: 70,
+            collapsedHeight: 75,
             actions: [
               // IconButton(
               //   onPressed: () {
@@ -137,7 +137,7 @@ class _MainUserPageState extends State<MainUserPage> {
                     child: TextField(
                       decoration: InputDecoration(
                           contentPadding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                           focusColor: Colors.white,
                           focusedBorder: OutlineInputBorder(
 
@@ -165,7 +165,7 @@ class _MainUserPageState extends State<MainUserPage> {
                 ],
               ),
             ),
-            expandedHeight: 150,
+            expandedHeight: 140,
             elevation: 1,
             // shape: RoundedRectangleBorder(
             //   borderRadius: BorderRadius.only(
@@ -188,19 +188,11 @@ class _MainUserPageState extends State<MainUserPage> {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(
-                              clipBehavior: Clip.hardEdge,
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(37.5),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.asset(
-                                  e['categoryImg']!,
-                                  fit: BoxFit.cover,
-                                ),
+                            SizedBox(
+                              width: 100,
+                              child: Image.asset(
+                                e['categoryImg']!,
+                                fit: BoxFit.contain,
                               ),
                             ),
                             SmallText(

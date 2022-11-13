@@ -27,7 +27,7 @@ class ProduceDetails extends StatelessWidget {
               background: Stack(
                 children: [
                   Positioned(
-                    top: 110,
+                    top: 100,
                     left: 80,
                     child: CircleAvatar(
                       radius: 200,
@@ -36,12 +36,12 @@ class ProduceDetails extends StatelessWidget {
                   ),
                   Positioned(
                       left: 80,
-                      top: 60,
+                      top: 30,
                       child: SizedBox(
                         width: 300,
                         height: 250,
                         child: Image.asset(
-                          'assets/images/apple.png',
+                          'assets/images/mango.png',
                           fit: BoxFit.cover,
                         ),
                       ))

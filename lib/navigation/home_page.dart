@@ -29,37 +29,35 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
-        body: pages[currentIndex],
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: BottomNavigationBar(
-              // unselectedFontSize: 0,
-              type: BottomNavigationBarType.fixed,
-              onTap: onTap,
-              currentIndex: currentIndex,
-              elevation: 1,
-              selectedItemColor: AppColors.mainGreen,
-              unselectedItemColor: Colors.grey.withOpacity(0.5),
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.home_rounded), label: "Home"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.book), label: 'Directory'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.grid_view), label: "Categories"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.person), label: 'Profile'),
-              ],
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
+      body: pages[currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: BottomNavigationBar(
+            // unselectedFontSize: 0,
+            type: BottomNavigationBarType.fixed,
+            onTap: onTap,
+            currentIndex: currentIndex,
+            elevation: 1,
+            selectedItemColor: AppColors.mainGreen,
+            unselectedItemColor: Colors.grey.withOpacity(0.5),
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.book), label: 'Directory'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.grid_view), label: "Categories"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), label: 'Profile'),
+            ],
           ),
         ),
       ),
