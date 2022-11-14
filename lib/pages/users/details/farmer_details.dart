@@ -23,8 +23,9 @@ class FarmerDetails extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            delegate:
-                CustomSliverAppBar(expandedHeight: Dimensions.expandedHeight, profile_img: farmer.image),
+            delegate: CustomSliverAppBar(
+                expandedHeight: Dimensions.expandedHeight,
+                profile_img: farmer.image),
             pinned: true,
             floating: true,
           ),
@@ -85,13 +86,15 @@ class FarmerDetails extends StatelessWidget {
                       Expanded(
                         child: Wrap(
                           spacing: 5,
-                          children: List.generate(farmer.products.length, (index) {
+                          children:
+                              List.generate(farmer.products.length, (index) {
                             return GestureDetector(
                               onTap: (() {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return ProduceDetails(product: farmer.products[index]);
+                                      return ProduceDetails(
+                                          product: farmer.products[index]);
                                     },
                                   ),
                                 );
@@ -111,14 +114,12 @@ class FarmerDetails extends StatelessWidget {
                   ),
                   LargeText(
                     text: 'About',
-                    size: 17,
                   ),
                   SizedBox(
                     height: Dimensions.height10,
                   ),
                   SmallText(
-                    text:
-                        '${farmer.description}',
+                    text: '${farmer.description}',
                   ),
                   SizedBox(
                     height: 30,
@@ -232,7 +233,7 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
                 radius: 75,
                 child: CircleAvatar(
                   radius: 65,
-                  backgroundImage:setProfileImage(profile_img),
+                  backgroundImage: setProfileImage(profile_img),
                 ),
               ),
             ),
@@ -252,4 +253,3 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       true;
 }
-

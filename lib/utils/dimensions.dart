@@ -5,34 +5,35 @@ class Dimensions {
   static double screenWidth = Get.context!.width; //411
 
 // dynamic height cards container
-
   static double pageView = screenHeight / 3.94;
   static double pageViewContainer = screenHeight / 4.44;
   static double pageViewTextContainer = screenHeight / 7.03;
 
 // dynamic height padding and margin
-
   static double height5 = screenHeight / 173.6;
   static double height10 = screenHeight / 86.8;
   static double height15 = screenHeight / 56.27;
   static double height20 = screenHeight / 43.4;
+  static double height40 = screenHeight / 20.27;
 
 // dynamic width padding and margin
-
   static double width5 = screenWidth / 82.2;
   static double width10 = screenWidth / 41.1;
-  static double width15 = screenHeight / 27.4;
-  static double width20 = screenHeight / 20.55;
-  static double width30 = screenHeight / 13.7;
+  static double width15 = screenWidth / 27.4;
+  static double width20 = screenWidth / 20.55;
+  static double width30 = screenWidth / 13.7;
 
 //fonts
   static double font17 = screenHeight / 51.05;
   static double font14 = screenHeight / 62;
+  static double font20 = screenHeight / 4015.55;
   static double font30 = screenHeight / 28.93;
-//  radius
 
+//  radius
+  static double radius5 = screenHeight / 162.2;
   static double radius10 = screenHeight / 84.4;
   static double radius20 = screenHeight / 42.2;
+  static double radius30 = screenHeight / 27.03;
 
   // icon size = 24
   static double iconSize20 = screenHeight / 35.17;
@@ -48,7 +49,5 @@ class Dimensions {
 
   // expandedHeight of sliver
   static double expandedHeight = screenHeight / 2.89;
-
-  //
   static double welcomePageImg = screenHeight / 1.55;
 }

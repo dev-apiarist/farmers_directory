@@ -23,15 +23,14 @@ class ProduceDetails extends StatefulWidget {
 }
 
 class _ProduceDetailsState extends State<ProduceDetails> {
-
   late Future<List<Farmer>> farmers;
-  Future<List<Farmer>> getFarmers() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint: "/farmers", queryParams:"product=${widget.product.id}" ));
+  Future<List<Farmer>> getFarmers() async {
+    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(
+        endpoint: "/farmers", queryParams: "product=${widget.product.id}"));
     List farmers = response["data"];
-    return farmers.map((farmer){
+    return farmers.map((farmer) {
       return Farmer.fromJson(farmer);
     }).toList();
-
   }
 
   @override
@@ -39,16 +38,17 @@ class _ProduceDetailsState extends State<ProduceDetails> {
     farmers = getFarmers();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Farmer>>(
         future: farmers,
-        builder:(context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          }else if(snapshot.hasData){
+          } else if (snapshot.hasData) {
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -57,8 +57,12 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                   pinned: true,
                   expandedHeight: Dimensions.expandedHeight,
                   flexibleSpace: FlexibleSpaceBar(
-                      background: Image(image: setProfileImage(widget.product.prod_img))
-                  ),
+                      background: Image(
+                    image: setProfileImage(
+                      widget.product.prod_img,
+                    ),
+                    fit: BoxFit.cover,
+                  )),
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
                     child: Container(
@@ -68,12 +72,12 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(100),
-
                         ),
                       ),
                       child: Center(
                         child: SmallText(
-                          text: '${snapshot.data!.length} Farmers are selling ${widget.product.prod_name}',
+                          text:
+                              '${snapshot.data!.length} Farmers are selling ${widget.product.prod_name}',
                           size: Dimensions.height20,
                         ),
                       ),
@@ -98,7 +102,7 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                 )
               ],
             );
-          }else{
+          } else {
             print(snapshot.error);
             return Center(child: Text('${snapshot.error}'));
           }
