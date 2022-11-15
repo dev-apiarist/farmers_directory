@@ -7,6 +7,7 @@ class LargeText extends StatelessWidget {
   double size;
   TextAlign? align;
 
+
   LargeText(
       {super.key,
       required this.text,
@@ -20,6 +21,7 @@ class LargeText extends StatelessWidget {
       text,
       textAlign: align,
       style: TextStyle(
+        
           color: color,
           fontWeight: FontWeight.w400,
           fontSize: size == 0 ? Dimensions.font17 : size),

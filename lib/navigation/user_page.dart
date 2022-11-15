@@ -21,10 +21,9 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-
   late Future<User> currentUser;
 
-  Future<User> getCurrentUser()async{
+  Future<User> getCurrentUser() async {
     return SecureStore.getUser();
   }
 
@@ -38,6 +37,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -61,13 +61,13 @@ class _UserProfileState extends State<UserProfile> {
       ),
       body: FutureBuilder<User>(
         future: currentUser,
-        builder:(context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(child:CircularProgressIndicator());
-          }else if(snapshot.hasError){
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
-          }else{
-            return  Column(
+          } else {
+            return Column(
               children: [
                 Container(
                   width: double.maxFinite,
@@ -83,7 +83,8 @@ class _UserProfileState extends State<UserProfile> {
                         height: 10,
                       ),
                       LargeText(
-                        text: "${snapshot.data!.first_name} ${snapshot.data!.last_name}",
+                        text:
+                            "${snapshot.data!.first_name} ${snapshot.data!.last_name}",
                         size: 20,
                       ),
                       SizedBox(
@@ -101,7 +102,6 @@ class _UserProfileState extends State<UserProfile> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // LargeText(text: 'Produce'),
                         // SizedBox(
@@ -135,7 +135,8 @@ class _UserProfileState extends State<UserProfile> {
                         SizedBox(
                           height: 20,
                         ),
-                        LeadingIconText(text: '${snapshot.data!.phone}', icon: Icons.call),
+                        LeadingIconText(
+                            text: '${snapshot.data!.phone}', icon: Icons.call),
                         SizedBox(
                           height: 20,
                         ),
@@ -144,12 +145,12 @@ class _UserProfileState extends State<UserProfile> {
                         SizedBox(
                           height: 40,
                         ),
-                        Align(
-                          alignment: Alignment.center,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
                           child: TextButton(
                             style: TextButton.styleFrom(
                                 shape: StadiumBorder(),
-                                backgroundColor: AppColors.mainBlue),
+                                backgroundColor: AppColors.mainGreen),
                             onPressed: () {
                               Navigator.push(
                                 context,

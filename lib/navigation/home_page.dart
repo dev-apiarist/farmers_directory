@@ -2,6 +2,7 @@ import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/navigation/directory_page.dart';
 import 'package:farmers_directory/navigation/user_page.dart';
 import 'package:farmers_directory/pages/home/main_user_page.dart';
+import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List pages = [MainUserPage(), Directory(), Categories(), UserProfile()];
+  List pages = const [MainUserPage(), Directory(), Categories(), UserProfile()];
 
   int currentIndex = 0;
   void onTap(int index) {
@@ -37,7 +38,8 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        margin: EdgeInsets.symmetric(
+            horizontal: Dimensions.width20, vertical: Dimensions.height10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
           child: BottomNavigationBar(

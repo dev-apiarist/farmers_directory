@@ -25,7 +25,9 @@ void main() async {
 
   await dep.init();
   runApp(const RootApp());
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  );
 }
 
 class RootApp extends StatelessWidget {
@@ -39,7 +41,7 @@ class RootApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)),
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home: LoginPage(),
     );
   }
 }

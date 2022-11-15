@@ -31,7 +31,7 @@ class MainUserPage extends StatefulWidget {
 
 class _MainUserPageState extends State<MainUserPage> {
   PageController pageController = PageController(viewportFraction: 1);
-  late Future <User> currentUser;
+  late Future<User> currentUser;
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
   List<Category> categories = [];
@@ -39,42 +39,47 @@ class _MainUserPageState extends State<MainUserPage> {
   List<Product> products = [];
   List<Farmer> nearbyFarmers = [];
 
-
-  getFarmers() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/farmers"));
+  getFarmers() async {
+    Map<String, dynamic> response =
+        jsonDecode(await NetworkHandler.get(endpoint: "/farmers"));
     List farmersList = response["data"];
-    setState((){
-      farmers = farmersList.map((farmer){
+    setState(() {
+      farmers = farmersList.map((farmer) {
         return Farmer.fromJson(farmer);
       }).toList();
     });
   }
-  getProducts() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/products"));
+
+  getProducts() async {
+    Map<String, dynamic> response =
+        jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
-    setState((){
-      products = productsList.map((product){
+    setState(() {
+      products = productsList.map((product) {
         return Product.fromJson(product);
       }).toList();
     });
   }
-  getCategories() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/categories"));
+
+  getCategories() async {
+    Map<String, dynamic> response =
+        jsonDecode(await NetworkHandler.get(endpoint: "/categories"));
     List categoryList = response["data"];
-    setState((){
-      categories = categoryList.map((category){
+    setState(() {
+      categories = categoryList.map((category) {
         return Category.fromJson(category);
       }).toList();
     });
   }
-  getData() async{
-      try{
-         getFarmers();
-         getCategories();
-         getProducts();
-      }catch(error){
-          print(error);
-      }
+
+  getData() async {
+    try {
+      getFarmers();
+      getCategories();
+      getProducts();
+    } catch (error) {
+      print(error);
+    }
   }
 
   final double _height = Dimensions.pageViewContainer;
@@ -116,259 +121,301 @@ class _MainUserPageState extends State<MainUserPage> {
     String? selectedLocation;
 
     return Scaffold(
-      drawer: Drawer(),
-      body: FutureBuilder<User>(
-        future:currentUser,
-        builder: (context,snapshot) {
-          if(snapshot.hasData){
-            nearbyFarmers = farmers.where((farmer) => farmer.address["parish"] == snapshot.data!.address["parish"]).toList();
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-            centerTitle: true,
-            title: SizedBox(
-                width: 70,
-                child: Image.asset(
-                  'assets/icons/logo.png',
-                  fit: BoxFit.cover,
-                )),
-            foregroundColor: Colors.black,
-            pinned: true,
-            floating: true,
-            titleSpacing: 15,
-            toolbarHeight: 70,
-            collapsedHeight: 75,
-            actions: [
-              // IconButton(
-              //   onPressed: () {
-              //     showSearch(
-              //       context: context,
-              //       delegate: CustomSearchDelegate(),
-              //     );
-              //   },
-              //   icon: Icon(Icons.search),
-              // ),
-            ],
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: 15.0,
-                        ),
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white54,
-                            radius: 30,
-                            backgroundImage:setProfileImage(snapshot.data!.image)
-                                ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: TextField(
-                      decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                          focusColor: Colors.white,
-                          focusedBorder: OutlineInputBorder(
-
-                              // borderSide: BorderSide(color: Colors.transparent),
-                              ),
-                          border: OutlineInputBorder(
-                            // borderSide:
-                            // BorderSide(width: 0, style: BorderStyle.none),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search ',
-                          fillColor: Colors.white,
-                          filled: true),
-                      readOnly: true,
-                      onTap: () {
-                        showSearch(
-                          context: context,
-                          delegate:
-                          CustomSearchDelegate(query: ""),
-                        );
-                      },
-                    ),
-                  )
-                ],
+        backgroundColor: Colors.white,
+        drawer: Drawer(
+          width: MediaQuery.of(context).size.width * 0.65,
+          elevation: 0,
+          backgroundColor: Colors.white,
+          child: ListView(
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(color: AppColors.mainGreen),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
               ),
-            ),
-            expandedHeight: 140,
-            elevation: 1,
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.only(
-            //     bottomRight: Radius.circular(10),
-            //     bottomLeft: Radius.circular(10),
-            //   ),
-            // ),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.person,
+                  text: 'Account',
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.settings,
+                  text: 'Settings',
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.feedback,
+                  text: 'Send Feedback',
+                ),
+              ),
+              Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.logout,
+                  text: 'Logout',
+                ),
+              ),
+              Divider(),
+            ],
           ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+        ),
+        body: FutureBuilder<User>(
+            future: currentUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                nearbyFarmers = farmers
+                    .where((farmer) =>
+                        farmer.address["parish"] ==
+                        snapshot.data!.address["parish"])
+                    .toList();
+                return CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      centerTitle: true,
+                      title: SizedBox(
+                          width: 70,
+                          child: Image.asset(
+                            'assets/icons/logo.png',
+                            fit: BoxFit.cover,
+                          )),
+                      foregroundColor: Colors.black,
+                      pinned: true,
+                      floating: true,
+                      titleSpacing: Dimensions.width15,
+                      toolbarHeight: 70,
+                      collapsedHeight: 75,
+
+                      backgroundColor: Colors.white,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            LargeText(
-                              text: 'Categories',
-                              size: 20,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: Dimensions.width15,
+                                  ),
+                                  child: CircleAvatar(
+                                      backgroundColor: Colors.white54,
+                                      radius: Dimensions.radius30,
+                                      backgroundImage: setProfileImage(
+                                          snapshot.data!.image)),
+                                )
+                              ],
                             ),
+                            Container(
+                              margin: EdgeInsets.only(top: Dimensions.height20),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Dimensions.width15),
+                              child: SizedBox(
+                                height: 45,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: Dimensions.width20),
+                                      focusColor: Colors.white,
+                                      focusedBorder: OutlineInputBorder(
+
+                                          // borderSide: BorderSide(color: Colors.transparent),
+                                          ),
+                                      border: OutlineInputBorder(
+                                        // borderSide:
+                                        // BorderSide(width: 0, style: BorderStyle.none),
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius5),
+                                      ),
+                                      prefixIcon: Icon(Icons.search),
+                                      hintText: 'Search ',
+                                      fillColor: Colors.white,
+                                      filled: true),
+                                  readOnly: true,
+                                  onTap: () {
+                                    showSearch(
+                                        context: context,
+                                        delegate: CustomSearchDelegate(
+                                            searchTerms: produce));
+                                  },
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: categories.map(
-                                (Category c) {
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(7),
-                                    clipBehavior: Clip.hardEdge,
-                                    width: 75,
-                                    height: 75,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.mainGreen.withOpacity(0.4),
-                                      borderRadius: BorderRadius.circular(37.5),
-                                    ),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(30),
-
-                                        child:Image.network(c.category_img),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  SmallText(
-                                    text: c.category_name,
-                                  )
-                                ],
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      ),
-                      Column(
+                      expandedHeight: 140,
+                      elevation: 1,
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.only(
+                      //     bottomRight: Radius.circular(10),
+                      //     bottomLeft: Radius.circular(10),
+                      //   ),
+                      // ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width10,
+                                vertical: Dimensions.height20),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 LargeText(
-                                  text: 'In Season',
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 240,
-                            child: PageView.builder(
-                              padEnds: false,
-                              controller: pageController,
-                              itemCount: (products.length >= 3)? 3 : products.length,
-                              itemBuilder: (BuildContext context, position) {
-                                return _buildPageItem(position, products[position]);
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          DotsIndicator(
-                            dotsCount: 3,
-                            position: _currPageValue,
-                            decorator: DotsDecorator(
-                              color: Colors.black12, // Inactive
-                              size: const Size.square(9.0),
-                              activeSize: const Size(18.0, 9.0),
-                              activeColor: AppColors.mainBlue,
-                              activeShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                LargeText(
-                                  text: 'Nearby Farmers',
-                                  size: 17,
+                                  text: 'Categories',
+                                  size: Dimensions.height20,
                                 ),
                               ],
                             ),
                           ),
                           Container(
-                              padding: EdgeInsets.symmetric(
-                              horizontal: Dimensions.width10),
-                              height: 200,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: (nearbyFarmers.length >= 5)? 5 : nearbyFarmers.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return FarmerDetails(
-                                                farmer: nearbyFarmers[index]);
-                                          },
+                            padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.height15),
+                            color: AppColors.mainGreen.withOpacity(0.3),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: categories.map(
+                                (Category c) {
+                                  return Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.network(
+                                            c.category_img,
+                                            fit: BoxFit.contain,
+                                          )),
+                                      LargeText(
+                                        text: c.category_name.toUpperCase(),
+                                        color: Colors.black87,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.width10,
+                                    vertical: Dimensions.height20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LargeText(
+                                      text: 'In Season',
+                                      size: Dimensions.height20,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: Dimensions.inSeasonContPri,
+                                child: PageView.builder(
+                                  padEnds: false,
+                                  controller: pageController,
+                                  itemCount: (products.length >= 3)
+                                      ? 3
+                                      : products.length,
+                                  itemBuilder:
+                                      (BuildContext context, position) {
+                                    return _buildPageItem(
+                                        position, products[position]);
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                height: Dimensions.height10,
+                              ),
+                              DotsIndicator(
+                                dotsCount: 3,
+                                position: _currPageValue,
+                                decorator: DotsDecorator(
+                                    color: Colors.black12, // Inactive
+                                    size: Size.square(Dimensions.height10),
+                                    activeColor: AppColors.mainGreen),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.width10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    LargeText(
+                                      text: 'Nearby Farmers',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    EdgeInsets.only(left: Dimensions.width10),
+                                height: 200,
+                                width: double.maxFinite,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: (nearbyFarmers.length >= 5)
+                                        ? 5
+                                        : nearbyFarmers.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return FarmerDetails(
+                                                    farmer:
+                                                        nearbyFarmers[index]);
+                                              },
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              right: Dimensions.width10,
+                                              top: Dimensions.height10),
+                                          width: 130,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius5),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    nearbyFarmers[index].image),
+                                                fit: BoxFit.cover),
+                                          ),
                                         ),
                                       );
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          right: Dimensions.width15,
-                                          top: Dimensions.height10),
-                                      width: 130,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            Dimensions.height20),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                nearbyFarmers[index].image),
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                  );
-                                }
-                            ),
+                                    }),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }else{
-            return Center(child:CircularProgressIndicator());
-          }
-        }
-      )
-    );
+                    )
+                  ],
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   List<String> locations = [
@@ -376,20 +423,16 @@ class _MainUserPageState extends State<MainUserPage> {
     'Kingston',
     'St. Ann',
     'St. James',
-    // 'Portland',
-    // 'St. Mary',
-    // 'St. Catherine',
-    // 'Trelawny',
-    // 'Westmoreland',
-    // 'St.Thomas',
-    // 'Hanover',
+    'Portland',
+    'St. Mary',
+    'St. Catherine',
+    'Trelawny',
     // 'Westmoreland',
     // 'St.Thomas',
     // 'Hanover',
   ];
 //pageview slider
-  Widget _buildPageItem( int index, Product product) {
-
+  Widget _buildPageItem(int index, Product product) {
     Matrix4 matrix = Matrix4.identity();
 
     // if current page
@@ -433,32 +476,35 @@ class _MainUserPageState extends State<MainUserPage> {
       child: Stack(
         children: [
           Container(
-            // height: Dimensions.pageView,
+            height: Dimensions.inSeasonContSec,
             clipBehavior: Clip.hardEdge,
-            margin: EdgeInsets.symmetric(horizontal: Dimensions.width15),
+            margin: EdgeInsets.symmetric(horizontal: Dimensions.width10),
             decoration: BoxDecoration(
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 5),
-                    blurRadius: 5.0,
+                    offset: Offset(0, Dimensions.height5),
+                    blurRadius: Dimensions.radius5,
                     color: Color(0xFFF4F4F4),
                   ),
                 ],
                 borderRadius: BorderRadius.circular(
-                  Dimensions.radius10,
+                  Dimensions.radius5,
                 ),
                 color: Colors.white),
             child: Row(children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.35,
                 height: double.maxFinite,
-                child: Image(image: setProduceImage(product.prod_img), fit: BoxFit.cover,),
+                child: Image(
+                  image: setProduceImage(product.prod_img),
+                  fit: BoxFit.cover,
+                ),
               ),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.symmetric(
                       horizontal: Dimensions.width10,
-                      vertical: Dimensions.height15),
+                      vertical: Dimensions.height10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -472,31 +518,32 @@ class _MainUserPageState extends State<MainUserPage> {
                       LargeText(
                         text: "Regions",
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 1.5, left: 2),
-                        child: Wrap(
-                          spacing: Dimensions.width10,
-                          runSpacing: 5,
-                          children: List.generate(
-                            locations.length,
-                            (index) {
-                              return LeadingIconText(
-                                text: locations[index],
-                                iconSize: Dimensions.height10,
-                                textSize: Dimensions.height15,
-                                icon: Icons.fiber_manual_record,
-                                color: Colors.black87,
-                              );
-                            },
+                      SizedBox(
+                        height: Dimensions.height10,
+                      ),
+                      GridView.builder(
+                        itemCount: locations.length,
+                        itemBuilder: (context, index) => SizedBox(
+                          height: Dimensions.height5,
+                          child: SmallText(
+                            text: locations[index],
                           ),
                         ),
+                        padding: EdgeInsets.all(0),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisSpacing: 0,
+                            mainAxisExtent: 24,
+                            crossAxisCount: 2,
+                            childAspectRatio: 3,
+                            crossAxisSpacing: Dimensions.width10),
                       ),
                       Spacer(),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            backgroundColor: AppColors.mainBlue,
+                            backgroundColor: Colors.black87,
                           ),
                           onPressed: () {
                             Navigator.of(context).push(
@@ -524,18 +571,8 @@ class _MainUserPageState extends State<MainUserPage> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  CustomSearchDelegate({required this.query});
-  List<String> searchTerms = [
-    'Apples',
-    'Banana',
-    'Yam',
-    'Potato',
-    'Tomato',
-    'Lychee',
-    'Orange',
-  ];
-
-  final String query;
+  List<String> searchTerms;
+  CustomSearchDelegate({required this.searchTerms});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -561,9 +598,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
+    for (var x in this.searchTerms) {
+      if (x.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(x);
       }
     }
     return ListView.builder(
@@ -579,9 +616,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
+    for (var x in this.searchTerms) {
+      if (x.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(x);
       }
     }
     return ListView.builder(
