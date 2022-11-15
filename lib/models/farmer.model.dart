@@ -27,10 +27,12 @@ class Farmer {
     this.id_number="",
     this.phone="",
     this.socials=const{},
-    this.password = "", required products
+    this.password = "", required this.products
   });
 
   factory Farmer.fromJson(Map<String, dynamic> json){
+    List productList = json["products"];
+    List<Product> products = productList.map((product) => Product.fromJson(product)).toList();
     return Farmer(
       id: json["_id"],
       fname: json["fname"],
@@ -43,7 +45,7 @@ class Farmer {
       phone: json["phone"],
       socials: json["socials"] ?? {"instagram": "", "website":"", "facebook": ""},
       address: json["address"] ?? {"street": "", "city":"", "parish": ""},
-      products: json["products"]
+      products: products
     );
   }
 
