@@ -15,8 +15,8 @@ class FarmerDetails extends StatelessWidget {
   final Farmer farmer;
   @override
   Widget build(BuildContext context) {
-    String contactNumber = '+1 876 286-8246';
-    String email = 'johnbrown24@gmail.com';
+    String contactNumber = farmer.phone;
+    String email = farmer.email;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,7 +31,7 @@ class FarmerDetails extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.only(top: 40),
+              margin: EdgeInsets.only(top: Dimensions.height40),
               padding: EdgeInsets.symmetric(horizontal: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class FarmerDetails extends StatelessWidget {
                     alignment: AlignmentDirectional.center,
                     child: LargeText(
                       text: '${farmer.fname} ${farmer.lname}',
-                      size: 30,
+                      size: Dimensions.font30,
                     ),
                   ),
                   SizedBox(
@@ -85,7 +85,7 @@ class FarmerDetails extends StatelessWidget {
                       SizedBox(width: Dimensions.width10),
                       Expanded(
                         child: Wrap(
-                          spacing: 5,
+                          spacing: Dimensions.width5,
                           children:
                               List.generate(farmer.products.length, (index) {
                             return GestureDetector(
@@ -212,7 +212,7 @@ class CustomSliverAppBar extends SliverPersistentHeaderDelegate {
               opacity: (1 - shrinkOffset / expandedHeight),
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(40),
+                  top: Radius.circular(Dimensions.height40),
                 ),
                 child: Container(
                   height: 40,

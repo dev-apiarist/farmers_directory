@@ -41,72 +41,74 @@ class _ProduceDetailsState extends State<ProduceDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: FutureBuilder<List<Farmer>>(
-        future: farmers,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData) {
-            return CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  floating: true,
-                  elevation: 0,
-                  pinned: true,
-                  expandedHeight: Dimensions.expandedHeight,
-                  flexibleSpace: FlexibleSpaceBar(
-                      background: Image(
-                    image: setProfileImage(
-                      widget.product.prod_img,
-                    ),
-                    fit: BoxFit.cover,
-                  )),
-                  bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(40),
-                    child: Container(
-                      height: 40,
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100),
-                        ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: FutureBuilder<List<Farmer>>(
+          future: farmers,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasData) {
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    floating: true,
+                    elevation: 0,
+                    pinned: true,
+                    expandedHeight: Dimensions.expandedHeight,
+                    flexibleSpace: FlexibleSpaceBar(
+                        background: Image(
+                      image: setProfileImage(
+                        widget.product.prod_img,
                       ),
-                      child: Center(
-                        child: SmallText(
-                          text:
-                              '${snapshot.data!.length} Farmers are selling ${widget.product.prod_name}',
-                          size: Dimensions.height20,
+                      fit: BoxFit.cover,
+                    )),
+                    bottom: PreferredSize(
+                      preferredSize: Size.fromHeight(40),
+                      child: Container(
+                        height: 40,
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(100),
+                          ),
+                        ),
+                        child: Center(
+                          child: SmallText(
+                            text:
+                                '${snapshot.data!.length} Farmers are selling ${widget.product.prod_name}',
+                            size: Dimensions.height20,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      ListView.separated(
-                        separatorBuilder: ((context, index) => Divider()),
-                        padding: EdgeInsets.only(top: Dimensions.height10),
-                        itemCount: snapshot.data!.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return FarmersList(farmer: snapshot.data![index]);
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          } else {
-            print(snapshot.error);
-            return Center(child: Text('${snapshot.error}'));
-          }
-        },
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        ListView.separated(
+                          separatorBuilder: ((context, index) => Divider()),
+                          padding: EdgeInsets.only(top: Dimensions.height10),
+                          itemCount: snapshot.data!.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return FarmersList(farmer: snapshot.data![index]);
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            } else {
+              print(snapshot.error);
+              return Center(child: Text('${snapshot.error}'));
+            }
+          },
+        ),
       ),
     );
   }

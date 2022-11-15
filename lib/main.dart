@@ -25,10 +25,9 @@ void main() async {
 
   await dep.init();
   runApp(const RootApp());
-
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+  );
 }
 
 class RootApp extends StatelessWidget {

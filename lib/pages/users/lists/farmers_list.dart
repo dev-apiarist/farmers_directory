@@ -40,7 +40,6 @@ class FarmersList extends StatelessWidget {
         children: [
           LargeText(
             text: 'Main Produce:',
-            size: 16,
           ),
           SizedBox(
             height: Dimensions.height5,

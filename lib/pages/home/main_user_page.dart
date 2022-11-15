@@ -132,16 +132,6 @@ class _MainUserPageState extends State<MainUserPage> {
                 decoration: BoxDecoration(color: AppColors.mainGreen),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // CircleAvatar(
-                    //   radius: 40,
-                    //   backgroundColor: Colors.white,
-                    // ),
-                    // LargeText(
-                    //   text: 'J Farmers',
-                    //   color: Colors.white,
-                    // ),
-                  ],
                 ),
               ),
               ListTile(
@@ -253,9 +243,9 @@ class _MainUserPageState extends State<MainUserPage> {
                                   readOnly: true,
                                   onTap: () {
                                     showSearch(
-                                      context: context,
-                                      delegate: CustomSearchDelegate(query: ''),
-                                    );
+                                        context: context,
+                                        delegate: CustomSearchDelegate(
+                                            searchTerms: produce));
                                   },
                                 ),
                               ),
@@ -278,21 +268,21 @@ class _MainUserPageState extends State<MainUserPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: Dimensions.width10,
-                                vertical: Dimensions.height15),
+                                vertical: Dimensions.height20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 LargeText(
                                   text: 'Categories',
-                                  size: Dimensions.font20,
+                                  size: Dimensions.height20,
                                 ),
                               ],
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height10),
-                            color: AppColors.mainGreen.withOpacity(0.2),
+                                vertical: Dimensions.height15),
+                            color: AppColors.mainGreen.withOpacity(0.3),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: categories.map(
@@ -309,7 +299,8 @@ class _MainUserPageState extends State<MainUserPage> {
                                             fit: BoxFit.contain,
                                           )),
                                       LargeText(
-                                        text: c.category_name,
+                                        text: c.category_name.toUpperCase(),
+                                        color: Colors.black87,
                                       )
                                     ],
                                   );
@@ -320,20 +311,22 @@ class _MainUserPageState extends State<MainUserPage> {
                           Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.width10,
+                                    vertical: Dimensions.height20),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     LargeText(
                                       text: 'In Season',
-                                      size: Dimensions.font20,
+                                      size: Dimensions.height20,
                                     ),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 290,
+                                height: Dimensions.inSeasonContPri,
                                 child: PageView.builder(
                                   padEnds: false,
                                   controller: pageController,
@@ -355,7 +348,7 @@ class _MainUserPageState extends State<MainUserPage> {
                                 position: _currPageValue,
                                 decorator: DotsDecorator(
                                     color: Colors.black12, // Inactive
-                                    size: const Size.square(9.0),
+                                    size: Size.square(Dimensions.height10),
                                     activeColor: AppColors.mainGreen),
                               ),
                               Padding(
@@ -401,8 +394,8 @@ class _MainUserPageState extends State<MainUserPage> {
                                               top: Dimensions.height10),
                                           width: 130,
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius5),
                                             image: DecorationImage(
                                                 image: NetworkImage(
                                                     nearbyFarmers[index].image),
@@ -483,19 +476,19 @@ class _MainUserPageState extends State<MainUserPage> {
       child: Stack(
         children: [
           Container(
-            height: 270,
+            height: Dimensions.inSeasonContSec,
             clipBehavior: Clip.hardEdge,
             margin: EdgeInsets.symmetric(horizontal: Dimensions.width10),
             decoration: BoxDecoration(
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 5),
-                    blurRadius: 5.0,
+                    offset: Offset(0, Dimensions.height5),
+                    blurRadius: Dimensions.radius5,
                     color: Color(0xFFF4F4F4),
                   ),
                 ],
                 borderRadius: BorderRadius.circular(
-                  5,
+                  Dimensions.radius5,
                 ),
                 color: Colors.white),
             child: Row(children: [
@@ -526,12 +519,12 @@ class _MainUserPageState extends State<MainUserPage> {
                         text: "Regions",
                       ),
                       SizedBox(
-                        height: 10,
+                        height: Dimensions.height10,
                       ),
                       GridView.builder(
                         itemCount: locations.length,
                         itemBuilder: (context, index) => SizedBox(
-                          height: 5,
+                          height: Dimensions.height5,
                           child: SmallText(
                             text: locations[index],
                           ),
@@ -543,7 +536,7 @@ class _MainUserPageState extends State<MainUserPage> {
                             mainAxisExtent: 24,
                             crossAxisCount: 2,
                             childAspectRatio: 3,
-                            crossAxisSpacing: 10),
+                            crossAxisSpacing: Dimensions.width10),
                       ),
                       Spacer(),
                       Align(
@@ -578,18 +571,8 @@ class _MainUserPageState extends State<MainUserPage> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  CustomSearchDelegate({required this.query});
-  List<String> searchTerms = [
-    'Apples',
-    'Banana',
-    'Yam',
-    'Potato',
-    'Tomato',
-    'Lychee',
-    'Orange',
-  ];
-
-  final String query;
+  List<String> searchTerms;
+  CustomSearchDelegate({required this.searchTerms});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -615,9 +598,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
+    for (var x in this.searchTerms) {
+      if (x.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(x);
       }
     }
     return ListView.builder(
@@ -633,9 +616,9 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var produce in searchTerms) {
-      if (produce.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(produce);
+    for (var x in this.searchTerms) {
+      if (x.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(x);
       }
     }
     return ListView.builder(

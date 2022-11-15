@@ -5,6 +5,7 @@ import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
 import 'package:farmers_directory/pages/users/lists/produce_list.dart';
 import 'package:farmers_directory/utils/functions.dart';
+import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 
@@ -25,26 +26,26 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
   TabController? tabController;
 
-
-
   late Future<List<Category>> allCategories;
   int categoryLength = 0;
   List<Product> products = [];
 
-  getProducts() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/products"));
+  getProducts() async {
+    Map<String, dynamic> response =
+        jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
-    setState((){
-      products = productsList.map((product){
+    setState(() {
+      products = productsList.map((product) {
         return Product.fromJson(product);
       }).toList();
     });
   }
 
-  Future<List<Category>> getCategories() async{
-    Map<String, dynamic> response = jsonDecode(await NetworkHandler.get(endpoint:"/categories"));
+  Future<List<Category>> getCategories() async {
+    Map<String, dynamic> response =
+        jsonDecode(await NetworkHandler.get(endpoint: "/categories"));
     List categoryList = response["data"];
-    List<Category> categories = categoryList.map((category){
+    List<Category> categories = categoryList.map((category) {
       return Category.fromJson(category);
     }).toList();
     return categories;
@@ -59,8 +60,8 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: LargeText(
           text: 'Categories',
@@ -76,52 +77,55 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
         backgroundColor: AppColors.mainGreen,
       ),
       body: FutureBuilder<List<Category>>(
-          future: allCategories,
-          builder: (context, snapshot){
-            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
-              tabController = TabController(length: snapshot.data!.length, vsync: this);
+        future: allCategories,
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            tabController =
+                TabController(length: snapshot.data!.length, vsync: this);
 
-              return Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: Dimensions.height10),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: TabBar(
-                        // indicator: CircleTabIndicator(color: Colors.black, radius: 4),
-                        indicatorColor: Colors.lightGreen,
-                        isScrollable: true,
-                        labelPadding:
-                        EdgeInsets.symmetric(horizontal: Dimensions.width20),
-                        labelColor: Colors.black,
-                        unselectedLabelColor: Colors.grey,
-                        controller: tabController,
-                        tabs: snapshot.data!.map((category){
-                          return Tab(text: category.category_name);
-                        }).toList(),
-                      ),
+            return Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: Dimensions.height10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TabBar(
+                      // indicator: CircleTabIndicator(color: Colors.black, radius: 4),
+                      indicatorColor: Colors.lightGreen,
+                      isScrollable: true,
+                      labelPadding:
+                          EdgeInsets.symmetric(horizontal: Dimensions.width20),
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
+                      controller: tabController,
+                      tabs: snapshot.data!.map((category) {
+                        return Tab(text: category.category_name);
+                      }).toList(),
                     ),
                   ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      child: TabBarView(
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: double.maxFinite,
+                    child: TabBarView(
                         physics: NeverScrollableScrollPhysics(),
                         controller: tabController,
-
-                        children: snapshot.data!.map((category){
-                          List<Product> filteredProduct = products.where((product){
+                        children: snapshot.data!.map((category) {
+                          List<Product> filteredProduct =
+                              products.where((product) {
                             return product.category == category.id;
                           }).toList();
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ...showInSeasonWhen(category.category_name, "Livestock",filteredProduct),
-
+                                ...showInSeasonWhen(category.category_name,
+                                    "Livestock", filteredProduct),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,
@@ -130,30 +134,37 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Icon(Icons.sort),
-                                          SmallText(text: 'Sort By')
+                                          LeadingIconText(
+                                            text: 'Sort By',
+                                            icon: Icons.sort,
+                                            iconSize: Dimensions.height20,
+                                          )
                                         ],
                                       ),
                                     )
                                   ],
                                 ),
-                                Expanded(child: ProduceList( productList: filteredProduct,)),
+                                SizedBox(
+                                  height: Dimensions.height10,
+                                ),
+                                Expanded(
+                                    child: ProduceList(
+                                  productList: filteredProduct,
+                                )),
                               ],
                             ),
                           );
-                        }).toList()
-
-                      ),
-                    ),
+                        }).toList()),
                   ),
-                ],
-              );
-            }else if(snapshot.hasError){
-              return Center(child: Text("${snapshot.error}"));
-            }else{
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text("${snapshot.error}"));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
@@ -186,18 +197,17 @@ class _CirclePainter extends BoxPainter {
   }
 }
 
-
- columnFunction(){
-  return                           Column(
+columnFunction() {
+  return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: 10, horizontal: 20),
+        padding: EdgeInsets.symmetric(
+            vertical: Dimensions.height10, horizontal: Dimensions.width20),
         child: LargeText(text: 'Livestock Breeding'),
       ),
       Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),
         height: 250,
         width: double.maxFinite,
         child: ListView.builder(
@@ -206,51 +216,55 @@ class _CirclePainter extends BoxPainter {
             itemCount: 0,
             itemBuilder: (context, index) {
               return Container(
-                margin: EdgeInsets.only(right: 15, top: 10),
-                width: 160,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
+                  margin: EdgeInsets.only(
+                      right: Dimensions.width15, top: Dimensions.height10),
+                  width: 160,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Dimensions.radius20),
+                    image: DecorationImage(
                       image: NetworkImage(
-                          "",),
-                ),
-              ));
+                        "",
+                      ),
+                    ),
+                  ));
             }),
       ),
       SizedBox(height: 30),
     ],
   );
- }
+}
 
- List<Widget> showInSeasonWhen(constant, variable, List<Product> products){
-  var seasonProduce = products.where((element) => element.inSeason == true).toList();
-  if(constant == variable){
+List<Widget> showInSeasonWhen(constant, variable, List<Product> products) {
+  var seasonProduce =
+      products.where((element) => element.inSeason == true).toList();
+  if (constant == variable) {
     return [SizedBox.shrink()];
-  }else{
-    return [LargeText(text: 'In Season'),
-   Container(
-   height: 200,
-   width: double.maxFinite,
-   child: ListView.builder(
-     shrinkWrap: true,
-     scrollDirection: Axis.horizontal,
-     itemCount: seasonProduce.length,
-     itemBuilder: (context, index) {
-       return Container(
-         margin: EdgeInsets.only(
-             right: Dimensions.width15,
-             top: Dimensions.height10),
-         width: 160,
-         decoration: BoxDecoration(
-           borderRadius: BorderRadius.circular(20),
-           image: DecorationImage(
-               image: NetworkImage(
-                   seasonProduce[index].prod_img),
-               fit: BoxFit.cover),
-         ),
-       );
-     },
-   ),
-   ),SizedBox(height: 30),];
+  } else {
+    return [
+      LargeText(text: 'In Season'),
+      Container(
+        height: 200,
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: seasonProduce.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.only(
+                  right: Dimensions.width15, top: Dimensions.height10),
+              width: 160,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.radius5),
+                image: DecorationImage(
+                    image: NetworkImage(seasonProduce[index].prod_img),
+                    fit: BoxFit.cover),
+              ),
+            );
+          },
+        ),
+      ),
+      SizedBox(height: 30),
+    ];
   }
- }
+}

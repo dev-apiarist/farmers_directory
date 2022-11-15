@@ -24,10 +24,9 @@ class Dimensions {
   static double width30 = screenWidth / 13.7;
 
 //fonts
-  static double font17 = screenHeight / 51.05;
-  static double font14 = screenHeight / 62;
-  static double font20 = screenHeight / 4015.55;
-  static double font30 = screenHeight / 28.93;
+  static double font17 = screenHeight / 47.70;
+  static double font14 = screenHeight / 57.92;
+  static double font30 = screenHeight / 27.03;
 
 //  radius
   static double radius5 = screenHeight / 162.2;
@@ -39,9 +38,9 @@ class Dimensions {
   static double iconSize20 = screenHeight / 35.17;
   static double iconSize16 = screenHeight / 54.25;
 
-  //List view Size
-  static double ListViewImageSize = screenWidth / 3.4;
-  static double ListViewTextContainer = screenWidth / 3.4;
+//
+  static double inSeasonContPri = screenHeight / 2.79;
+  static double inSeasonContSec = screenHeight / 3;
 
   //featured produce
   static double featuredProduceImgContSize = screenHeight / 2.28;
