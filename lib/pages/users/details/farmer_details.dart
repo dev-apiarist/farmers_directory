@@ -86,6 +86,7 @@ class FarmerDetails extends StatelessWidget {
                         child: Wrap(
                           spacing: 5,
                           children: List.generate(farmer.products.length, (index) {
+                            print(farmer.products[index].prod_name);
                             return GestureDetector(
                               onTap: (() {
                                 Navigator.of(context).push(
@@ -100,7 +101,8 @@ class FarmerDetails extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 side: BorderSide(color: Colors.black54),
                                 label: SmallText(
-                                  text: '${farmer.products[index]}',
+                                  size: 13,
+                                  text: '${farmer.products[index].prod_name}',
                                 ),
                               ),
                             );

@@ -50,7 +50,7 @@ class FarmersList extends StatelessWidget {
             children: List.generate(farmer.products.length, (index) {
               return LeadingIconText(
                 icon: Icons.fiber_manual_record,
-                text: '${farmer.products[index]}',
+                text: '${farmer.products[index].prod_name}',
                 color: Colors.black87,
                 iconSize: Dimensions.height10,
                 textSize: Dimensions.font14,

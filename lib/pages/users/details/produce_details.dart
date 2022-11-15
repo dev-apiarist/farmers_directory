@@ -49,6 +49,9 @@ class _ProduceDetailsState extends State<ProduceDetails> {
           if(snapshot.connectionState == ConnectionState.waiting){
             return Center(child: CircularProgressIndicator());
           }else if(snapshot.hasData){
+            List<Farmer> filteredFarmers = snapshot.data!.where((farmer){
+              return farmer.products.where((prod){ return widget.product.id == prod.id;}).isNotEmpty;
+            }).toList();
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -57,7 +60,7 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                   pinned: true,
                   expandedHeight: Dimensions.expandedHeight,
                   flexibleSpace: FlexibleSpaceBar(
-                      background: Image(image: setProfileImage(widget.product.prod_img))
+                      background: Image(image: setProfileImage(widget.product.prod_img)),
                   ),
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),
@@ -73,7 +76,7 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                       ),
                       child: Center(
                         child: SmallText(
-                          text: '${snapshot.data!.length} Farmers are selling ${widget.product.prod_name}',
+                          text: '${filteredFarmers.length} Farmers are selling ${widget.product.prod_name}',
                           size: Dimensions.height20,
                         ),
                       ),
@@ -86,11 +89,11 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                       ListView.separated(
                         separatorBuilder: ((context, index) => Divider()),
                         padding: EdgeInsets.only(top: Dimensions.height10),
-                        itemCount: snapshot.data!.length,
+                        itemCount: filteredFarmers.length,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return FarmersList(farmer: snapshot.data![index]);
+                          return FarmersList(farmer: filteredFarmers[index]);
                         },
                       ),
                     ],
