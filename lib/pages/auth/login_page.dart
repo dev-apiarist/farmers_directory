@@ -141,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                             SmallText(
                               text: 'Forgot Password?',
                               color: Colors.blueAccent,
-                            )
+                            ),
+
                           ],
                         ),
                         Padding(
@@ -178,7 +179,29 @@ class _LoginPageState extends State<LoginPage> {
                                   fit: BoxFit.cover,
                                 )),
                           ],
-                        )
+                        ),
+                        SizedBox(height:40),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children:[
+                              SmallText(
+                                text: 'Don\'t have an account as yet?',
+                                color: Colors.grey,
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpPage()));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:8.0),
+                                  child: Text('Sign Up',
+                                    style: TextStyle(fontSize: 16, color:Colors.lightGreen,fontWeight: FontWeight.bold)
+                                  ),
+                                ),
+                              )
+                            ]
+                          ),
+
                       ],
                     ),
                   ),
