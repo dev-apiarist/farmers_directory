@@ -50,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void getUserData(String responseString) {
     Map<String, dynamic> responseMap = jsonDecode(responseString);
-    print(responseMap["data"]["token"]);
     SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
     SecureStore.createUser(responseMap["data"]["user"]);
     Future.delayed(Duration.zero, () {
@@ -182,6 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(height:40),
                         Row(
+
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:[
                               SmallText(
@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left:8.0),
                                   child: Text('Sign Up',
-                                    style: TextStyle(fontSize: 16, color:Colors.lightGreen,fontWeight: FontWeight.bold)
+                                    style: TextStyle(fontSize: 14, color:Colors.lightGreen,fontWeight: FontWeight.bold)
                                   ),
                                 ),
                               )

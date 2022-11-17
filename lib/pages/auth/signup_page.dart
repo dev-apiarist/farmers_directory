@@ -18,38 +18,52 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   int _index = 0;
   final formKey = GlobalKey<FormState>();
-  final User user = User(address:{"city": "", "street":"", "parish": ""});
-  Map _requestState = {
-    "hasError" : false,
-    "message": "",
-    "pending": false,
-  };
-
+  final TextEditingController first_nameCtrl = TextEditingController();
+  final TextEditingController last_nameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController password2Ctrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
+  final TextEditingController streetCtrl = TextEditingController();
+  final TextEditingController parishCtrl = TextEditingController();
+  final TextEditingController cityCtrl = TextEditingController();
+  final TextEditingController websiteCtrl = TextEditingController();
+  final TextEditingController instagramCtrl = TextEditingController();
+  final TextEditingController facebookCtrl = TextEditingController();
+  final TextEditingController descriptionCtrl = TextEditingController();
+  bool isLastStep = false;
+  bool _loading = false;
 
 
 
   submitSignUp()async{
-    Map body = {
-      "first_name":user.first_name,
-      "last_name":user.last_name,
-      "email":user.email,
-      "address":user.address,
-      "phone":user.phone,
-      "password":user.password,
+    Map userBody = {
+      "first_name":first_nameCtrl.text,
+      "last_name":last_nameCtrl.text,
+      "email":emailCtrl.text,
+      "address":{
+        "street": streetCtrl.text,
+        "parish": parishCtrl.text,
+        "city": cityCtrl.text
+      },
+      "phone":phoneCtrl.text,
+      "password":passwordCtrl.text,
     };
+
     try{
-      setState(() {
-        _requestState["pending"] = true;
-      });
-      String dataString = await NetworkHandler.post("/users", body);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => LoginPage()));
+        setState(() {
+          _loading = true;
+        });
+        await NetworkHandler.post("/users", userBody);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => LoginPage()));
+
     }catch(error){
       setState(() {
-        _requestState["pending"] = false;
-        _requestState["hasError"] = true;
-        _requestState["message"] = error.toString();
+        _loading = false;
       });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     }
+
   }
   @override
   void dispose() {
@@ -60,7 +74,46 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stepper(
+      body: (!_loading) ? Stepper(
+        controlsBuilder: (context, steps){
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: isLastStep ? Row(
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: AppColors.mainGreen,
+                      shape: StadiumBorder(),
+                    ),
+                    onPressed: () {
+                      submitSignUp();
+                    },
+                    child: LargeText(
+                      text: 'Submit',
+                      color: Colors.white,
+                    ),
+                  ),
+                  TextButton(onPressed: steps.onStepCancel, child: const Text("Cancel", style: TextStyle(color: Colors.white70),))
+                ],
+              ) : Row(
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: AppColors.mainGreen,
+                      shape: StadiumBorder(),
+                    ),
+                    onPressed: steps.onStepContinue,
+                    child: LargeText(
+                      text: 'Next',
+                      color: Colors.white,
+                    ),
+                  ),
+                  TextButton(onPressed: steps.onStepCancel, child: const Text("Cancel", style: TextStyle(color: AppColors.mainGreen),))
+                ],
+              )
+          );
+        },
+
         // type: StepperType.horizontal,
         currentStep: _index,
         onStepCancel: () {
@@ -71,19 +124,29 @@ class _SignUpPageState extends State<SignUpPage> {
           }
         },
         onStepContinue: () {
-          if (_index <= 0) {
-            setState(() {
-              _index += 1;
-            });
+          if (_index <= 0 ) {
+            _index += 1;
           }
+          if(_index == 1){
+            isLastStep = true;
+
+          }
+          setState(() {});
+
         },
         onStepTapped: (int index) {
+          if(index != 1){
+            isLastStep = false;
+          }else{
+            isLastStep = true;
+          }
           setState(() {
             _index = index;
           });
         },
         steps: [
           Step(
+
             title: SmallText(text: 'Personal Details'),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -94,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 2.7,
                       child: CustomTextField(
-                        isPassword: true,
+                        controller: first_nameCtrl,
                         title: 'First Name',
                         placeholder: 'John',
                       ),
@@ -102,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 2.7,
                       child: CustomTextField(
-                        isPassword: true,
+                        controller: last_nameCtrl,
                         title: 'Last Name',
                         placeholder: 'Travolta',
                       ),
@@ -110,12 +173,20 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 CustomTextField(
+                  controller: emailCtrl,
                   title: 'Your email address',
                   placeholder: 'johntravolta@gmail.com',
                 ),
                 CustomTextField(
+                  controller: passwordCtrl,
                   isPassword: true,
                   title: 'Password',
+                  placeholder: '************',
+                ),
+                CustomTextField(
+                  controller: password2Ctrl,
+                  isPassword: true,
+                  title: 'Confirm Password',
                   placeholder: '************',
                 ),
               ],
@@ -129,6 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CustomTextField(
+                      controller: streetCtrl,
                       title: 'Street ',
                       placeholder: '',
                     ),
@@ -138,14 +210,14 @@ class _SignUpPageState extends State<SignUpPage> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width / 2.7,
                           child: CustomTextField(
-                            isPassword: true,
+                            controller: parishCtrl,
                             title: 'Parish',
                           ),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width / 2.7,
                           child: CustomTextField(
-                            isPassword: true,
+                            controller: cityCtrl,
                             title: 'City',
                           ),
                         ),
@@ -156,14 +228,8 @@ class _SignUpPageState extends State<SignUpPage> {
               ],
             ),
           ),
-          Step(
-            title: SmallText(text: 'Socials (Optional)'),
-            content: Column(
-              children: [],
-            ),
-          ),
         ],
-    ),
+    ) : Center(child:CircularProgressIndicator(color:AppColors.mainGreen)),
     );
   }
 }
