@@ -413,7 +413,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   ],
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(color:AppColors.mainGreen));
               }
             }));
   }
