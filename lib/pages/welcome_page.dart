@@ -1,3 +1,4 @@
+import 'package:farmers_directory/pages/auth/farmer_login_page.dart';
 import 'package:farmers_directory/pages/home/main_user_page.dart';
 
 import 'package:farmers_directory/utils/colors.dart';
@@ -91,6 +92,11 @@ class _WelcomePageState extends State<WelcomePage> {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                            onTap: (){
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FarmerLoginPage()));
+                            },
+                            child: Text("Are you a farmer? ", style: TextStyle(decoration: TextDecoration.underline, fontSize: Dimensions.height15)))
                       ]),
                 ),
               )
