@@ -244,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         ),
                                         Container(
 
-                                          height: 45,
+                                          height: 50,
                                           padding: EdgeInsets.all(5),
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(30),
@@ -305,7 +305,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpPage()));
+                      Navigator.pop(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left:8.0),

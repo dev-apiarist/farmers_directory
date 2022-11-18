@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:farmers_directory/pages/edit/edit_password.dart';
@@ -33,7 +34,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController lnameCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController phoneCtrl = TextEditingController();
-
+  String id = "";
+  bool _loading = false;
   submitData()async{
       Map<String, String> body = {
         "first_name": fnameCtrl.text,
@@ -44,12 +46,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
       List<Map<String, dynamic>> files = [
         {"field": "image", "data": imgChosen}
       ];
-      await NetworkHandler.postMultipart("/users", body, files);
-      Navigator.pop(context);
+      try{
+      _loading = true;
+      Map responseData = jsonDecode(await NetworkHandler.patchMultipart("/users/${id}", body, files));
+      SecureStore.createUser(responseData["data"]);
+      Navigator.pop(context, true);
+      }catch(error) {
+        setState((){
+          _loading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+      }
+
   }
 
   Future<User> getUser() async {
     User currentUser = await SecureStore.getUser();
+    setState(() {
+      id = currentUser.id!;
+    });
     return currentUser;
   }
 
@@ -68,6 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         actions: [
           IconButton(
             onPressed: () {
+
               submitData();
             },
             icon: Icon(
@@ -81,12 +97,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Icons.close,
             color: Colors.black87,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, false),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: FutureBuilder<User>(
+      body: (!_loading) ? FutureBuilder<User>(
         future: user,
         builder: (context, snapshot) {
 
@@ -254,7 +270,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             return Center(child: CircularProgressIndicator());
           }
         }
-      ),
+      ) : Center(child: CircularProgressIndicator()),
     );
   }
 }

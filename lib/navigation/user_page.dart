@@ -159,6 +159,16 @@ class _UserProfileState extends State<UserProfile> {
                                     return EditProfilePage();
                                   },
                                 ),
+                              ).then((updated) {
+                                if(updated){
+                                  setState(() {
+                                    print("I got a value");
+                                    currentUser = getCurrentUser();
+                                  });
+                                }
+
+                              }
+
                               );
                             },
                             child: LargeText(
