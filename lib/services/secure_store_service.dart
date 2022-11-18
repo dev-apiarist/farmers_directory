@@ -15,8 +15,10 @@ class SecureStore{
   }
 
   //Creates a storage entry for the user in the persistent storage created.
-  static void createUser(Map userData){
+  static void createUser(Map userData)async{
+    String? user = await getToken("user");
     storeToken("user", jsonEncode(userData));
+
   }
 
   static Future<User> getUser() async{
@@ -34,6 +36,10 @@ class SecureStore{
 
   static logout() async {
     await _storage.deleteAll();
+  }
+
+  static removeToken(String token) {
+    _storage.delete(key: token);
   }
 
 }
