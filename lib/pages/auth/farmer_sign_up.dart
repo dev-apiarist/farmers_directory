@@ -22,7 +22,6 @@ class FarmerSignUpPage extends StatefulWidget {
 }
 
 class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
-  int _index = 0;
   final formKey = GlobalKey<FormState>();
   final TextEditingController first_nameCtrl = TextEditingController();
   final TextEditingController last_nameCtrl = TextEditingController();
@@ -37,6 +36,8 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
   final TextEditingController instagramCtrl = TextEditingController();
   final TextEditingController facebookCtrl = TextEditingController();
   final TextEditingController descriptionCtrl = TextEditingController();
+  final TextEditingController searchCtrl = TextEditingController();
+  String query = "";
   bool isLastStep = false;
   int _currentStep = 0;
   bool _loading = false;
@@ -66,10 +67,16 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
       }
     };
     try{
+        setState(() {
+          _loading = true;
+        });
         String dataString = await NetworkHandler.post("/farmers", farmerBody);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => LoginPage()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => FarmerSignUpPage()));
 
     }catch(error){
+        setState(() {
+          _loading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     }
   }
@@ -93,7 +100,6 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
   Future<List<Category>> getAllCategories() async{
     try{
       List categoryList = jsonDecode(await NetworkHandler.get(endpoint: "/categories"))["data"];
-      print(categoryList);
       return categoryList.map((category){
         return Category.fromJson(category);
       }).toList();
@@ -188,9 +194,11 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                             }
                           },
                           onStepContinue: () {
-                            if (_currentStep <= 4) {
+                            if (_currentStep <= 3) {
                               setState(() {
                                 _currentStep += 1;
+                                isLastStep = (_currentStep == 3) ? true : false;
+
                               });
                             }
                           },
@@ -198,6 +206,7 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
 
                             setState(() {
                               _currentStep = index;
+                              isLastStep = (_currentStep == 3) ? true : false;
                             });
                           },
                           steps: [
@@ -402,43 +411,81 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                               StepState.complete : StepState.disabled,
                               title: SmallText(text: 'Select Products'),
                               content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: allCategories.map((category){
-                                  List<Product> filteredList = snapshot.data!.where((product) => product.category == category.id ).toList();
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SmallText(text: "Search Products"),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFormField(
+                                          controller: searchCtrl,
+                                          scrollPhysics: BouncingScrollPhysics(),
+                                          keyboardType:TextInputType.text,
+                                          decoration: InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide:
+                                                  BorderSide(color: Colors.grey.withOpacity(0.4))),
+                                              contentPadding: EdgeInsets.all(15),
+                                              hintText: "Search",
+                                              border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30)),
+                                              filled: true,
+                                              fillColor: Colors.white70),
+                                          onChanged: (value){
+                                            query = searchCtrl.text;
+                                            setState(() {});
+                                          }
 
-                                  return Column(
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                        child: Text(category.category_name, style:TextStyle(fontWeight: FontWeight.w600)),
-                                      ),
-                                      Wrap(
-                                        spacing: Dimensions.width5,
-                                        children:
-                                        List.generate(filteredList.length, (index) {
-                                          return GestureDetector(
-                                            onTap: (() {
-                                                 toggleSelectedToList(productList: selectedProduct, productId: filteredList[index].id);
-                                                 setState(() {});
+                                    children: allCategories.map((category){
+                                      List<Product> filteredList = snapshot.data!.where((product) => product.category == category.id ).toList();
+                                      filteredList = filteredList.where((element)=> element.prod_name.toLowerCase().contains(query.toLowerCase())).toList();
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                            child: Text(category.category_name, style:TextStyle(fontWeight: FontWeight.w600)),
+                                          ),
+                                          Wrap(
+                                            spacing: Dimensions.width5,
+                                            children:
+                                            List.generate(filteredList.length, (index) {
+                                              return GestureDetector(
+                                                onTap: (() {
+                                                     toggleSelectedToList(productList: selectedProduct, productId: filteredList[index].id);
+                                                     setState(() {});
+                                                }),
+                                                child: Chip(
+                                                  backgroundColor: isSelected(productList:selectedProduct, productId: filteredList[index].id) ? selectedColor: Colors.white,
+                                                  side: BorderSide(color: Colors.black54),
+                                                  label: SmallText(
+                                                    size: 13,
+                                                    text: '${filteredList[index].prod_name}',
+                                                  ),
+                                                ),
+                                              );
                                             }),
-                                            child: Chip(
-                                              backgroundColor: isSelected(productList:selectedProduct, productId: filteredList[index].id) ? selectedColor: Colors.white,
-                                              side: BorderSide(color: Colors.black54),
-                                              label: SmallText(
-                                                size: 13,
-                                                text: '${filteredList[index].prod_name}',
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      ),
+                                          ),
 
-                                    ]
-                                  );
+                                        ]
+                                      );
 
 
-                                }).toList(),
+                                    }).toList(),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
