@@ -36,7 +36,7 @@ class User {
       image: json["image"] ?? "",
       isSuperAdmin: json["isSuperAdmin"] ?? false,
       phone: json["phone"] ?? "",
-      isFarmer: json["isFarmer"],
+      isFarmer: json["isFarmer"] ?? false,
     );
   }
 }
