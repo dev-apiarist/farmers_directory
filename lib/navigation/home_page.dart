@@ -2,14 +2,17 @@ import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/navigation/directory_page.dart';
 import 'package:farmers_directory/navigation/user_page.dart';
 import 'package:farmers_directory/pages/home/main_user_page.dart';
+import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../models/user.model.dart';
 import '../pages/users/details/farmer_details.dart';
 import '../pages/users/details/produce_details.dart';
 import '../utils/colors.dart';
+import 'farmer_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,13 +22,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List pages = const [MainUserPage(), Directory(), Categories(), UserProfile()];
+  bool isFarmer = false;
+  List pages = [];
+
+  Future<Widget> getProfilePage() async{
+    User user = await SecureStore.getUser();
+
+    if(user.isFarmer){
+      return FarmerProfile();
+    }else return UserProfile();
+
+  }
+  void setPages() async{
+    pages = [MainUserPage(), Directory(), Categories(), await getProfilePage()];
+    setState(() {});
+  }
 
   int currentIndex = 0;
   void onTap(int index) {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    setPages();
+    super.initState();
   }
 
   @override
