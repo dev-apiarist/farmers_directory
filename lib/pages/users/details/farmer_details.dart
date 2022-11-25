@@ -40,7 +40,7 @@ class FarmerDetails extends StatelessWidget {
                   Align(
                     alignment: AlignmentDirectional.center,
                     child: LargeText(
-                      text: '${farmer.fname} ${farmer.lname}',
+                      text: '${farmer.first_name} ${farmer.last_name}',
                       size: Dimensions.font30,
                     ),
                   ),

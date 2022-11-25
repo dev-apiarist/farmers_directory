@@ -1,20 +1,26 @@
 
 class User {
-  String? id = "";
-  String? first_name = "";
-  String? last_name = "";
-  String? image = "";
-  String? email = "";
-  Map<String, dynamic> address = {
-    "city": "",
-    "street": "",
-    "parish": ""
-  };
-  String? phone = "";
-  bool? isSuperAdmin = false;
-  String? password = "";
+  final String id;
+  final String first_name;
+  final String last_name;
+  final String image;
+  final String email;
+  final Map<String, dynamic> address;
+  final String phone;
+  final bool isSuperAdmin;
+  // final String password;
+  final bool isFarmer;
 
-  User({this.id,this.first_name, this.last_name, this.email, required this.address,this.image, this.isSuperAdmin, this.phone });
+  User({
+    this.id = "",
+    this.first_name ="",
+    this.last_name="",
+    this.email = "",
+    required this.address,
+    this.image = "",
+    this.isSuperAdmin = false,
+    this.phone="",
+    this.isFarmer = false });
 
   factory User.fromJson(Map<String, dynamic> json){
     return User(
@@ -30,6 +36,7 @@ class User {
       image: json["image"] ?? "",
       isSuperAdmin: json["isSuperAdmin"] ?? false,
       phone: json["phone"] ?? "",
+      isFarmer: json["isFarmer"],
     );
   }
 }

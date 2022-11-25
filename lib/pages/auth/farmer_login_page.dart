@@ -52,9 +52,10 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
 
   void getUserData(String responseString) {
     Map<String, dynamic> responseMap = jsonDecode(responseString);
-    print(responseMap["data"]["token"]);
     SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
-    SecureStore.createUser(responseMap["data"]["farmer"]);
+    Map<String, dynamic> user = responseMap["data"]["data"];
+    user["isFarmer"] = true;
+    SecureStore.createUser(user);
     Future.delayed(Duration.zero, () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));

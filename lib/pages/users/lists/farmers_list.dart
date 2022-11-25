@@ -33,7 +33,7 @@ class FarmersList extends StatelessWidget {
         backgroundImage: setProfileImage(farmer.image),
       ),
       title: SmallText(
-        text: '${farmer.fname} ${farmer.lname}',
+        text: '${farmer.first_name} ${farmer.last_name}',
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,33 +1,26 @@
 import 'package:farmers_directory/models/product.model.dart';
+import 'package:farmers_directory/models/user.model.dart';
 
-class Farmer {
-  final String id;
-  final String fname;
-  final String lname;
-  final String farmer_type;
-  final String image;
-  final String email;
+class Farmer extends User{
   final String description;
-  final Map<String, dynamic> address;
   final Map<String, dynamic> socials;
-  final String phone;
   final String id_number;
-  final String password;
+  final String farmer_type;
   List<Product> products = [];
 
   Farmer({
-    this.id = "",
-    this.fname="",
-    this.lname="",
+    super.id = "",
+    super.first_name="",
+    super.last_name="",
     this.farmer_type="",
-    this.image="",
-    this.email="",
+    super.image="",
+    super.email="",
     this.description="",
-    this.address= const{},
+    super.address= const{},
     this.id_number="",
-    this.phone="",
+    super.phone="",
     this.socials=const{},
-    this.password = "", required this.products
+    required this.products
   });
 
   factory Farmer.fromJson(Map<String, dynamic> json){
@@ -35,8 +28,8 @@ class Farmer {
     List<Product> products = productList.map((product) => Product.fromJson(product)).toList();
     return Farmer(
       id: json["_id"],
-      fname: json["fname"],
-      lname: json["lname"],
+      first_name: json["first_name"],
+      last_name: json["last_name"],
       farmer_type: json["farmer_type"] ?? "",
       image: json["image"] ?? "",
       email: json["email"],
@@ -51,8 +44,8 @@ class Farmer {
 
   Map<String, dynamic> toJson(){
     return {
-      "fname": this.fname,
-      "lname": this.lname,
+      "first_name": this.first_name,
+      "last_name": this.last_name,
       "farmer_type": this.farmer_type,
       "image": this.image,
       "email": this.email,
@@ -61,7 +54,6 @@ class Farmer {
       "phone": this.phone,
       "socials": this.socials,
       "address": this.address,
-      "password": this.password,
       "products": this.products,
     };
   }
