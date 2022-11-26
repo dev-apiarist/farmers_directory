@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:farmers_directory/models/farmer.model.dart';
 import 'package:farmers_directory/pages/auth/login_page.dart';
+import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/src/widgets/basic.dart';
@@ -21,10 +25,13 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
-  late Future<User> currentUser;
+  late Future<Farmer> currentUser;
 
-  Future<User> getCurrentUser() async {
-    return SecureStore.getUser();
+  Future<Farmer> getCurrentUser() async {
+    User userData = await SecureStore.getUser();
+      Map<String, dynamic> farmerData = jsonDecode(await NetworkHandler.get(endpoint: "/farmers/${userData.id}"));
+      return Farmer.fromJson(farmerData["data"]);
+
   }
 
   @override
@@ -59,14 +66,12 @@ class _FarmerProfileState extends State<FarmerProfile> {
           )
         ],
       ),
-      body: FutureBuilder<User>(
+      body: FutureBuilder<Farmer>(
         future: currentUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
+          } else if(snapshot.hasData){
             return Column(
               children: [
                 Container(
@@ -80,7 +85,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         backgroundColor: Colors.white60,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       LargeText(
                         text:
@@ -92,8 +97,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       ),
                       LeadingIconText(
                         text: '${snapshot.data!.address["parish"]}',
-                        icon: Icons.location_on,
-                        color: Colors.black,
+                        icon: Icons.location_on_outlined,
+                        color: Colors.black87,
+                        iconSize:30
                       ),
                     ],
                   ),
@@ -102,46 +108,53 @@ class _FarmerProfileState extends State<FarmerProfile> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // LargeText(text: 'Produce'),
-                        // SizedBox(
-                        //   height: 5,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     LargeText(text: 'Crops:'),
-                        //     Wrap(
-                        //       children: List.generate(
-                        //         5,
-                        //             (index) => SmallText(text: 'Yam' ','),
-                        //       ).toList(),
-                        //     ),
-                        //   ],
-                        // ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     LargeText(text: 'Livestock:'),
-                        //     Wrap(
-                        //       children: List.generate(
-                        //         2,
-                        //             (index) => SmallText(text: 'Goat' ','),
-                        //       ).toList(),
-                        //     ),
-                        //   ],
-                        // ),
+                        LargeText(text: 'Produce'),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Wrap(
+                              children: List.generate(
+                                snapshot.data!.products.length,
+                                    (index) => Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                      child: Chip(label:Text('${snapshot.data!.products[index].prod_name}',), backgroundColor: AppColors.mainGold.withOpacity(0.2),),
+                                    ),
+                              ).toList(),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           height: 20,
                         ),
-                        LeadingIconText(
-                            text: '${snapshot.data!.phone}', icon: Icons.call),
+                        LargeText(text: 'About Us'),
+                        Text("${snapshot.data!.description}", style: TextStyle(fontWeight: FontWeight.w100),),
+
                         SizedBox(
                           height: 20,
                         ),
-                        LeadingIconText(
-                            text: '${snapshot.data!.email}', icon: Icons.email),
+
+
+                        GestureDetector(
+                          onTap: (){
+                            launchApplication(snapshot.data!.phone);
+                          },
+                          child: LeadingIconText(
+                              text: '${snapshot.data!.phone}', icon: Icons.call),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            launchApplication(snapshot.data!.email);
+                          },
+                          child:LeadingIconText(
+                              text: '${snapshot.data!.email}', icon: Icons.email),
+                        ),
                         SizedBox(
                           height: 40,
                         ),
@@ -150,7 +163,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           child: TextButton(
                             style: TextButton.styleFrom(
                                 shape: StadiumBorder(),
-                                backgroundColor: AppColors.mainGreen),
+                                backgroundColor: AppColors.mainGold),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -183,6 +196,8 @@ class _FarmerProfileState extends State<FarmerProfile> {
                 ),
               ],
             );
+          }else{
+            return Text("${snapshot.error}");
           }
         },
       ),

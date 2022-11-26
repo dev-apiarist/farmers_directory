@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:farmers_directory/models/farmer.model.dart';
 import 'package:farmers_directory/pages/edit/edit_password.dart';
 import 'package:farmers_directory/pages/edit/personal_information_page.dart';
 import 'package:farmers_directory/pages/farmer/main_farmer_page.dart';
@@ -15,6 +14,7 @@ import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../models/farmer.model.dart';
 import '../../models/user.model.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -37,7 +37,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController phoneCtrl = TextEditingController();
   String id = "";
   bool _loading = false;
-
   submitData()async{
       Map<String, String> body = {
         "first_name": fnameCtrl.text,
@@ -118,6 +117,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             fnameCtrl.text = snapshot.data!.first_name!;
             lnameCtrl.text = snapshot.data!.last_name!;
             phoneCtrl.text = snapshot.data!.phone!;
+
             imageUrl = snapshot.data!.image!;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -163,10 +163,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextFormField(
                       controller: lnameCtrl,
                       maxLines: 1,
+
                       decoration: InputDecoration(
+
                         labelText: 'Last Name',
                       ),
                     ),
+
                     TextFormField(
                       controller: emailCtrl,
                       maxLines: 1,

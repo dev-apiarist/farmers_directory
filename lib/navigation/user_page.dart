@@ -103,45 +103,27 @@ class _UserProfileState extends State<UserProfile> {
                     padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
                       children: [
-                        // LargeText(text: 'Produce'),
-                        // SizedBox(
-                        //   height: 5,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     LargeText(text: 'Crops:'),
-                        //     Wrap(
-                        //       children: List.generate(
-                        //         5,
-                        //             (index) => SmallText(text: 'Yam' ','),
-                        //       ).toList(),
-                        //     ),
-                        //   ],
-                        // ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     LargeText(text: 'Livestock:'),
-                        //     Wrap(
-                        //       children: List.generate(
-                        //         2,
-                        //             (index) => SmallText(text: 'Goat' ','),
-                        //       ).toList(),
-                        //     ),
-                        //   ],
-                        // ),
+
                         SizedBox(
                           height: 20,
                         ),
-                        LeadingIconText(
-                            text: '${snapshot.data!.phone}', icon: Icons.call),
+                        GestureDetector(
+                          onTap: (){
+                            launchApplication(snapshot.data!.phone);
+                          },
+                          child:LeadingIconText(
+                              text: '${snapshot.data!.phone}', icon: Icons.phone),
+                        ),
                         SizedBox(
                           height: 20,
                         ),
-                        LeadingIconText(
-                            text: '${snapshot.data!.email}', icon: Icons.email),
+                        GestureDetector(
+                          onTap: (){
+                            launchApplication(snapshot.data!.email);
+                          },
+                          child: LeadingIconText(
+                              text: '${snapshot.data!.email}', icon: Icons.email),
+                        ),
                         SizedBox(
                           height: 40,
                         ),

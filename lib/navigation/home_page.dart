@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isFarmer = false;
-  List pages = [];
+  late List pages = List.filled(4, SizedBox.shrink());
 
   Future<Widget> getProfilePage() async{
     User user = await SecureStore.getUser();

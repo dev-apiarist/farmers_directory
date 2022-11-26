@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/text.dart';
 
@@ -63,4 +64,12 @@ ImageProvider setProduceImage(String? uri){
 
 ImageProvider setProfileImage(String? uri){
   return useAssetIfImageNull(assetUri:"assets/images/defaultProfile.png", imgPath: uri);
+}
+
+void launchApplication(String data)async{
+  if(!data.contains("@"))
+  await launchUrl(Uri(scheme: "tel", path: data));
+  else{
+    await launchUrl(Uri(scheme:"mailto",path:data ));
+  }
 }
