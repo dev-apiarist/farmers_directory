@@ -71,7 +71,7 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
       return Farmer.fromJson(farmerData);
     }
     setState(() {
-      id = currentUser.id!;
+      id = currentUser.id;
     });
     return currentUser;
   }
@@ -116,13 +116,13 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
 
           if(snapshot.hasData){
             Farmer farmer = (snapshot.data! as Farmer);
-            emailCtrl.text = snapshot.data!.email!;
-            fnameCtrl.text = snapshot.data!.first_name!;
-            lnameCtrl.text = snapshot.data!.last_name!;
-            phoneCtrl.text = snapshot.data!.phone!;
+            emailCtrl.text = snapshot.data!.email;
+            fnameCtrl.text = snapshot.data!.first_name;
+            lnameCtrl.text = snapshot.data!.last_name;
+            phoneCtrl.text = snapshot.data!.phone;
             descriptionCtrl.text = (snapshot.data! as Farmer).description;
 
-            imageUrl = snapshot.data!.image!;
+            imageUrl = snapshot.data!.image;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(

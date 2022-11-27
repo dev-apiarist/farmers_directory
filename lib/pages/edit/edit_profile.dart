@@ -70,7 +70,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       return Farmer.fromJson(farmerData);
     }
     setState(() {
-      id = currentUser.id!;
+      id = currentUser.id;
     });
     return currentUser;
   }
@@ -114,11 +114,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         builder: (context, snapshot) {
 
           if(snapshot.hasData){
-            emailCtrl.text = snapshot.data!.email!;
-            fnameCtrl.text = snapshot.data!.first_name!;
-            lnameCtrl.text = snapshot.data!.last_name!;
-            phoneCtrl.text = snapshot.data!.phone!;
-            imageUrl = snapshot.data!.image!;
+            emailCtrl.text = snapshot.data!.email;
+            fnameCtrl.text = snapshot.data!.first_name;
+            lnameCtrl.text = snapshot.data!.last_name;
+            phoneCtrl.text = snapshot.data!.phone;
+            imageUrl = snapshot.data!.image;
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(

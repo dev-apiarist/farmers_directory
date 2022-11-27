@@ -8,17 +8,11 @@ class ApiClient extends GetConnect implements GetxService {
   //api-url
   final String appBaseUrl;
 
-  late Map<String, String> _mainHeaders;
 
   ApiClient({required this.appBaseUrl}) {
     baseUrl = appBaseUrl;
     timeout = Duration(seconds: 30);
 
-
-    _mainHeaders = {
-      'Content-type': 'application/json; charset= UTF-8',
-      'Authorization': 'Bearer $token',
-    };
   }
   Future<Response> getData(
     String uri,
