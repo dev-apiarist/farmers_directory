@@ -16,7 +16,7 @@ class SecureStore{
 
   //Creates a storage entry for the user in the persistent storage created.
   static void createUser(Map userData)async{
-    String? user = await getToken("user");
+    // String? user = await getToken("user");
     storeToken("user", jsonEncode(userData));
 
   }
