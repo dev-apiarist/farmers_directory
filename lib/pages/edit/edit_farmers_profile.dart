@@ -17,14 +17,14 @@ import 'package:image_picker/image_picker.dart';
 import '../../models/farmer.model.dart';
 import '../../models/user.model.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+class EditFarmerProfilePage extends StatefulWidget {
+  const EditFarmerProfilePage({super.key});
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<EditFarmerProfilePage> createState() => _EditFarmerProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
   late Future<User> user;
   ImagePicker _imagePicker = ImagePicker();
   XFile? imgChosen;
@@ -35,6 +35,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController lnameCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController phoneCtrl = TextEditingController();
+  TextEditingController descriptionCtrl = TextEditingController();
+
   String id = "";
   bool _loading = false;
   submitData()async{
@@ -43,13 +45,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         "last_name": lnameCtrl.text,
         "emailCtrl": emailCtrl.text,
         "phone": phoneCtrl.text,
+        "description": descriptionCtrl.text,
       };
       List<Map<String, dynamic>> files = [
         {"field": "image", "data": imgChosen}
       ];
       try{
       _loading = true;
-      Map responseData = jsonDecode(await NetworkHandler.patchMultipart("/users/${id}", body, files));
+      Map responseData = jsonDecode(await NetworkHandler.patchMultipart("/farmers/${id}", body, files));
       SecureStore.createUser(responseData["data"]);
       Navigator.pop(context, true);
       }catch(error) {
@@ -65,7 +68,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     User currentUser = await SecureStore.getUser();
     if(currentUser.isFarmer){
       Map<String, dynamic>farmerData = jsonDecode(await NetworkHandler.get(endpoint: "/farmers/${currentUser.id}"))["data"];
-      print(farmerData);
       return Farmer.fromJson(farmerData);
     }
     setState(() {
@@ -117,6 +119,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             fnameCtrl.text = snapshot.data!.first_name!;
             lnameCtrl.text = snapshot.data!.last_name!;
             phoneCtrl.text = snapshot.data!.phone!;
+            descriptionCtrl.text = (snapshot.data! as Farmer).description;
 
             imageUrl = snapshot.data!.image!;
             return SingleChildScrollView(
@@ -174,6 +177,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       controller: emailCtrl,
                       maxLines: 1,
                       decoration: InputDecoration(labelText: 'Email'),
+                    ),
+                    TextFormField(
+                      controller: descriptionCtrl,
+                      maxLines: 3,
+                      minLines: 3,
+                      decoration: InputDecoration(labelText: 'Description'),
                     ),
                     TextFormField(
                       controller: phoneCtrl,
