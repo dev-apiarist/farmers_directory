@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:farmers_directory/models/farmer.model.dart';
 import 'package:farmers_directory/pages/auth/login_page.dart';
+import 'package:farmers_directory/pages/edit/edit_farmers_profile.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
@@ -169,7 +170,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return EditProfilePage();
+                                    return EditFarmerProfilePage();
                                   },
                                 ),
                               ).then((updated) {
