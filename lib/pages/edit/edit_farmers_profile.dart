@@ -115,6 +115,7 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
         builder: (context, snapshot) {
 
           if(snapshot.hasData){
+            Farmer farmer = (snapshot.data! as Farmer);
             emailCtrl.text = snapshot.data!.email!;
             fnameCtrl.text = snapshot.data!.first_name!;
             lnameCtrl.text = snapshot.data!.last_name!;
@@ -206,7 +207,7 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: ((context) => MainFarmerPage()),
+                          builder: ((context) => MainFarmerPage(farmer:farmer)),
                         ),
                       ),
                       child: Padding(

@@ -38,9 +38,8 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
       setState(() {
         _loading = true;
       });
-      String authenticatedUser =
-          await NetworkHandler.post("/farmers/login", body);
-      getUserData(authenticatedUser);
+      String authenticatedUser = await NetworkHandler.post("/farmers/login", body);
+          getUserData(authenticatedUser);
     } catch (err) {
       setState(() {
         _loading = false;
