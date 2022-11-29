@@ -53,17 +53,23 @@ class NetworkHandler {
   static Future <String> patchMultipart(String endpoint, Map<String, String> body, List<Map<String, dynamic>> streams) async{
     http.MultipartRequest request = http.MultipartRequest("PATCH",buildUrl(segment: endpoint));
     request.headers.addAll(await _generateHeader());
-    var multipartFileList = streams.map((element) {
-      File dataFile = File(element["data"].path);
-      return http.MultipartFile(element["field"], dataFile.readAsBytes().asStream(),dataFile.lengthSync(), filename: dataFile.path.split('/').last );
-    });
-    request.files.addAll(multipartFileList);
+    if(streams.length > 0 && streams[0]["data"] != null) {
+      var multipartFileList = streams.map((element) {
+        File dataFile = File(element["data"].path);
+        return http.MultipartFile(
+            element["field"], dataFile.readAsBytes().asStream(),
+            dataFile.lengthSync(), filename: dataFile.path
+            .split('/')
+            .last);
+      });
+      request.files.addAll(multipartFileList);
+    }
+
     request.fields.addAll(body);
 
     http.StreamedResponse response = await request.send();
     var streamToString = await response.stream.bytesToString();
     if(response.statusCode == 200 || response.statusCode == 201){
-      print(jsonDecode(streamToString));
       return streamToString;
     }else {
       throw Exception(jsonDecode(streamToString)["error"]);
