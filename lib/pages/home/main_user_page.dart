@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:farmers_directory/models/category.model.dart';
 import 'package:farmers_directory/navigation/categories_page.dart';
+import 'package:farmers_directory/pages/auth/farmer_login_page.dart';
+import 'package:farmers_directory/pages/auth/login_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
@@ -39,40 +41,51 @@ class _MainUserPageState extends State<MainUserPage> {
   List<Product> products = [];
   List<Farmer> nearbyFarmers = [];
 
-  getFarmers() async {
+  Future<List<Farmer>> getFarmers() async {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/farmers"));
     List farmersList = response["data"];
-    setState(() {
-      farmers = farmersList.map((farmer) {
-        return Farmer.fromJson(farmer);
-      }).toList();
-    });
+    return farmersList.map((farmer) {
+      return Farmer.fromJson(farmer);
+    }).toList();
   }
 
-  getProducts() async {
+  logout() async{
+    User user = await SecureStore.getUser();
+    Widget? loginPage;
+    if(user.isFarmer){
+      loginPage = FarmerLoginPage();
+    }else{
+      loginPage = LoginPage();
+    }
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> loginPage!));
+
+  }
+
+  Future<List<Product>> getProducts() async {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
-    products = productsList.map((product) {
+    return productsList.map((product) {
         return Product.fromJson(product);
       }).toList();
   }
 
-  getCategories() async {
+  Future<List<Category>> getCategories() async {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/categories"));
     List categoryList = response["data"];
-      categories = categoryList.map((category) {
+      return categoryList.map((category) {
         return Category.fromJson(category);
       }).toList();
   }
 
   getData() async {
     try {
-      getFarmers();
-      getCategories();
-      getProducts();
+      farmers = await getFarmers();
+      categories = await getCategories();
+      products = await getProducts();
+      setState(() {});
     } catch (error) {
       print(error);
     }
@@ -155,6 +168,9 @@ class _MainUserPageState extends State<MainUserPage> {
               ),
               Divider(),
               ListTile(
+                onTap: (){
+                  logout();
+                },
                 title: LeadingIconText(
                   iconSize: Dimensions.iconSize16,
                   icon: Icons.logout,
@@ -525,6 +541,7 @@ class _MainUserPageState extends State<MainUserPage> {
                             text: locations[index],
                           ),
                         ),
+                        physics: NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.all(0),
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
