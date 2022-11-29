@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:farmers_directory/models/farmer.model.dart';
 import 'package:farmers_directory/pages/auth/login_page.dart';
 import 'package:farmers_directory/pages/edit/edit_farmers_profile.dart';
@@ -10,9 +9,7 @@ import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-
 import '../models/user.model.dart';
-import '../pages/edit/edit_profile.dart';
 import '../utils/colors.dart';
 import '../utils/functions.dart';
 import '../widgets/leading_icon.dart';
@@ -28,9 +25,13 @@ class FarmerProfile extends StatefulWidget {
 class _FarmerProfileState extends State<FarmerProfile> {
   late Future<Farmer> currentUser;
 
-  Future<Farmer> getCurrentUser() async {
+  Future<Farmer> getCurrentUser({bool updated = false}) async {
     User userData = await SecureStore.getUser();
       Map<String, dynamic> farmerData = jsonDecode(await NetworkHandler.get(endpoint: "/farmers/${userData.id}"));
+      farmerData["data"]["isFarmer"] = true;
+      if(updated){
+        SecureStore.createUser(farmerData["data"]);
+      }
       return Farmer.fromJson(farmerData["data"]);
 
   }
@@ -173,11 +174,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                     return EditFarmerProfilePage();
                                   },
                                 ),
-                              ).then((updated) {
-                                if(updated){
+                              ).then((isUpdated) {
+                                if(isUpdated){
                                   setState(() {
-                                    print("I got a value");
-                                    currentUser = getCurrentUser();
+                                    currentUser = getCurrentUser(updated:isUpdated);
                                   });
                                 }
 
