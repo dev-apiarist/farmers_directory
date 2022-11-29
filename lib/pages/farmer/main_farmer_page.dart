@@ -63,19 +63,6 @@ class _MainFarmerPageState extends State<MainFarmerPage> {
 
     }
   }
-  // Future<User> getUser() async {
-  //   User currentUser = await SecureStore.getUser();
-  //   if(currentUser.isFarmer){
-  //     Map<String, dynamic>farmerData = jsonDecode(await NetworkHandler.get(endpoint: "/farmers/${currentUser.id}"))["data"];
-  //     print(farmerData);
-  //     farmer = Farmer.fromJson(farmerData);
-  //   }
-  //   setState(() {
-  //     id = currentUser.id!;
-  //     selectedProducts = farmer.products.map((p)=>p.id).toList();
-  //   });
-  //   return currentUser;
-  // }
 
   @override
   void initState() {
@@ -90,93 +77,125 @@ class _MainFarmerPageState extends State<MainFarmerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              return Navigator.pop(context, selectedProducts);
+            },
+            icon: Icon(
+              Icons.done,
+              color: Colors.black87,
+            ),
+          )
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.black87,
+          ),
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+
       body: FutureBuilder(
         future: productList,
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SmallText(text: "Search Products"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                            controller: searchCtrl,
-
-                            scrollPhysics: BouncingScrollPhysics(),
-                            keyboardType:TextInputType.text,
-                            decoration: InputDecoration(
-                              isDense: true,
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide:
-                                    BorderSide(color: Colors.grey.withOpacity(0.4))),
-                                contentPadding: EdgeInsets.all(15),
-                                hintText: "Search",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                    filled: true,
-                                    fillColor: Colors.white70
-                                ),
-                            onChanged: (value){
-                              query = searchCtrl.text;
-                              setState(() {});
-                            }
-
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
+            return ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: allCategories.map((category){
-                      List<Product> filteredList = snapshot.data!.where((product) => product.category == category.id ).toList();
-                      filteredList = filteredList.where((element)=> element.prod_name.toLowerCase().contains(query.toLowerCase())).toList();
-                      filteredList.sort((prod1, prod2)=>prod1.prod_name.compareTo(prod2.prod_name));
-                      return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(category.category_name, style:TextStyle(fontWeight: FontWeight.w600)),
+                            Text("Update ${widget.farmer.first_name}'s Produce", style: TextStyle(color:AppColors.mainGold, fontWeight: FontWeight.w600, fontSize: 20),),
+                            SizedBox(
+                              height: 20,
                             ),
-                            Wrap(
-                              spacing: Dimensions.width5,
-                              children:
-                              List.generate(filteredList.length, (index) {
-                                return GestureDetector(
-                                  onTap: (() {
-                                    toggleSelectedToList(productList: selectedProducts, productId: filteredList[index].id);
-                                    setState(() {});
-                                  }),
-                                  child: Chip(
-                                    backgroundColor: isSelected(productList:selectedProducts, productId: filteredList[index].id) ? selectedColor: Colors.white,
-                                    side: BorderSide(color: Colors.black54),
-                                    label: SmallText(
-                                      size: 13,
-                                      text: '${filteredList[index].prod_name}',
+                            SmallText(text: "Search Products"),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                                controller: searchCtrl,
+
+                                scrollPhysics: BouncingScrollPhysics(),
+                                keyboardType:TextInputType.text,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide:
+                                        BorderSide(color: Colors.grey.withOpacity(0.4))),
+                                    contentPadding: EdgeInsets.all(10),
+                                    hintText: "Search",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30)),
+                                        filled: true,
+                                        fillColor: Colors.white70
                                     ),
-                                  ),
-                                );
-                              }),
+                                onChanged: (value){
+                                  query = searchCtrl.text;
+                                  setState(() {});
+                                }
+
                             ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: allCategories.map((category){
+                          List<Product> filteredList = snapshot.data!.where((product) => product.category == category.id ).toList();
+                          filteredList = filteredList.where((element)=> element.prod_name.toLowerCase().contains(query.toLowerCase())).toList();
+                          filteredList.sort((prod1, prod2)=>prod1.prod_name.compareTo(prod2.prod_name));
+                          return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
 
-                          ]
-                      );
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(category.category_name, style:TextStyle(fontWeight: FontWeight.w600)),
+                                ),
+                                Wrap(
+                                  spacing: Dimensions.width5,
+                                  children:
+                                  List.generate(filteredList.length, (index) {
+                                    return GestureDetector(
+                                      onTap: (() {
+                                        toggleSelectedToList(productList: selectedProducts, productId: filteredList[index].id);
+                                        setState(() {});
+                                      }),
+                                      child: Chip(
+                                        backgroundColor: isSelected(productList:selectedProducts, productId: filteredList[index].id) ? selectedColor: Colors.white,
+                                        side: BorderSide(color: Colors.black54),
+                                        label: SmallText(
+                                          size: 13,
+                                          text: '${filteredList[index].prod_name}',
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+
+                              ]
+                          );
 
 
-                    }).toList(),
+                        }).toList(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           }else{
             return Center(child:CircularProgressIndicator());

@@ -29,6 +29,7 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
   ImagePicker _imagePicker = ImagePicker();
   XFile? imgChosen;
   String imageUrl = "";
+  List<String> productList = [];
 
 
   TextEditingController fnameCtrl = TextEditingController();
@@ -43,14 +44,15 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
       Map<String, String> body = {
         "first_name": fnameCtrl.text,
         "last_name": lnameCtrl.text,
-        "emailCtrl": emailCtrl.text,
+        "email": emailCtrl.text,
         "phone": phoneCtrl.text,
         "description": descriptionCtrl.text,
+        "products": jsonEncode(productList),
       };
       List<Map<String, dynamic>> files = [
         {"field": "image", "data": imgChosen}
       ];
-      try{
+       try{
       _loading = true;
       Map responseData = jsonDecode(await NetworkHandler.patchMultipart("/farmers/${id}", body, files));
       SecureStore.createUser(responseData["data"]);
@@ -66,13 +68,11 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
 
   Future<User> getUser() async {
     User currentUser = await SecureStore.getUser();
+    id = currentUser.id;
     if(currentUser.isFarmer){
       Map<String, dynamic>farmerData = jsonDecode(await NetworkHandler.get(endpoint: "/farmers/${currentUser.id}"))["data"];
       return Farmer.fromJson(farmerData);
     }
-    setState(() {
-      id = currentUser.id;
-    });
     return currentUser;
   }
 
@@ -81,7 +81,6 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
     // TODO: implement initState
     super.initState();
     user = getUser();
-
   }
   @override
   Widget build(BuildContext context) {
@@ -91,7 +90,6 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
         actions: [
           IconButton(
             onPressed: () {
-
               submitData();
             },
             icon: Icon(
@@ -110,7 +108,7 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: (!_loading) ? FutureBuilder<User>(
+      body: (!_loading) ? FutureBuilder(
         future: user,
         builder: (context, snapshot) {
 
@@ -121,6 +119,8 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
             lnameCtrl.text = snapshot.data!.last_name;
             phoneCtrl.text = snapshot.data!.phone;
             descriptionCtrl.text = (snapshot.data! as Farmer).description;
+            productList = (snapshot.data! as Farmer).products.map((e) => e.id).toList();
+
 
             imageUrl = snapshot.data!.image;
             return SingleChildScrollView(
@@ -209,7 +209,13 @@ class _EditFarmerProfilePageState extends State<EditFarmerProfilePage> {
                         MaterialPageRoute(
                           builder: ((context) => MainFarmerPage(farmer:farmer)),
                         ),
-                      ),
+                      ).then((value){
+                        //Checks if the produce list has been updated.
+                        if(value is bool && value == false){
+                        }else if(value is List){
+                            productList = value as List<String>;
+                        }
+                      }),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Row(
