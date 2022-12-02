@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import '../utils/dimensions.dart';
 
 class LargeText extends StatelessWidget {
-  Color? color;
+  final Color? color;
   final String text;
-  double size;
-  TextAlign? align;
+  final double size;
+  final TextAlign? align;
 
-
-  LargeText(
+  const LargeText(
       {super.key,
       required this.text,
       this.color = const Color(0xFF1E1E1E),
@@ -21,7 +20,6 @@ class LargeText extends StatelessWidget {
       text,
       textAlign: align,
       style: TextStyle(
-        
           color: color,
           fontWeight: FontWeight.w400,
           fontSize: size == 0 ? Dimensions.font17 : size),

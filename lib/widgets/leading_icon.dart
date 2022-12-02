@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class LeadingIconText extends StatelessWidget {
-  IconData icon;
-  Color? color;
+  final IconData icon;
+  final Color? color;
   final String text;
-  double textSize;
-  double iconSize;
-  LeadingIconText(
+  final double textSize;
+  final double iconSize;
+  const LeadingIconText(
       {super.key,
       required this.text,
       this.color,

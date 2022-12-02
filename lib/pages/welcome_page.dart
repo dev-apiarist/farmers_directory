@@ -4,7 +4,9 @@ import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../utils/colors.dart';
 import 'auth/login_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -54,11 +56,6 @@ class _WelcomePageState extends State<WelcomePage> {
                               color: Colors.black87,
                               fontSize: Dimensions.font27,
                               fontWeight: FontWeight.w800),
-                          children: [
-                            // TextSpan(
-                            //     text: '\nWith Real Farmers'.toUpperCase(),
-                            //     style: TextStyle(fontSize: 20)),
-                          ],
                         ),
                       ),
                       LargeText(
@@ -68,15 +65,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                            backgroundColor: Color(0xFF8CB369),
-                            shape: StadiumBorder()),
+                            backgroundColor: AppColors.mainGreen,
+                            shape: const StadiumBorder()),
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
+                          Get.off(() => const LoginPage());
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
@@ -91,10 +83,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FarmerLoginPage()));
+                          Get.to(() => const FarmerLoginPage());
                         },
                         child: Text(
                           "Are you a farmer? ",
@@ -112,7 +101,7 @@ class _WelcomePageState extends State<WelcomePage> {
           Positioned(
             top: Dimensions.logoPos,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(Dimensions.radius50),
+              borderRadius: BorderRadius.circular(Dimensions.height50),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

@@ -11,7 +11,7 @@ import '../pages/edit/edit_profile.dart';
 import '../utils/colors.dart';
 import '../utils/functions.dart';
 import '../widgets/leading_icon.dart';
-import '../widgets/text.dart';
+import '../widgets/typography.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});

@@ -1,4 +1,4 @@
-import 'package:farmers_directory/widgets/text.dart';
+import 'package:farmers_directory/widgets/typography.dart';
 import 'package:flutter/material.dart';
 
 class EditPassword extends StatelessWidget {
