@@ -2,13 +2,11 @@ import 'package:farmers_directory/pages/welcome_page.dart';
 import 'package:farmers_directory/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'helper/dependencies.dart' as dep;
 
 void main() async {
   GlobalFunctions();
   WidgetsFlutterBinding.ensureInitialized();
-
   await dep.init();
   runApp(const RootApp());
 }

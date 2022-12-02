@@ -180,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: EdgeInsets.only(top: Dimensions.height40),
                           child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () => Get.to(() => SignUpPage()),
                             child: RichText(
                               text: const TextSpan(
