@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:farmers_directory/pages/auth/signup_page.dart';
-import 'package:farmers_directory/pages/home/main_user_page.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
 import 'package:farmers_directory/utils/colors.dart';
@@ -73,15 +72,19 @@ class _LoginPageState extends State<LoginPage> {
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/icons/logo.png',
+                SizedBox(
+                  height: Dimensions.logoS,
+                  width: Dimensions.logoS,
+                  child: Image.asset(
+                    'assets/icons/logo.png',
+                  ),
                 ),
                 SizedBox(
                   height: Dimensions.height10,
                 ),
                 LargeText(
                   text: 'J Farmers',
-                  size: 25,
+                  size: Dimensions.font27,
                 ),
                 SizedBox(
                   height: Dimensions.height10,
@@ -141,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                               text: 'Forgot Password?',
                               color: Colors.blueAccent,
                             ),
-
                           ],
                         ),
                         Padding(
@@ -179,29 +181,31 @@ class _LoginPageState extends State<LoginPage> {
                                 )),
                           ],
                         ),
-                        SizedBox(height:40),
+                        SizedBox(height: 40),
                         Row(
-
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children:[
+                            children: [
                               SmallText(
                                 text: 'Don\'t have an account as yet?',
                                 color: Colors.grey,
                               ),
                               GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpPage()));
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUpPage()));
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left:8.0),
+                                  padding: const EdgeInsets.only(left: 8.0),
                                   child: Text('Sign Up',
-                                    style: TextStyle(fontSize: 14, color:Colors.lightGreen,fontWeight: FontWeight.bold)
-                                  ),
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.lightGreen,
+                                          fontWeight: FontWeight.bold)),
                                 ),
                               )
-                            ]
-                          ),
-
+                            ]),
                       ],
                     ),
                   ),

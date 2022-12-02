@@ -15,6 +15,7 @@ class Dimensions {
   static double height15 = screenHeight / 56.27;
   static double height20 = screenHeight / 43.4;
   static double height40 = screenHeight / 20.27;
+  static double height70 = screenHeight / 12.4;
 
 // dynamic width padding and margin
   static double width5 = screenWidth / 82.2;
@@ -22,10 +23,12 @@ class Dimensions {
   static double width15 = screenWidth / 27.4;
   static double width20 = screenWidth / 20.55;
   static double width30 = screenWidth / 13.7;
+  static double width70 = screenWidth / 5.87;
 
 //fonts
   static double font17 = screenHeight / 47.70;
   static double font14 = screenHeight / 57.92;
+  static double font27 = screenHeight / 32.15;
   static double font30 = screenHeight / 27.03;
 
 //  radius
@@ -33,6 +36,7 @@ class Dimensions {
   static double radius10 = screenHeight / 84.4;
   static double radius20 = screenHeight / 42.2;
   static double radius30 = screenHeight / 27.03;
+  static double radius50 = screenHeight / 17.36;
 
   // icon size = 24
   static double iconSize20 = screenHeight / 35.17;
@@ -49,4 +53,9 @@ class Dimensions {
   // expandedHeight of sliver
   static double expandedHeight = screenHeight / 2.89;
   static double welcomePageImg = screenHeight / 1.55;
+
+  // logo
+
+  static double logoS = screenHeight / 8.68;
+  static double logoPos = screenHeight / 1.88;
 }

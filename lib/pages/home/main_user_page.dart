@@ -55,17 +55,17 @@ class _MainUserPageState extends State<MainUserPage> {
         jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
     products = productsList.map((product) {
-        return Product.fromJson(product);
-      }).toList();
+      return Product.fromJson(product);
+    }).toList();
   }
 
   getCategories() async {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/categories"));
     List categoryList = response["data"];
-      categories = categoryList.map((category) {
-        return Category.fromJson(category);
-      }).toList();
+    categories = categoryList.map((category) {
+      return Category.fromJson(category);
+    }).toList();
   }
 
   getData() async {
@@ -179,7 +179,7 @@ class _MainUserPageState extends State<MainUserPage> {
                     SliverAppBar(
                       centerTitle: true,
                       title: SizedBox(
-                          width: 70,
+                          width: Dimensions.width70,
                           child: Image.asset(
                             'assets/icons/logo.png',
                             fit: BoxFit.cover,
@@ -188,7 +188,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       pinned: true,
                       floating: true,
                       titleSpacing: Dimensions.width15,
-                      toolbarHeight: 70,
+                      toolbarHeight: Dimensions.height70,
                       collapsedHeight: 75,
 
                       backgroundColor: Colors.white,
@@ -409,7 +409,9 @@ class _MainUserPageState extends State<MainUserPage> {
                   ],
                 );
               } else {
-                return Center(child: CircularProgressIndicator(color:AppColors.mainGreen));
+                return Center(
+                    child:
+                        CircularProgressIndicator(color: AppColors.mainGreen));
               }
             }));
   }

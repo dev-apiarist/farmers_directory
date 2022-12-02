@@ -1,14 +1,10 @@
 import 'package:farmers_directory/pages/auth/farmer_login_page.dart';
-import 'package:farmers_directory/pages/home/main_user_page.dart';
 
-import 'package:farmers_directory/utils/colors.dart';
 import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
-import 'package:farmers_directory/widgets/sm_text.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import '../navigation/home_page.dart';
+import 'package:flutter/material.dart';
+
 import 'auth/login_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -22,6 +18,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
@@ -32,7 +29,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 clipper: CustomClip(),
                 child: Container(
                   height: Dimensions.welcomePageImg,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
                         'assets/images/welcome_page.jpeg',
@@ -48,81 +45,91 @@ class _WelcomePageState extends State<WelcomePage> {
                       EdgeInsets.symmetric(horizontal: Dimensions.height20),
                   width: double.maxFinite,
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Meet Local Farmers'.toUpperCase(),
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600),
-                            children: [
-                              // TextSpan(
-                              //     text: '\nWith Real Farmers'.toUpperCase(),
-                              //     style: TextStyle(fontSize: 20)),
-                            ],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: 'Meet Local Farmers'.toUpperCase(),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: Dimensions.font27,
+                              fontWeight: FontWeight.w800),
+                          children: [
+                            // TextSpan(
+                            //     text: '\nWith Real Farmers'.toUpperCase(),
+                            //     style: TextStyle(fontSize: 20)),
+                          ],
+                        ),
+                      ),
+                      LargeText(
+                        text:
+                            "From the farm to you yaad, cut down\nthird-party costs.",
+                        align: TextAlign.center,
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Color(0xFF8CB369),
+                            shape: StadiumBorder()),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: Dimensions.height15,
+                              horizontal: Dimensions.width15),
+                          child: LargeText(
+                            text: 'Get Connected',
+                            color: Colors.white,
+                            size: Dimensions.height20,
                           ),
                         ),
-                        LargeText(
-                          text:
-                              "From the farm to you yaad, cut down\nthird-party costs.",
-                          align: TextAlign.center,
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Color(0xFF8CB369),
-                              shape: StadiumBorder()),
-                          onPressed: () {
-                            Navigator.pushReplacement(
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginPage(),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.height15,
-                                horizontal: Dimensions.width15),
-                            child: LargeText(
-                              text: 'Get Connected',
-                              color: Colors.white,
-                              size: Dimensions.height20,
-                            ),
-                          ),
+                                  builder: (context) => FarmerLoginPage()));
+                        },
+                        child: Text(
+                          "Are you a farmer? ",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: Dimensions.height15),
                         ),
-                        GestureDetector(
-                            onTap: (){
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FarmerLoginPage()));
-                            },
-                            child: Text("Are you a farmer? ", style: TextStyle(decoration: TextDecoration.underline, fontSize: Dimensions.height15)))
-                      ]),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
           ),
           Positioned(
-            top: 430,
+            top: Dimensions.logoPos,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(Dimensions.radius50),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.9),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 6), // changes position of shadow
+                      color: Colors.black.withOpacity(0.5),
                     ),
                   ],
                 ),
-                width: 100,
-                height: 100,
-                child: Image.asset(
-                  'assets/icons/logo.png',
-                  fit: BoxFit.cover,
+                width: Dimensions.logoS,
+                height: Dimensions.logoS,
+                child: Padding(
+                  padding: EdgeInsets.all(Dimensions.width5),
+                  child: Image.asset(
+                    'assets/icons/logo.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

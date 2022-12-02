@@ -16,7 +16,6 @@ dependencies:
 
   dots_indicator: ^2.1.0
   get: ^4.6.5
-  flutter_launcher_icons: ^0.10.0
   google_fonts: ^3.0.1
   url_launcher: ^6.1.6
   dropdown_button2: ^1.8.8
@@ -31,6 +30,7 @@ flutter_icons:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
 
   flutter_lints: ^2.0.0
 

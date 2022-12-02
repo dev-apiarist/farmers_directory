@@ -25,9 +25,9 @@ void main() async {
 
   await dep.init();
   runApp(const RootApp());
-  SystemChrome.setEnabledSystemUIMode(
-    SystemUiMode.immersiveSticky,
-  );
+  // SystemChrome.setEnabledSystemUIMode(
+  //   SystemUiMode.immersiveSticky,
+  // );
 }
 
 class RootApp extends StatelessWidget {
