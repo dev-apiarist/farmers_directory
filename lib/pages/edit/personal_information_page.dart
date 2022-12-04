@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/text.dart';
+import '../../widgets/typography.dart';
 
 class PersonalInformation extends StatelessWidget {
   const PersonalInformation({super.key});

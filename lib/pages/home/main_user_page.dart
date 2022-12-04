@@ -195,7 +195,7 @@ class _MainUserPageState extends State<MainUserPage> {
                     SliverAppBar(
                       centerTitle: true,
                       title: SizedBox(
-                          width: 70,
+                          width: Dimensions.width70,
                           child: Image.asset(
                             'assets/icons/logo.png',
                             fit: BoxFit.cover,
@@ -204,7 +204,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       pinned: true,
                       floating: true,
                       titleSpacing: Dimensions.width15,
-                      toolbarHeight: 70,
+                      toolbarHeight: Dimensions.height70,
                       collapsedHeight: 75,
 
                       backgroundColor: Colors.white,
@@ -425,7 +425,9 @@ class _MainUserPageState extends State<MainUserPage> {
                   ],
                 );
               } else {
-                return Center(child: CircularProgressIndicator(color:AppColors.mainGreen));
+                return Center(
+                    child:
+                        CircularProgressIndicator(color: AppColors.mainGreen));
               }
             }));
   }

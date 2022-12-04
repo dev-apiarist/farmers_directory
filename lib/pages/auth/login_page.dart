@@ -1,17 +1,14 @@
 import 'dart:convert';
 import 'package:farmers_directory/pages/auth/signup_page.dart';
-import 'package:farmers_directory/pages/home/main_user_page.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
-import 'package:farmers_directory/utils/colors.dart';
-import 'package:farmers_directory/utils/dimensions.dart';
-import 'package:farmers_directory/widgets/lg_text.dart';
-import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:farmers_directory/widgets/text_field.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../models/user.model.dart';
 import '../../navigation/home_page.dart';
+import '../../utils/utils.dart';
+import '../../widgets/typography.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -53,8 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     SecureStore.storeToken("jwt-auth", responseMap["data"]["token"]);
     SecureStore.createUser(responseMap["data"]["user"]);
     Future.delayed(Duration.zero, () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+      Get.off(() => const HomePage());
     });
   }
 
@@ -73,27 +69,31 @@ class _LoginPageState extends State<LoginPage> {
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/icons/logo.png',
+                SizedBox(
+                  height: Dimensions.logoS,
+                  width: Dimensions.logoS,
+                  child: Image.asset(
+                    'assets/icons/logo.png',
+                  ),
                 ),
                 SizedBox(
                   height: Dimensions.height10,
                 ),
                 LargeText(
                   text: 'J Farmers',
-                  size: 25,
+                  size: Dimensions.font27,
                 ),
                 SizedBox(
                   height: Dimensions.height10,
                 ),
-                SmallText(
+                const SmallText(
                   text: 'Get connected with local farmers',
                 ),
                 SizedBox(
-                  height: 50,
+                  height: Dimensions.height50,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width40),
                   child: Form(
                     key: formKey,
                     child: Column(
@@ -115,17 +115,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(
                           width: double.maxFinite,
-                          height: 55,
+                          height: Dimensions.height50,
                           child: TextButton(
                             style: TextButton.styleFrom(
                               backgroundColor: AppColors.mainGreen,
-                              shape: StadiumBorder(),
+                              shape: const StadiumBorder(),
                             ),
                             onPressed: () {
-                              print(emailController.text);
+                              // print(emailController.text);
                               submitLogin();
                             },
-                            child: LargeText(
+                            child: const LargeText(
                               text: 'Continue',
                               color: Colors.white,
                             ),
@@ -134,42 +134,40 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: Dimensions.height20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SmallText(
-                              text: 'Forgot Password?',
-                              color: Colors.blueAccent,
-                            ),
-
-                          ],
+                        const Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: SmallText(
+                            text: 'Forgot Password?',
+                            color: Colors.blueAccent,
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30.0),
+                          padding: EdgeInsets.symmetric(
+                              vertical: Dimensions.width30),
                           child: Row(
                             children: <Widget>[
-                              Expanded(child: Divider()),
+                              const Expanded(child: Divider()),
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: Dimensions.width10),
-                                child: LargeText(text: 'OR'),
+                                child: const LargeText(text: 'OR'),
                               ),
-                              Expanded(child: Divider()),
+                              const Expanded(child: Divider()),
                             ],
                           ),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(
-                              width: 35,
+                              width: Dimensions.width30,
                               child: Image.asset(
                                 'assets/icons/google.png',
                                 fit: BoxFit.cover,
                               ),
                             ),
                             SizedBox(
-                              width: 35,
+                              width: Dimensions.width30,
                             ),
                             SizedBox(
                                 width: Dimensions.width30,
@@ -179,36 +177,35 @@ class _LoginPageState extends State<LoginPage> {
                                 )),
                           ],
                         ),
-                        SizedBox(height:40),
-                        Row(
-
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:[
-                              SmallText(
-                                text: 'Don\'t have an account as yet?',
-                                color: Colors.grey,
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpPage()));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left:8.0),
-                                  child: Text('Sign Up',
-                                    style: TextStyle(fontSize: 14, color:Colors.lightGreen,fontWeight: FontWeight.bold)
+                        Padding(
+                          padding: EdgeInsets.only(top: Dimensions.height40),
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () => Get.to(() => SignUpPage()),
+                            child: RichText(
+                              text: const TextSpan(
+                                text: "Don't have an account? ",
+                                style: TextStyle(color: Colors.grey),
+                                children: [
+                                  TextSpan(
+                                    text: 'Sign Up',
+                                    style: TextStyle(
+                                      color: AppColors.mainGreen,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                              )
-                            ]
+                                ],
+                              ),
+                            ),
                           ),
-
+                        ),
                       ],
                     ),
                   ),
                 ),
               ],
             )
-          : Center(child: CircularProgressIndicator()),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }
@@ -216,27 +213,31 @@ class _LoginPageState extends State<LoginPage> {
 Widget showError(message, state, updateState, submitFunc, context) {
   return Center(
       child: AlertDialog(
-    title: Text("An Error occured"),
-    icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
+    title: const LargeText(text: "An Error occured"),
+    icon: Icon(Icons.cancel_outlined,
+        size: Dimensions.height40, color: Colors.red),
     content: Text(message.toString()),
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        borderRadius: BorderRadius.circular(Dimensions.height10)),
     actions: [
       TextButton(
           onPressed: () {
             updateState(() {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              Get.off(() => const LoginPage());
             });
           },
-          child: Text("Cancel")),
+          child: const SmallText(
+            text: 'Cancel',
+          )),
       TextButton(
           onPressed: () {
             updateState(() {
               state = submitFunc();
             });
           },
-          child: Text("Retry")),
+          child: const SmallText(
+            text: 'Retry',
+          )),
     ],
   ));
 }

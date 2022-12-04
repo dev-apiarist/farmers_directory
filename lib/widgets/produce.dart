@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'sm_text.dart';
 
 class FarmerProduce extends StatelessWidget {
@@ -11,7 +10,7 @@ class FarmerProduce extends StatelessWidget {
       child: SizedBox(
         height: 10,
         child: GridView.count(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           childAspectRatio: 0.9 / .3,
           crossAxisCount: 4,
           children: produce.map((String value) {
