@@ -1,3 +1,4 @@
+import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'sm_text.dart';
 
@@ -8,7 +9,7 @@ class FarmerProduce extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox(
-        height: 10,
+        height: Dimensions.height10,
         child: GridView.count(
           physics: const NeverScrollableScrollPhysics(),
           childAspectRatio: 0.9 / .3,
@@ -21,7 +22,7 @@ class FarmerProduce extends StatelessWidget {
                   size: 8,
                 ),
                 SizedBox(
-                  width: 2,
+                  width: Dimensions.width2,
                 ),
                 SmallText(text: value),
               ],

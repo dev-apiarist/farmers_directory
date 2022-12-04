@@ -1,20 +1,13 @@
 import 'dart:convert';
-
-import 'package:farmers_directory/pages/users/details/farmer_details.dart';
-import 'package:farmers_directory/pages/users/details/produce_details.dart';
-import 'package:farmers_directory/pages/users/lists/farmers_list.dart';
 import 'package:farmers_directory/pages/users/lists/produce_list.dart';
 import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
-import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
-
 import '../models/category.model.dart';
 import '../models/product.model.dart';
 import '../services/network_handler_service.dart';
-import '../utils/colors.dart';
-import '../utils/dimensions.dart';
-import '../widgets/sm_text.dart';
+import '../utils/utils.dart';
+import '../widgets/typography.dart';
 
 class Categories extends StatefulWidget {
   const Categories({super.key});
@@ -63,14 +56,14 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: LargeText(
+        title: const LargeText(
           text: 'Categories',
           color: Colors.white,
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
           )
         ],
         elevation: 0,
@@ -109,7 +102,7 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                   child: SizedBox(
                     width: double.maxFinite,
                     child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         controller: tabController,
                         children: snapshot.data!.map((category) {
                           List<Product> filteredProduct =
@@ -117,8 +110,8 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
                             return product.category == category.id;
                           }).toList();
                           return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Dimensions.width20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -170,32 +163,32 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
   }
 }
 
-class CircleTabIndicator extends Decoration {
-  final Color color;
-  double radius;
-  CircleTabIndicator({required this.color, required this.radius});
+// class CircleTabIndicator extends Decoration {
+//   final Color color;
+//   final double radius;
+//   const CircleTabIndicator({required this.color, required this.radius});
 
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
-    return _CirclePainter(color: color, radius: radius);
-  }
-}
+//   @override
+//   BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+//     return _CirclePainter(color: color, radius: radius);
+//   }
+// }
 
-class _CirclePainter extends BoxPainter {
-  final Color color;
-  double radius;
-  _CirclePainter({required this.color, required this.radius});
+// class _CirclePainter extends BoxPainter {
+//   final Color color;
+//   double radius;
+//   _CirclePainter({required this.color, required this.radius});
 
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    Paint paint = Paint();
-    paint.color = color;
-    paint.isAntiAlias = true;
-    final Offset circleOffset = Offset(
-        configuration.size!.width / 2 - radius / 2, configuration.size!.height);
-    canvas.drawCircle(offset + circleOffset, radius, paint);
-  }
-}
+//   @override
+//   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+//     Paint paint = Paint();
+//     paint.color = color;
+//     paint.isAntiAlias = true;
+//     final Offset circleOffset = Offset(
+//         configuration.size!.width / 2 - radius / 2, configuration.size!.height);
+//     canvas.drawCircle(offset + circleOffset, radius, paint);
+//   }
+// }
 
 columnFunction() {
   return Column(
@@ -221,7 +214,7 @@ columnFunction() {
                   width: 160,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radius20),
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       image: NetworkImage(
                         "",
                       ),
@@ -229,7 +222,7 @@ columnFunction() {
                   ));
             }),
       ),
-      SizedBox(height: 30),
+      const SizedBox(height: 30),
     ],
   );
 }
@@ -238,7 +231,7 @@ List<Widget> showInSeasonWhen(constant, variable, List<Product> products) {
   var seasonProduce =
       products.where((element) => element.inSeason == true).toList();
   if (constant == variable) {
-    return [SizedBox.shrink()];
+    return [const SizedBox.shrink()];
   } else {
     return [
       LargeText(text: 'In Season'),

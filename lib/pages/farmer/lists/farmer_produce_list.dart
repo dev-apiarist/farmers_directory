@@ -10,7 +10,7 @@ class FarmerProduceList extends StatefulWidget {
 }
 
 class _FarmerProduceListState extends State<FarmerProduceList> {
-  List<String> _produce = ["Apples", "Banana", "Yam"];
+  final List<String> _produce = ["Apples", "Banana", "Yam"];
 
   late List<bool> _isChecked;
 
@@ -24,9 +24,9 @@ class _FarmerProduceListState extends State<FarmerProduceList> {
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) {
-        return Divider();
+        return const Divider();
       },
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: _produce.length,
       itemBuilder: (context, index) {
@@ -35,7 +35,7 @@ class _FarmerProduceListState extends State<FarmerProduceList> {
           direction: DismissDirection.endToStart,
           background: Container(
               alignment: AlignmentDirectional.centerEnd,
-              child: Icon(Icons.delete)),
+              child: const Icon(Icons.delete)),
           confirmDismiss: (direction) async {
             return await showDialog(
               barrierDismissible: false,
@@ -63,9 +63,9 @@ class _FarmerProduceListState extends State<FarmerProduceList> {
             controlAffinity: ListTileControlAffinity.leading,
             value: _isChecked[index],
             onChanged: (value) {
-              setState() {
-                _isChecked[index] = !value!;
-              }
+              setState(() {
+                _isChecked[index] = value!;
+              });
             },
             title: LargeText(text: _produce[index]),
           ),

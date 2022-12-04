@@ -24,38 +24,42 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: Dimensions.height10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SmallText(text: widget.title),
-          SizedBox(
-            height: Dimensions.height10,
-          ),
-          SizedBox(
-            height: 50,
-            child: TextFormField(
-              controller: widget.controller,
-              scrollPhysics: const BouncingScrollPhysics(),
-              keyboardType:
-                  widget.isNumber ? TextInputType.number : TextInputType.text,
-              obscureText: widget.isPassword,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(Dimensions.width30),
-                      borderSide:
-                          BorderSide(color: Colors.grey.withOpacity(0.4))),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: Dimensions.width20),
-                  hintText: widget.placeholder,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(Dimensions.width30)),
-                  filled: true,
-                  fillColor: Colors.white70),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: Dimensions.height10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SmallText(text: widget.title),
+            SizedBox(
+              height: Dimensions.height10,
             ),
-          ),
-        ],
+            SizedBox(
+              height: 50,
+              child: TextFormField(
+                controller: widget.controller,
+                scrollPhysics: const BouncingScrollPhysics(),
+                keyboardType:
+                    widget.isNumber ? TextInputType.number : TextInputType.text,
+                obscureText: widget.isPassword,
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(Dimensions.width30),
+                        borderSide:
+                            BorderSide(color: Colors.grey.withOpacity(0.4))),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: Dimensions.width20),
+                    hintText: widget.placeholder,
+                    border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.width30)),
+                    filled: true,
+                    fillColor: Colors.white70),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

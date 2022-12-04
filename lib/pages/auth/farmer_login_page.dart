@@ -11,6 +11,7 @@ import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:farmers_directory/widgets/text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../models/user.model.dart';
 import '../../navigation/home_page.dart';
@@ -38,8 +39,9 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
       setState(() {
         _loading = true;
       });
-      String authenticatedUser = await NetworkHandler.post("/farmers/login", body);
-          getUserData(authenticatedUser);
+      String authenticatedUser =
+          await NetworkHandler.post("/farmers/login", body);
+      getUserData(authenticatedUser);
     } catch (err) {
       setState(() {
         _loading = false;
@@ -56,8 +58,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
     user["isFarmer"] = true;
     SecureStore.createUser(user);
     Future.delayed(Duration.zero, () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+      Get.off(() => const HomePage());
     });
   }
 
@@ -69,165 +70,160 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: (!_loading)
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/icons/logo.png',
-                ),
-                SizedBox(
-                  height: Dimensions.height10,
-                ),
-                // LargeText(
-                //   text: 'J Farmers',
-                //   size: 25,
-                // ),
-                SizedBox(
-                  height: Dimensions.height20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Text(
-                    'Let us be the platform you need to showcase your produce. ',
-                    style:TextStyle(color: AppColors.mainGold.withOpacity(.6), fontSize: 18, fontWeight: FontWeight.w100),
-                    textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
+        body: (!_loading)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: Dimensions.logoS,
+                    width: Dimensions.logoS,
+                    child: Image.asset(
+                      'assets/icons/logo.png',
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Text(
+                  SizedBox(
+                    height: Dimensions.height20,
+                  ),
+                  const LargeText(
+                      align: TextAlign.center,
+                      color: AppColors.mainGold,
+                      text:
+                          'Let us be the platform you need to showcase your produce.'),
+                  SizedBox(
+                    height: Dimensions.height40,
+                  ),
+                  Text(
                     "Farmer Login",
-                    style:TextStyle(color:AppColors.mainGold, fontSize: 25, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        color: AppColors.mainGold,
+                        fontSize: Dimensions.font27,
+                        fontWeight: FontWeight.w600),
                     textAlign: TextAlign.start,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomTextField(
-                          controller: emailController,
-                          title: 'Email address',
-                          placeholder: 'johntravolta@gmail.com',
-                        ),
-                        CustomTextField(
-                          isPassword: true,
-                          controller: passwordController,
-                          title: 'Password',
-                          placeholder: '************',
-                        ),
-                        SizedBox(
-                          height: Dimensions.height20,
-                        ),
-                        SizedBox(
-                          width: double.maxFinite,
-                          height: 55,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: AppColors.mainGold,
-                              shape: StadiumBorder(),
-                            ),
-                            onPressed: () {
-                              print(emailController.text);
-                              submitLogin();
-                            },
-                            child: LargeText(
-                              text: 'Continue',
-                              color: Colors.white,
+                  SizedBox(
+                    height: Dimensions.height20,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Dimensions.width40),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomTextField(
+                            controller: emailController,
+                            title: 'Email address',
+                            placeholder: 'johntravolta@gmail.com',
+                          ),
+                          CustomTextField(
+                            isPassword: true,
+                            controller: passwordController,
+                            title: 'Password',
+                            placeholder: '************',
+                          ),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          SizedBox(
+                            width: double.maxFinite,
+                            height: Dimensions.height50,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: AppColors.mainGold,
+                                shape: const StadiumBorder(),
+                              ),
+                              onPressed: () {
+                                // print(emailController.text);
+                                submitLogin();
+                              },
+                              child: LargeText(
+                                text: 'Continue',
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: Dimensions.height20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SmallText(
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          const Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: SmallText(
                               text: 'Forgot Password?',
                               color: Colors.blueAccent,
                             ),
-
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(child: Divider()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: Dimensions.width10),
-                                child: LargeText(text: 'OR'),
-                              ),
-                              Expanded(child: Divider()),
-                            ],
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 35,
-                              child: Image.asset(
-                                'assets/icons/google.png',
-                                fit: BoxFit.cover,
-                              ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.width30),
+                            child: Row(
+                              children: <Widget>[
+                                const Expanded(child: Divider()),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.width10),
+                                  child: const LargeText(text: 'OR'),
+                                ),
+                                const Expanded(child: Divider()),
+                              ],
                             ),
-                            SizedBox(
-                              width: 35,
-                            ),
-                            SizedBox(
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
                                 width: Dimensions.width30,
                                 child: Image.asset(
-                                  'assets/icons/facebook.png',
+                                  'assets/icons/google.png',
                                   fit: BoxFit.cover,
-                                )),
-                          ],
-                        ),
-                        SizedBox(height:40),
-                        Row(
-
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:[
-                              SmallText(
-                                text: 'Don\'t have an account as yet?',
-                                color: Colors.grey,
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>FarmerSignUpPage()));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left:8.0),
-                                  child: Text('Sign Up',
-                                    style: TextStyle(fontSize: 14, color:AppColors.mainGold,fontWeight: FontWeight.bold)
-                                  ),
                                 ),
-                              )
-                            ]
+                              ),
+                              SizedBox(
+                                width: Dimensions.width30,
+                              ),
+                              SizedBox(
+                                  width: Dimensions.width30,
+                                  child: Image.asset(
+                                    'assets/icons/facebook.png',
+                                    fit: BoxFit.cover,
+                                  )),
+                            ],
                           ),
-
-                      ],
+                          Padding(
+                            padding: EdgeInsets.only(top: Dimensions.height40),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => Get.to(() => FarmerSignUpPage()),
+                              child: RichText(
+                                text: const TextSpan(
+                                  text: "Don't have an account? ",
+                                  style: TextStyle(color: Colors.grey),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Sign Up',
+                                      style: TextStyle(
+                                        color: AppColors.mainGold,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
-          : Center(child: CircularProgressIndicator()),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
@@ -235,27 +231,31 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
 Widget showError(message, state, updateState, submitFunc, context) {
   return Center(
       child: AlertDialog(
-    title: Text("An Error occured"),
-    icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
+    title: const LargeText(text: "An Error occured"),
+    icon: Icon(Icons.cancel_outlined,
+        size: Dimensions.height40, color: Colors.red),
     content: Text(message.toString()),
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        borderRadius: BorderRadius.circular(Dimensions.height10)),
     actions: [
       TextButton(
           onPressed: () {
             updateState(() {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => WelcomePage()));
+              Get.off(() => const WelcomePage());
             });
           },
-          child: Text("Cancel")),
+          child: const SmallText(
+            text: 'Cancel',
+          )),
       TextButton(
           onPressed: () {
             updateState(() {
               state = submitFunc();
             });
           },
-          child: Text("Retry")),
+          child: const SmallText(
+            text: 'Retry',
+          )),
     ],
   ));
 }

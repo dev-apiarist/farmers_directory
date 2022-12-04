@@ -135,7 +135,8 @@ class FarmerDetails extends StatelessWidget {
                           parseUrl,
                         );
                       }
-                    }),
+                    }
+                    ),
                     child: LeadingIconText(
                       text: farmer.phone,
                       icon: Icons.call_outlined,

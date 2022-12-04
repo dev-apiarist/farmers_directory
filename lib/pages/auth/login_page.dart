@@ -25,8 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _loading = false;
   submitLogin() async {
     Map body = {
-      "email": emailController.text,
-      "password": passwordController.text,
+      "email": emailController.text.trim(),
+      "password": passwordController.text.trim(),
     };
 
     try {
@@ -40,8 +40,13 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _loading = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            err.toString(),
+          ),
+        ),
+      );
     }
   }
 
@@ -62,150 +67,154 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: (!_loading)
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: Dimensions.logoS,
-                  width: Dimensions.logoS,
-                  child: Image.asset(
-                    'assets/icons/logo.png',
-                  ),
-                ),
-                SizedBox(
-                  height: Dimensions.height10,
-                ),
-                LargeText(
-                  text: 'J Farmers',
-                  size: Dimensions.font27,
-                ),
-                SizedBox(
-                  height: Dimensions.height10,
-                ),
-                const SmallText(
-                  text: 'Get connected with local farmers',
-                ),
-                SizedBox(
-                  height: Dimensions.height50,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Dimensions.width40),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomTextField(
-                          controller: emailController,
-                          title: 'Your email address',
-                          placeholder: 'johntravolta@gmail.com',
-                        ),
-                        CustomTextField(
-                          isPassword: true,
-                          controller: passwordController,
-                          title: 'Password',
-                          placeholder: '************',
-                        ),
-                        SizedBox(
-                          height: Dimensions.height20,
-                        ),
-                        SizedBox(
-                          width: double.maxFinite,
-                          height: Dimensions.height50,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: AppColors.mainGreen,
-                              shape: const StadiumBorder(),
-                            ),
-                            onPressed: () {
-                              // print(emailController.text);
-                              submitLogin();
-                            },
-                            child: const LargeText(
-                              text: 'Continue',
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: Dimensions.height20,
-                        ),
-                        const Align(
-                          alignment: AlignmentDirectional.centerEnd,
-                          child: SmallText(
-                            text: 'Forgot Password?',
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.width30),
-                          child: Row(
-                            children: <Widget>[
-                              const Expanded(child: Divider()),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: Dimensions.width10),
-                                child: const LargeText(text: 'OR'),
-                              ),
-                              const Expanded(child: Divider()),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: Dimensions.width30,
-                              child: Image.asset(
-                                'assets/icons/google.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(
-                              width: Dimensions.width30,
-                            ),
-                            SizedBox(
-                                width: Dimensions.width30,
-                                child: Image.asset(
-                                  'assets/icons/facebook.png',
-                                  fit: BoxFit.cover,
-                                )),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: Dimensions.height40),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () => Get.to(() => SignUpPage()),
-                            child: RichText(
-                              text: const TextSpan(
-                                text: "Don't have an account? ",
-                                style: TextStyle(color: Colors.grey),
-                                children: [
-                                  TextSpan(
-                                    text: 'Sign Up',
-                                    style: TextStyle(
-                                      color: AppColors.mainGreen,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
+        body: (!_loading)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: Dimensions.logoS,
+                    width: Dimensions.logoS,
+                    child: Image.asset(
+                      'assets/icons/logo.png',
                     ),
                   ),
-                ),
-              ],
-            )
-          : const Center(child: CircularProgressIndicator()),
+                  SizedBox(
+                    height: Dimensions.height10,
+                  ),
+                  LargeText(
+                    text: 'Welcome to J Farmers',
+                    size: Dimensions.font27,
+                  ),
+                  SizedBox(
+                    height: Dimensions.height10,
+                  ),
+                  const SmallText(
+                    text: 'Get connected with local farmers',
+                  ),
+                  SizedBox(
+                    height: Dimensions.height50,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Dimensions.width40),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CustomTextField(
+                            controller: emailController,
+                            title: 'Your email address',
+                            placeholder: 'johntravolta@gmail.com',
+                          ),
+                          CustomTextField(
+                            isPassword: true,
+                            controller: passwordController,
+                            title: 'Password',
+                            placeholder: '************',
+                          ),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          SizedBox(
+                            width: double.maxFinite,
+                            height: Dimensions.height50,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: AppColors.mainGreen,
+                                shape: const StadiumBorder(),
+                              ),
+                              onPressed: () {
+                                // print(emailController.text);
+                                submitLogin();
+                              },
+                              child: const LargeText(
+                                text: 'Continue',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          const Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: SmallText(
+                              text: 'Forgot Password?',
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.width30),
+                            child: Row(
+                              children: <Widget>[
+                                const Expanded(child: Divider()),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.width10),
+                                  child: const LargeText(text: 'OR'),
+                                ),
+                                const Expanded(child: Divider()),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: Dimensions.width30,
+                                child: Image.asset(
+                                  'assets/icons/google.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(
+                                width: Dimensions.width30,
+                              ),
+                              SizedBox(
+                                  width: Dimensions.width30,
+                                  child: Image.asset(
+                                    'assets/icons/facebook.png',
+                                    fit: BoxFit.cover,
+                                  )),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: Dimensions.height40),
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => Get.to(() => SignUpPage()),
+                              child: RichText(
+                                text: const TextSpan(
+                                  text: "Don't have an account? ",
+                                  style: TextStyle(color: Colors.grey),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Sign Up',
+                                      style: TextStyle(
+                                        color: AppColors.mainGreen,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

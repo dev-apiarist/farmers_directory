@@ -1,26 +1,20 @@
 import 'dart:convert';
-
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:farmers_directory/models/category.model.dart';
-import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
 import 'package:farmers_directory/services/secure_store_service.dart';
-import 'package:farmers_directory/utils/colors.dart';
 import 'package:farmers_directory/utils/functions.dart';
-import 'package:farmers_directory/widgets/custom_dropdown.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/produce.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
 import '../../models/farmer.model.dart';
 import '../../models/product.model.dart';
 import '../../models/user.model.dart';
-import '../../utils/dimensions.dart';
-import '../../widgets/lg_text.dart';
-import '../../widgets/sm_text.dart';
+import '../../utils/utils.dart';
+import '../../widgets/typography.dart';
 
 class MainUserPage extends StatefulWidget {
   const MainUserPage({super.key});
@@ -104,18 +98,6 @@ class _MainUserPageState extends State<MainUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> locations = [
-      'Clarendon',
-      'Kingston',
-      'St. Ann',
-      'St. James',
-      'Portland',
-      'St. Mary',
-      'St. Catherine',
-      'Trelawny',
-    ];
-    String? selectedLocation;
-
     return Scaffold(
         backgroundColor: Colors.white,
         drawer: Drawer(
@@ -125,7 +107,7 @@ class _MainUserPageState extends State<MainUserPage> {
           child: ListView(
             children: [
               DrawerHeader(
-                decoration: BoxDecoration(color: AppColors.mainGreen),
+                decoration: const BoxDecoration(color: AppColors.mainGreen),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -137,7 +119,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   text: 'Account',
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 title: LeadingIconText(
                   iconSize: Dimensions.iconSize16,
@@ -145,7 +127,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   text: 'Settings',
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 title: LeadingIconText(
                   iconSize: Dimensions.iconSize16,
@@ -153,7 +135,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   text: 'Send Feedback',
                 ),
               ),
-              Divider(),
+              const Divider(),
               ListTile(
                 title: LeadingIconText(
                   iconSize: Dimensions.iconSize16,
@@ -161,7 +143,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   text: 'Logout',
                 ),
               ),
-              Divider(),
+              const Divider(),
             ],
           ),
         ),
@@ -179,17 +161,18 @@ class _MainUserPageState extends State<MainUserPage> {
                     SliverAppBar(
                       centerTitle: true,
                       title: SizedBox(
-                          width: Dimensions.width70,
-                          child: Image.asset(
-                            'assets/icons/logo.png',
-                            fit: BoxFit.cover,
-                          )),
+                        width: Dimensions.width70,
+                        child: Image.asset(
+                          'assets/icons/logo.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                       foregroundColor: Colors.black,
                       pinned: true,
                       floating: true,
                       titleSpacing: Dimensions.width15,
-                      toolbarHeight: Dimensions.height70,
-                      collapsedHeight: 75,
+                      toolbarHeight: 60,
+                      collapsedHeight: 60,
 
                       backgroundColor: Colors.white,
                       flexibleSpace: FlexibleSpaceBar(
@@ -201,8 +184,10 @@ class _MainUserPageState extends State<MainUserPage> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(
-                                    right: Dimensions.width15,
-                                  ),
+                                      right: Dimensions.width15,
+                                      top: MediaQuery.of(context)
+                                          .viewPadding
+                                          .top),
                                   child: CircleAvatar(
                                       backgroundColor: Colors.white54,
                                       radius: Dimensions.radius30,
@@ -222,17 +207,14 @@ class _MainUserPageState extends State<MainUserPage> {
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: Dimensions.width20),
                                       focusColor: Colors.white,
-                                      focusedBorder: OutlineInputBorder(
-
-                                          // borderSide: BorderSide(color: Colors.transparent),
-                                          ),
+                                      focusedBorder: const OutlineInputBorder(),
                                       border: OutlineInputBorder(
                                         // borderSide:
                                         // BorderSide(width: 0, style: BorderStyle.none),
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radius5),
                                       ),
-                                      prefixIcon: Icon(Icons.search),
+                                      prefixIcon: const Icon(Icons.search),
                                       hintText: 'Search ',
                                       fillColor: Colors.white,
                                       filled: true),
@@ -336,9 +318,6 @@ class _MainUserPageState extends State<MainUserPage> {
                                   },
                                 ),
                               ),
-                              SizedBox(
-                                height: Dimensions.height10,
-                              ),
                               DotsIndicator(
                                 dotsCount: 3,
                                 position: _currPageValue,
@@ -347,17 +326,14 @@ class _MainUserPageState extends State<MainUserPage> {
                                     size: Size.square(Dimensions.height10),
                                     activeColor: AppColors.mainGreen),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: Dimensions.width10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    LargeText(
-                                      text: 'Nearby Farmers',
-                                    ),
-                                  ],
+                              Align(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.width10),
+                                  child: const LargeText(
+                                    text: 'Nearby Farmers',
+                                  ),
                                 ),
                               ),
                               Container(
@@ -409,7 +385,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   ],
                 );
               } else {
-                return Center(
+                return const Center(
                     child:
                         CircularProgressIndicator(color: AppColors.mainGreen));
               }
@@ -425,9 +401,6 @@ class _MainUserPageState extends State<MainUserPage> {
     'St. Mary',
     'St. Catherine',
     'Trelawny',
-    // 'Westmoreland',
-    // 'St.Thomas',
-    // 'Hanover',
   ];
 //pageview slider
   Widget _buildPageItem(int index, Product product) {
@@ -482,7 +455,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   BoxShadow(
                     offset: Offset(0, Dimensions.height5),
                     blurRadius: Dimensions.radius5,
-                    color: Color(0xFFF4F4F4),
+                    color: const Color(0xFFF4F4F4),
                   ),
                 ],
                 borderRadius: BorderRadius.circular(
@@ -507,19 +480,20 @@ class _MainUserPageState extends State<MainUserPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LargeText(
-                        text: '${product.prod_name}',
+                        text: product.prod_name,
                         size: Dimensions.height20,
                       ),
                       SizedBox(
                         height: Dimensions.height5,
                       ),
-                      LargeText(
+                      const LargeText(
                         text: "Regions",
                       ),
                       SizedBox(
                         height: Dimensions.height10,
                       ),
                       GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: locations.length,
                         itemBuilder: (context, index) => SizedBox(
                           height: Dimensions.height5,
@@ -527,7 +501,7 @@ class _MainUserPageState extends State<MainUserPage> {
                             text: locations[index],
                           ),
                         ),
-                        padding: EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             mainAxisSpacing: 0,
@@ -536,7 +510,7 @@ class _MainUserPageState extends State<MainUserPage> {
                             childAspectRatio: 3,
                             crossAxisSpacing: Dimensions.width10),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: TextButton(
@@ -550,7 +524,7 @@ class _MainUserPageState extends State<MainUserPage> {
                               }),
                             );
                           },
-                          child: SmallText(
+                          child: const SmallText(
                             text: "View Farmers",
                             color: Colors.white,
                           ),
@@ -579,7 +553,7 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       )
     ];
   }

@@ -22,7 +22,7 @@ class FarmersList extends StatelessWidget {
       },
       isThreeLine: true,
       horizontalTitleGap: Dimensions.width10,
-      visualDensity: VisualDensity(vertical: 4),
+      visualDensity: const VisualDensity(vertical: 4),
       contentPadding: EdgeInsets.symmetric(
         horizontal: Dimensions.width20,
         vertical: Dimensions.height5,
@@ -38,7 +38,7 @@ class FarmersList extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LargeText(
+          const LargeText(
             text: 'Main Produce:',
           ),
           SizedBox(
@@ -49,7 +49,7 @@ class FarmersList extends StatelessWidget {
             children: List.generate(farmer.products.length, (index) {
               return LeadingIconText(
                 icon: Icons.fiber_manual_record,
-                text: '${farmer.products[index].prod_name}',
+                text: farmer.products[index].prod_name,
                 color: Colors.black87,
                 iconSize: Dimensions.height10,
                 textSize: Dimensions.font14,

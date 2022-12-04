@@ -49,27 +49,27 @@ class GlobalFunctions {
   }
 }
 
-
-ImageProvider useAssetIfImageNull({String assetUri= "" , String? imgPath}){
-  if(imgPath == "" || imgPath == null){
+ImageProvider useAssetIfImageNull({String assetUri = "", String? imgPath}) {
+  if (imgPath == "" || imgPath == null) {
     return AssetImage(assetUri);
-  }else{
+  } else {
     return NetworkImage(imgPath);
   }
 }
 
-ImageProvider setProduceImage(String? uri){
+ImageProvider setProduceImage(String? uri) {
   return useAssetIfImageNull(assetUri: "assets/images/logo.png", imgPath: uri);
 }
 
-ImageProvider setProfileImage(String? uri){
-  return useAssetIfImageNull(assetUri:"assets/images/defaultProfile.png", imgPath: uri);
+ImageProvider setProfileImage(String? uri) {
+  return useAssetIfImageNull(
+      assetUri: "assets/images/defaultProfile.png", imgPath: uri);
 }
 
-void launchApplication(String data)async{
-  if(!data.contains("@"))
-  await launchUrl(Uri(scheme: "tel", path: data));
-  else{
-    await launchUrl(Uri(scheme:"mailto",path:data ));
+void launchApplication(String data) async {
+  if (!data.contains("@")) {
+    await launchUrl(Uri(scheme: "tel", path: data));
+  } else {
+    await launchUrl(Uri(scheme: "mailto", path: data));
   }
 }

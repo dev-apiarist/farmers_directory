@@ -46,69 +46,73 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
   late List<Category> allCategories = [];
   Color selectedColor = AppColors.mainGold.withOpacity(0.4);
 
-
-  submitSignUp()async{
+  submitSignUp() async {
     Map farmerBody = {
-      "first_name":first_nameCtrl.text,
-      "last_name":last_nameCtrl.text,
-      "email":emailCtrl.text,
-      "address":{
+      "first_name": first_nameCtrl.text,
+      "last_name": last_nameCtrl.text,
+      "email": emailCtrl.text,
+      "address": {
         "street": streetCtrl.text,
         "parish": parishCtrl.text,
         "city": cityCtrl.text
       },
-      "phone":phoneCtrl.text,
+      "phone": phoneCtrl.text,
       "description": descriptionCtrl.text,
-      "password":passwordCtrl.text,
+      "password": passwordCtrl.text,
       "socials": {
         "facebook": facebookCtrl.text,
         "instagram": instagramCtrl.text,
         "website": websiteCtrl.text,
       }
     };
-    try{
-        setState(() {
-          _loading = true;
-        });
-        String dataString = await NetworkHandler.post("/farmers", farmerBody);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder) => FarmerSignUpPage()));
-
-    }catch(error){
-        setState(() {
-          _loading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    try {
+      setState(() {
+        _loading = true;
+      });
+      String dataString = await NetworkHandler.post("/farmers", farmerBody);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (builder) => FarmerSignUpPage()));
+    } catch (error) {
+      setState(() {
+        _loading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
     }
   }
 
-  Future<List<Product>> getAllProducts() async{
-    try{
+  Future<List<Product>> getAllProducts() async {
+    try {
       allCategories = await getAllCategories();
 
-      List productList = jsonDecode(await NetworkHandler.get(endpoint: "/products"))["data"];
-      setState((){});
+      List productList =
+          jsonDecode(await NetworkHandler.get(endpoint: "/products"))["data"];
+      setState(() {});
 
-      return productList.map((product){
+      return productList.map((product) {
         return Product.fromJson(product);
       }).toList();
-    }catch(error){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
       return [];
-
     }
   }
-  Future<List<Category>> getAllCategories() async{
-    try{
-      List categoryList = jsonDecode(await NetworkHandler.get(endpoint: "/categories"))["data"];
-      return categoryList.map((category){
+
+  Future<List<Category>> getAllCategories() async {
+    try {
+      List categoryList =
+          jsonDecode(await NetworkHandler.get(endpoint: "/categories"))["data"];
+      return categoryList.map((category) {
         return Category.fromJson(category);
       }).toList();
-    }catch(error){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
       return [];
-
     }
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -121,455 +125,571 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
     super.initState();
     parishCtrl.text = parishList[0];
     allProducts = getAllProducts();
-
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: (!_loading)?
-      FutureBuilder<List<Product>>(
-          future: allProducts,
-          builder: (context, snapshot) {
-
-          if(snapshot.hasData){
-            return Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        SizedBox(
-                            height: 30
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:40.0),
-                          child: Text("Create a Farmer's Account", style: TextStyle(color: AppColors.mainGold, fontWeight: FontWeight.w600, fontSize: 25),),
-                        ),
-                        Stepper(
-                          physics:ScrollPhysics(),
-                          controlsBuilder: (context, steps){
-                            return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: isLastStep ? Row(
-                                  children: [
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: AppColors.mainGold,
-                                        shape: StadiumBorder(),
-                                      ),
-                                      onPressed: () {
-                                        submitSignUp();
-                                      },
-                                      child: LargeText(
-                                        text: 'Submit',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TextButton(onPressed: steps.onStepCancel, child: const Text("Cancel", style: TextStyle(color: AppColors.mainGold),))
-                                  ],
-                                ) : Row(
-                                  children: [
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: AppColors.mainGold,
-                                        shape: StadiumBorder(),
-                                      ),
-                                      onPressed: steps.onStepContinue,
-                                      child: LargeText(
-                                        text: 'Next',
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TextButton(onPressed: steps.onStepCancel, child: const Text("Cancel", style: TextStyle(color: AppColors.mainGold),))
-                                  ],
-                                )
-                            );
-                          },
-                          currentStep: _currentStep,
-                          onStepCancel: () {
-                            if (_currentStep > 0) {
-                              setState(() {
-                                _currentStep -= 1;
-                              });
-                            }
-                          },
-                          onStepContinue: () {
-                            if (_currentStep <= 3) {
-                              setState(() {
-                                _currentStep += 1;
-                                isLastStep = (_currentStep == 3) ? true : false;
-
-                              });
-                            }
-                          },
-                          onStepTapped: (int index) {
-
-                            setState(() {
-                              _currentStep = index;
-                              isLastStep = (_currentStep == 3) ? true : false;
-                            });
-                          },
-                          steps: [
-                            Step(
-                              isActive: _currentStep >= 0,
-                              state: _currentStep >= 0 ?
-                              StepState.complete : StepState.disabled,
-                              title: SmallText(text: 'Personal Details'),
-                              content: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width / 2.7,
-                                        child: CustomTextField(
-                                          controller: first_nameCtrl,
-                                          title: 'First Name',
-                                          placeholder: 'John',
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width / 2.7,
-                                        child: CustomTextField(
-                                          controller: last_nameCtrl,
-                                          title: 'Last Name',
-                                          placeholder: 'Travolta',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomTextField(
-                                    controller: emailCtrl,
-                                    title: 'Email',
-                                    placeholder: 'johntravolta@gmail.com',
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SmallText(text: "Description"),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFormField(
-                                        minLines: 4,
-                                        maxLines: 5,
-                                        controller: descriptionCtrl,
-                                        scrollPhysics: BouncingScrollPhysics(),
-                                        keyboardType:TextInputType.multiline,
-                                        decoration: InputDecoration(
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(30),
-                                                borderSide:
-                                                BorderSide(color: Colors.grey.withOpacity(0.4))),
-                                            contentPadding: EdgeInsets.all(15),
-                                            hintText: "Description",
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(30)),
-                                            filled: true,
-                                            fillColor: Colors.white70),
-
-                                      ),
-                                    ],
-                                  ),
-
-                                  CustomTextField(
-                                    controller: passwordCtrl,
-                                    isPassword: true,
-                                    title: 'Password',
-                                    placeholder: '************',
-                                  ),
-                                  CustomTextField(
-                                    controller: password2Ctrl,
-                                    isPassword: true,
-                                    title: 'Confirm Password',
-                                    placeholder: '************',
-                                  ),
-                                ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: (!_loading)
+            ? FutureBuilder<List<Product>>(
+                future: allProducts,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(children: [
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            SizedBox(height: 30),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40.0),
+                              child: Text(
+                                "Create a Farmer's Account",
+                                style: TextStyle(
+                                    color: AppColors.mainGold,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25),
                               ),
                             ),
-                            Step(
-
-                              isActive: _currentStep >= 0,
-                              state: _currentStep >= 1 ?
-                              StepState.complete : StepState.disabled,
-                              title: SmallText(text: 'Address'),
-                              content: Column(
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            Stepper(
+                              physics: ScrollPhysics(),
+                              controlsBuilder: (context, steps) {
+                                return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: isLastStep
+                                        ? Row(
+                                            children: [
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      AppColors.mainGold,
+                                                  shape: StadiumBorder(),
+                                                ),
+                                                onPressed: () {
+                                                  submitSignUp();
+                                                },
+                                                child: LargeText(
+                                                  text: 'Submit',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              TextButton(
+                                                  onPressed: steps.onStepCancel,
+                                                  child: const Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppColors.mainGold),
+                                                  ))
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      AppColors.mainGold,
+                                                  shape: StadiumBorder(),
+                                                ),
+                                                onPressed: steps.onStepContinue,
+                                                child: LargeText(
+                                                  text: 'Next',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              TextButton(
+                                                  onPressed: steps.onStepCancel,
+                                                  child: const Text(
+                                                    "Cancel",
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppColors.mainGold),
+                                                  ))
+                                            ],
+                                          ));
+                              },
+                              currentStep: _currentStep,
+                              onStepCancel: () {
+                                if (_currentStep > 0) {
+                                  setState(() {
+                                    _currentStep -= 1;
+                                  });
+                                }
+                              },
+                              onStepContinue: () {
+                                if (_currentStep <= 3) {
+                                  setState(() {
+                                    _currentStep += 1;
+                                    isLastStep =
+                                        (_currentStep == 3) ? true : false;
+                                  });
+                                }
+                              },
+                              onStepTapped: (int index) {
+                                setState(() {
+                                  _currentStep = index;
+                                  isLastStep =
+                                      (_currentStep == 3) ? true : false;
+                                });
+                              },
+                              steps: [
+                                Step(
+                                  isActive: _currentStep >= 0,
+                                  state: _currentStep >= 0
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                  title: SmallText(text: 'Personal Details'),
+                                  content: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      CustomTextField(
-                                        controller: streetCtrl,
-                                        title: 'Street ',
-                                        placeholder: '',
-                                      ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
-                                            width: MediaQuery.of(context).size.width / 2.7,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text("Parish"),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-
-                                                  height: 50,
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(30),
-                                                      color: Colors.white,
-                                                      border: Border.fromBorderSide(BorderSide(color:Colors.grey.withOpacity(0.4), width: 1.0))
-                                                  ),
-                                                  child: DropdownButton(
-                                                    value: parishCtrl.text,
-                                                    onChanged: (String? value){
-                                                      setState(() {
-                                                        parishCtrl.text = value!;
-                                                      });
-                                                    },
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    underline: SizedBox.shrink(),
-                                                    items: parishList.map((parishName){
-                                                      return DropdownMenuItem<String>(
-
-                                                          child: Text(parishName, style: TextStyle(fontSize: 14),),
-                                                          value: parishName
-                                                      );
-
-                                                    }).toList(),
-
-                                                  ),
-                                                ),
-                                              ],
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.7,
+                                            child: CustomTextField(
+                                              controller: first_nameCtrl,
+                                              title: 'First Name',
+                                              placeholder: 'John',
                                             ),
                                           ),
-
                                           SizedBox(
-                                            width: MediaQuery.of(context).size.width / 2.7,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                2.7,
                                             child: CustomTextField(
-                                              controller: cityCtrl,
-                                              title: 'City',
+                                              controller: last_nameCtrl,
+                                              title: 'Last Name',
+                                              placeholder: 'Travolta',
                                             ),
+                                          ),
+                                        ],
+                                      ),
+                                      CustomTextField(
+                                        controller: emailCtrl,
+                                        title: 'Email',
+                                        placeholder: 'johntravolta@gmail.com',
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SmallText(text: "Description"),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextFormField(
+                                            minLines: 4,
+                                            maxLines: 5,
+                                            controller: descriptionCtrl,
+                                            scrollPhysics:
+                                                BouncingScrollPhysics(),
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            decoration: InputDecoration(
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        borderSide: BorderSide(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.4))),
+                                                contentPadding:
+                                                    EdgeInsets.all(15),
+                                                hintText: "Description",
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30)),
+                                                filled: true,
+                                                fillColor: Colors.white70),
+                                          ),
+                                        ],
+                                      ),
+                                      CustomTextField(
+                                        controller: passwordCtrl,
+                                        isPassword: true,
+                                        title: 'Password',
+                                        placeholder: '************',
+                                      ),
+                                      CustomTextField(
+                                        controller: password2Ctrl,
+                                        isPassword: true,
+                                        title: 'Confirm Password',
+                                        placeholder: '************',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Step(
+                                  isActive: _currentStep >= 0,
+                                  state: _currentStep >= 1
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                  title: SmallText(text: 'Address'),
+                                  content: Column(
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          CustomTextField(
+                                            controller: streetCtrl,
+                                            title: 'Street ',
+                                            placeholder: '',
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.7,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text("Parish"),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Container(
+                                                      height: 50,
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(30),
+                                                          color: Colors.white,
+                                                          border: Border.fromBorderSide(
+                                                              BorderSide(
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .withOpacity(
+                                                                          0.4),
+                                                                  width: 1.0))),
+                                                      child: DropdownButton(
+                                                        value: parishCtrl.text,
+                                                        onChanged:
+                                                            (String? value) {
+                                                          setState(() {
+                                                            parishCtrl.text =
+                                                                value!;
+                                                          });
+                                                        },
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        underline:
+                                                            SizedBox.shrink(),
+                                                        items: parishList
+                                                            .map((parishName) {
+                                                          return DropdownMenuItem<
+                                                                  String>(
+                                                              child: Text(
+                                                                parishName,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        14),
+                                                              ),
+                                                              value:
+                                                                  parishName);
+                                                        }).toList(),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.7,
+                                                child: CustomTextField(
+                                                  controller: cityCtrl,
+                                                  title: 'City',
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Step(
-                              isActive: _currentStep >= 0,
-                              state: _currentStep >= 2 ?
-                              StepState.complete : StepState.disabled,
-                              title: SmallText(text: 'Socials (Optional)'),
-                              content: Column(
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                ),
+                                Step(
+                                  isActive: _currentStep >= 0,
+                                  state: _currentStep >= 2
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                  title: SmallText(text: 'Socials (Optional)'),
+                                  content: Column(
                                     children: [
-                                      CustomTextField(
-                                        controller: instagramCtrl,
-                                        title: 'Instagram ',
-                                        placeholder: '',
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
                                         children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width / 2.7,
-                                            child: CustomTextField(
-                                              controller: facebookCtrl,
-                                              title: 'Facebook ',
-                                              placeholder: '',
-                                            ),
+                                          CustomTextField(
+                                            controller: instagramCtrl,
+                                            title: 'Instagram ',
+                                            placeholder: '',
                                           ),
-
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width / 2.7,
-                                            child: CustomTextField(
-                                              controller: websiteCtrl,
-                                              title: 'Website',
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.7,
+                                                child: CustomTextField(
+                                                  controller: facebookCtrl,
+                                                  title: 'Facebook ',
+                                                  placeholder: '',
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.7,
+                                                child: CustomTextField(
+                                                  controller: websiteCtrl,
+                                                  title: 'Website',
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Step(
-                              isActive: _currentStep >= 0,
-                              state: _currentStep >= 3 ?
-                              StepState.complete : StepState.disabled,
-                              title: SmallText(text: 'Select Products'),
-                              content: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SmallText(text: "Search Products"),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: searchCtrl,
-                                          scrollPhysics: BouncingScrollPhysics(),
-                                          keyboardType:TextInputType.text,
-                                          decoration: InputDecoration(
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(30),
-                                                  borderSide:
-                                                  BorderSide(color: Colors.grey.withOpacity(0.4))),
-                                              contentPadding: EdgeInsets.all(15),
-                                              hintText: "Search",
-                                              border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(30)),
-                                              filled: true,
-                                              fillColor: Colors.white70),
-                                          onChanged: (value){
-                                            query = searchCtrl.text;
-                                            setState(() {});
-                                          }
-
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: allCategories.map((category){
-                                      List<Product> filteredList = snapshot.data!.where((product) => product.category == category.id ).toList();
-                                      filteredList = filteredList.where((element)=> element.prod_name.toLowerCase().contains(query.toLowerCase())).toList();
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                            child: Text(category.category_name, style:TextStyle(fontWeight: FontWeight.w600)),
-                                          ),
-                                          Wrap(
-                                            spacing: Dimensions.width5,
-                                            children:
-                                            List.generate(filteredList.length, (index) {
-                                              return GestureDetector(
-                                                onTap: (() {
-                                                     toggleSelectedToList(productList: selectedProduct, productId: filteredList[index].id);
-                                                     setState(() {});
+                                ),
+                                Step(
+                                  isActive: _currentStep >= 0,
+                                  state: _currentStep >= 3
+                                      ? StepState.complete
+                                      : StepState.disabled,
+                                  title: SmallText(text: 'Select Products'),
+                                  content: Column(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SmallText(text: "Search Products"),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            TextFormField(
+                                                controller: searchCtrl,
+                                                scrollPhysics:
+                                                    BouncingScrollPhysics(),
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                decoration: InputDecoration(
+                                                    enabledBorder: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        borderSide: BorderSide(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.4))),
+                                                    contentPadding:
+                                                        EdgeInsets.all(15),
+                                                    hintText: "Search",
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30)),
+                                                    filled: true,
+                                                    fillColor: Colors.white70),
+                                                onChanged: (value) {
+                                                  query = searchCtrl.text;
+                                                  setState(() {});
                                                 }),
-                                                child: Chip(
-                                                  backgroundColor: isSelected(productList:selectedProduct, productId: filteredList[index].id) ? selectedColor: Colors.white,
-                                                  side: BorderSide(color: Colors.black54),
-                                                  label: SmallText(
-                                                    size: 13,
-                                                    text: '${filteredList[index].prod_name}',
-                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: allCategories.map((category) {
+                                          List<Product> filteredList = snapshot
+                                              .data!
+                                              .where((product) =>
+                                                  product.category ==
+                                                  category.id)
+                                              .toList();
+                                          filteredList = filteredList
+                                              .where((element) => element
+                                                  .prod_name
+                                                  .toLowerCase()
+                                                  .contains(
+                                                      query.toLowerCase()))
+                                              .toList();
+                                          return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
+                                                  child: Text(
+                                                      category.category_name,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600)),
                                                 ),
-                                              );
-                                            }),
-                                          ),
-
-                                        ]
-                                      );
-
-
-                                    }).toList(),
+                                                Wrap(
+                                                  spacing: Dimensions.width5,
+                                                  children: List.generate(
+                                                      filteredList.length,
+                                                      (index) {
+                                                    return GestureDetector(
+                                                      onTap: (() {
+                                                        toggleSelectedToList(
+                                                            productList:
+                                                                selectedProduct,
+                                                            productId:
+                                                                filteredList[
+                                                                        index]
+                                                                    .id);
+                                                        setState(() {});
+                                                      }),
+                                                      child: Chip(
+                                                        backgroundColor: isSelected(
+                                                                productList:
+                                                                    selectedProduct,
+                                                                productId:
+                                                                    filteredList[
+                                                                            index]
+                                                                        .id)
+                                                            ? selectedColor
+                                                            : Colors.white,
+                                                        side: BorderSide(
+                                                            color:
+                                                                Colors.black54),
+                                                        label: SmallText(
+                                                          size: 13,
+                                                          text:
+                                                              '${filteredList[index].prod_name}',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                                ),
+                                              ]);
+                                        }).toList(),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Row(
-
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          SmallText(
-                            text: 'Already have an account?',
-                            color: Colors.grey,
-                          ),
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text('Sign In',
-                                  style: TextStyle(fontSize: 14, color:AppColors.mainGold,fontWeight: FontWeight.bold)
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SmallText(
+                                text: 'Already have an account?',
+                                color: Colors.grey,
                               ),
-                            ),
-                          )
-                        ]
-                    ),
-                  ),
-
-
-                ]
-            );
-          }else if(snapshot.hasError){
-            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
-            return Text(snapshot.error.toString());
-
-          }else{
-            return Center(child:CircularProgressIndicator(color: AppColors.mainGold));
-          }
-        }
-      ) : Center(child:CircularProgressIndicator(color: AppColors.mainGold)),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text('Sign In',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: AppColors.mainGold,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              )
+                            ]),
+                      ),
+                    ]);
+                  } else if (snapshot.hasError) {
+                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+                    return Text(snapshot.error.toString());
+                  } else {
+                    return Center(
+                        child: CircularProgressIndicator(
+                            color: AppColors.mainGold));
+                  }
+                })
+            : Center(
+                child: CircularProgressIndicator(color: AppColors.mainGold)),
+      ),
     );
   }
 }
 
-
-Widget showError(state, updateState, submitSignUp){
-
-    return Center(
-        child: AlertDialog(
-            title: Text("Signup Failed!"),
-            icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
-            content: Text(state["message"].toString()),
-            shape: RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(10.0))),
-
-          actions: [
-            TextButton(onPressed: (){
-              updateState((){
-                  state["hasError"] = false;
-              });
-            }, child: Text("Cancel")),
-
-            TextButton(onPressed: (){
-              submitSignUp();
-              updateState((){
-                  state["hasError"] = false;
-                  state["pending"] = true;
-              });
-            }, child: Text("Retry")),
-          ],
-        )
-    );
+Widget showError(state, updateState, submitSignUp) {
+  return Center(
+      child: AlertDialog(
+    title: Text("Signup Failed!"),
+    icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
+    content: Text(state["message"].toString()),
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+    actions: [
+      TextButton(
+          onPressed: () {
+            updateState(() {
+              state["hasError"] = false;
+            });
+          },
+          child: Text("Cancel")),
+      TextButton(
+          onPressed: () {
+            submitSignUp();
+            updateState(() {
+              state["hasError"] = false;
+              state["pending"] = true;
+            });
+          },
+          child: Text("Retry")),
+    ],
+  ));
 }
 
-isSelected({List productList = const[], String productId = ""}){
+isSelected({List productList = const [], String productId = ""}) {
   return productList.contains(productId);
 }
 
-toggleSelectedToList({List productList = const[], String productId = ""}){
-  if(isSelected(productList:productList, productId: productId)){
+toggleSelectedToList({List productList = const [], String productId = ""}) {
+  if (isSelected(productList: productList, productId: productId)) {
     productList.removeWhere((element) => element == productId);
-  }else{productList.add(productId);}
+  } else {
+    productList.add(productId);
+  }
 }
-

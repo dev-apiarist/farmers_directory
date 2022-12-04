@@ -11,7 +11,7 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
       )
     ];
   }
@@ -22,13 +22,13 @@ class CustomSearchDelegate extends SearchDelegate {
         onPressed: () {
           close(context, null);
         },
-        icon: Icon(Icons.arrow_back));
+        icon: const Icon(Icons.arrow_back));
   }
 
   @override
   Widget buildResults(BuildContext context) {
     List<String> matchQuery = [];
-    for (var x in this.searchTerms) {
+    for (var x in searchTerms) {
       if (x.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(x);
       }
@@ -46,7 +46,7 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> matchQuery = [];
-    for (var x in this.searchTerms) {
+    for (var x in searchTerms) {
       if (x.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(x);
       }
