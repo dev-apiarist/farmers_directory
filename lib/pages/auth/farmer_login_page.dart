@@ -58,7 +58,11 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
     user["isFarmer"] = true;
     SecureStore.createUser(user);
     Future.delayed(Duration.zero, () {
-      Get.off(() => const HomePage());
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ));
     });
   }
 

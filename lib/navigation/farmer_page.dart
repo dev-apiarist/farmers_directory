@@ -9,6 +9,7 @@ import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:flutter/material.dart';
 import '../models/user.model.dart';
 import '../utils/colors.dart';
+import '../utils/dimensions.dart';
 import '../utils/functions.dart';
 import '../widgets/leading_icon.dart';
 import '../widgets/typography.dart';
@@ -48,8 +49,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
               onPressed: () => Navigator.pushReplacement(
@@ -67,6 +67,53 @@ class _FarmerProfileState extends State<FarmerProfile> {
               ),
             )
           ],
+        ),
+        drawer: Drawer(
+          width: MediaQuery.of(context).size.width * 0.65,
+          elevation: 0,
+          backgroundColor: Colors.white,
+          child: ListView(
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(color: AppColors.mainGreen),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+              ),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.person,
+                  text: 'Account',
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.settings,
+                  text: 'Settings',
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.feedback,
+                  text: 'Send Feedback',
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: LeadingIconText(
+                  iconSize: Dimensions.iconSize16,
+                  icon: Icons.logout,
+                  text: 'Logout',
+                ),
+              ),
+              const Divider(),
+            ],
+          ),
         ),
         body: FutureBuilder<Farmer>(
           future: currentUser,

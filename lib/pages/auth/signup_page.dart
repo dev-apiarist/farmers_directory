@@ -55,11 +55,8 @@ class _SignUpPageState extends State<SignUpPage> {
         _loading = true;
       });
       await NetworkHandler.post("/users", userBody);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (builder) => LoginPage(),
-        ),
-      );
+
+      Get.off(() => LoginPage());
     } catch (error) {
       setState(() {
         _loading = false;
@@ -72,12 +69,6 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   @override
