@@ -88,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   LargeText(
                     text: 'Welcome to J Farmers',
-                    size: Dimensions.font27,
                   ),
                   SizedBox(
                     height: Dimensions.height10,

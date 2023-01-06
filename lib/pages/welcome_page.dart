@@ -58,7 +58,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               fontWeight: FontWeight.w800),
                         ),
                       ),
-                      LargeText(
+                      const LargeText(
                         text:
                             "From the farm to you yaad, cut down\nthird-party costs.",
                         align: TextAlign.center,
@@ -71,9 +71,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           Get.off(() => const LoginPage());
                         },
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.height15,
-                              horizontal: Dimensions.width15),
+                          padding: EdgeInsets.all(Dimensions.width10),
                           child: LargeText(
                             text: 'Get Connected',
                             color: Colors.white,

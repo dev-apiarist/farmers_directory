@@ -86,24 +86,19 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                       'assets/icons/logo.png',
                     ),
                   ),
-                  SizedBox(
-                    height: Dimensions.height20,
+                  LargeText(
+                    text: 'Farmer Login',
+                    color: AppColors.mainGold,
                   ),
-                  const LargeText(
-                      align: TextAlign.center,
+                  SizedBox(
+                    height: Dimensions.height10,
+                  ),
+                  const SmallText(
                       color: AppColors.mainGold,
-                      text:
-                          'Let us be the platform you need to showcase your produce.'),
+                      align: TextAlign.center,
+                      text: 'The platform to showcase your produce.'),
                   SizedBox(
                     height: Dimensions.height40,
-                  ),
-                  Text(
-                    "Farmer Login",
-                    style: TextStyle(
-                        color: AppColors.mainGold,
-                        fontSize: Dimensions.font27,
-                        fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.start,
                   ),
                   SizedBox(
                     height: Dimensions.height20,

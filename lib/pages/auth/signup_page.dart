@@ -4,6 +4,7 @@ import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/lg_text.dart';
 import 'package:farmers_directory/widgets/sm_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../models/parishes.dart';
 import '../../models/user.model.dart';
@@ -108,7 +109,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           LargeText(
                             text: 'Create an Account',
-                            size: Dimensions.font27,
                           ),
                         ],
                       ),
@@ -287,7 +287,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 ),
                                                 Container(
                                                   height: 50,
-                                                  padding: EdgeInsets.all(5),
+                                                  padding: EdgeInsets.all(
+                                                      Dimensions.height5),
                                                   decoration: BoxDecoration(
                                                       borderRadius: BorderRadius
                                                           .circular(30),
@@ -310,9 +311,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                                     },
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            10),
+                                                            Dimensions
+                                                                .radius10),
                                                     underline:
-                                                        SizedBox.shrink(),
+                                                        const SizedBox.shrink(),
                                                     items: parishList
                                                         .map((parishName) {
                                                       return DropdownMenuItem<
@@ -320,7 +322,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                                           child: Text(
                                                             parishName,
                                                             style: TextStyle(
-                                                                fontSize: 14),
+                                                                fontSize:
+                                                                    Dimensions
+                                                                        .font14),
                                                           ),
                                                           value: parishName);
                                                     }).toList(),
@@ -351,7 +355,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => Get.back(),
                         child: RichText(
                           text: const TextSpan(
                             text: "Already have an account? ",
@@ -372,38 +376,39 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               )
-            : Center(
-                child: CircularProgressIndicator(color: AppColors.mainGreen)),
+            : const Center(
+                child: CircularProgressIndicator(color: AppColors.mainGreen),
+              ),
       ),
     );
   }
 }
 
-Widget showError(state, updateState, submitSignUp) {
-  return Center(
-      child: AlertDialog(
-    title: Text("Signup Failed!"),
-    icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
-    content: Text(state["message"].toString()),
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-    actions: [
-      TextButton(
-          onPressed: () {
-            updateState(() {
-              state["hasError"] = false;
-            });
-          },
-          child: Text("Cancel")),
-      TextButton(
-          onPressed: () {
-            submitSignUp();
-            updateState(() {
-              state["hasError"] = false;
-              state["pending"] = true;
-            });
-          },
-          child: Text("Retry")),
-    ],
-  ));
-}
+// Widget showError(state, updateState, submitSignUp) {
+//   return Center(
+//       child: AlertDialog(
+//     title: Text("Signup Failed!"),
+//     icon: const Icon(Icons.cancel_outlined, size: 45.0, color: Colors.red),
+//     content: Text(state["message"].toString()),
+//     shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.all(Radius.circular(10.0))),
+//     actions: [
+//       TextButton(
+//           onPressed: () {
+//             updateState(() {
+//               state["hasError"] = false;
+//             });
+//           },
+//           child: Text("Cancel")),
+//       TextButton(
+//           onPressed: () {
+//             submitSignUp();
+//             updateState(() {
+//               state["hasError"] = false;
+//               state["pending"] = true;
+//             });
+//           },
+//           child: Text("Retry")),
+//     ],
+//   ));
+// }

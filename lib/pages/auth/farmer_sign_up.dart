@@ -142,20 +142,24 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                       Expanded(
                         child: ListView(
                           children: [
-                            SizedBox(height: 30),
+                            SizedBox(
+                              height: Dimensions.logoS,
+                              width: Dimensions.logoS,
+                              child: Image.asset(
+                                'assets/icons/logo.png',
+                              ),
+                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 40.0),
-                              child: Text(
-                                "Create a Farmer's Account",
-                                style: TextStyle(
-                                    color: AppColors.mainGold,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25),
+                              child: LargeText(
+                                text: "Create a Farmer's Account",
+                                color: AppColors.mainGold,
+                                align: TextAlign.center,
                               ),
                             ),
                             Stepper(
-                              physics: ScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               controlsBuilder: (context, steps) {
                                 return Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -166,12 +170,12 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                                                 style: TextButton.styleFrom(
                                                   backgroundColor:
                                                       AppColors.mainGold,
-                                                  shape: StadiumBorder(),
+                                                  shape: const StadiumBorder(),
                                                 ),
                                                 onPressed: () {
                                                   submitSignUp();
                                                 },
-                                                child: LargeText(
+                                                child: const SmallText(
                                                   text: 'Submit',
                                                   color: Colors.white,
                                                 ),
@@ -192,10 +196,10 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                                                 style: TextButton.styleFrom(
                                                   backgroundColor:
                                                       AppColors.mainGold,
-                                                  shape: StadiumBorder(),
+                                                  shape: const StadiumBorder(),
                                                 ),
                                                 onPressed: steps.onStepContinue,
-                                                child: LargeText(
+                                                child: const SmallText(
                                                   text: 'Next',
                                                   color: Colors.white,
                                                 ),
@@ -241,7 +245,8 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                                   state: _currentStep >= 0
                                       ? StepState.complete
                                       : StepState.disabled,
-                                  title: SmallText(text: 'Personal Details'),
+                                  title:
+                                      const SmallText(text: 'Personal Details'),
                                   content: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
@@ -279,43 +284,51 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                                         title: 'Email',
                                         placeholder: 'johntravolta@gmail.com',
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SmallText(text: "Description"),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          TextFormField(
-                                            minLines: 4,
-                                            maxLines: 5,
-                                            controller: descriptionCtrl,
-                                            scrollPhysics:
-                                                BouncingScrollPhysics(),
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            decoration: InputDecoration(
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(30),
-                                                        borderSide: BorderSide(
-                                                            color: Colors.grey
-                                                                .withOpacity(
-                                                                    0.4))),
-                                                contentPadding:
-                                                    EdgeInsets.all(15),
-                                                hintText: "Description",
-                                                border: OutlineInputBorder(
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: Dimensions.height10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SmallText(
+                                                text: "Description"),
+                                            SizedBox(
+                                              height: Dimensions.height10,
+                                            ),
+                                            TextFormField(
+                                              minLines: 4,
+                                              maxLines: 5,
+                                              controller: descriptionCtrl,
+                                              scrollPhysics:
+                                                  const BouncingScrollPhysics(),
+                                              keyboardType:
+                                                  TextInputType.multiline,
+                                              decoration: InputDecoration(
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            30)),
-                                                filled: true,
-                                                fillColor: Colors.white70),
-                                          ),
-                                        ],
+                                                            Dimensions.width20),
+                                                    borderSide: BorderSide(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.4),
+                                                    ),
+                                                  ),
+                                                  contentPadding:
+                                                      EdgeInsets.all(
+                                                          Dimensions.width15),
+                                                  hintText: "Description",
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              Dimensions
+                                                                  .width20)),
+                                                  filled: true,
+                                                  fillColor: Colors.white70),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       CustomTextField(
                                         controller: passwordCtrl,
@@ -337,7 +350,7 @@ class _FarmerSignUpPageState extends State<FarmerSignUpPage> {
                                   state: _currentStep >= 1
                                       ? StepState.complete
                                       : StepState.disabled,
-                                  title: SmallText(text: 'Address'),
+                                  title: const SmallText(text: 'Address'),
                                   content: Column(
                                     children: [
                                       Column(

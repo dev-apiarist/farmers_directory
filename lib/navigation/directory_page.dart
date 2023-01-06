@@ -49,6 +49,14 @@ class _DirectoryState extends State<Directory> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    getProducts();
+    farmerList = getFarmers();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

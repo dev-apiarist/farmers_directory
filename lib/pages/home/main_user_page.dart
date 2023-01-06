@@ -270,13 +270,14 @@ class _MainUserPageState extends State<MainUserPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.network(
-                                            c.category_img,
-                                            fit: BoxFit.contain,
-                                          )),
-                                      LargeText(
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.network(
+                                          c.category_img,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      SmallText(
                                         text: c.category_name.toUpperCase(),
                                         color: Colors.black87,
                                       )
