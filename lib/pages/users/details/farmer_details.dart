@@ -19,7 +19,6 @@ class FarmerDetails extends StatelessWidget {
     String email = farmer.email;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
@@ -41,33 +40,20 @@ class FarmerDetails extends StatelessWidget {
                     alignment: AlignmentDirectional.center,
                     child: LargeText(
                       text: '${farmer.first_name} ${farmer.last_name}',
-                      size: Dimensions.font30,
+                      size: Dimensions.xxl,
                     ),
                   ),
                   SizedBox(
-                    height: Dimensions.height10,
+                    height: Dimensions.height5,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          LeadingIconText(
-                            iconSize: Dimensions.height20,
-                            text: '${farmer.farmer_type}',
-                            icon: Icons.work_outline,
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          LeadingIconText(
-                            iconSize: Dimensions.height20,
-                            text: "${farmer.address["parish"]}",
-                            icon: Icons.location_on_outlined,
-                          )
-                        ],
-                      ),
+                      LeadingIconText(
+                        iconSize: Dimensions.height20,
+                        text: "${farmer.address["parish"]}",
+                        icon: Icons.location_on_outlined,
+                      )
                     ],
                   ),
                   SizedBox(
@@ -135,8 +121,7 @@ class FarmerDetails extends StatelessWidget {
                           parseUrl,
                         );
                       }
-                    }
-                    ),
+                    }),
                     child: LeadingIconText(
                       text: farmer.phone,
                       icon: Icons.call_outlined,

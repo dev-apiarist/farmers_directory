@@ -52,7 +52,7 @@ class FarmersList extends StatelessWidget {
                 text: farmer.products[index].prod_name,
                 color: Colors.black87,
                 iconSize: Dimensions.height10,
-                textSize: Dimensions.font14,
+                textSize: Dimensions.sm,
               );
             }),
           ),

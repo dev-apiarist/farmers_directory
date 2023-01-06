@@ -62,8 +62,12 @@ class _ProduceDetailsState extends State<ProduceDetails> {
                   pinned: true,
                   expandedHeight: Dimensions.expandedHeight,
                   flexibleSpace: FlexibleSpaceBar(
-                    background:
-                        Image(image: setProfileImage(widget.product.prod_img)),
+                    background: Image(
+                      image: setProfileImage(
+                        widget.product.prod_img,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   bottom: PreferredSize(
                     preferredSize: Size.fromHeight(40),

@@ -1,8 +1,10 @@
 import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/widgets/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
+  final bool isEmail;
   final bool isPassword;
   final TextEditingController? controller;
   final String title;
@@ -11,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     super.key,
     this.isPassword = false,
+    this.isEmail = false,
     this.isNumber = false,
     this.placeholder = '',
     this.controller,
@@ -36,6 +39,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           SizedBox(
             height: 50,
             child: TextFormField(
+              autofillHints: [
+                widget.isEmail
+                    ? AutofillHints.email
+                    : widget.isPassword
+                        ? AutofillHints.password
+                        : ''
+              ],
+              onEditingComplete: widget.isEmail & widget.isPassword
+                  ? () => TextInput.finishAutofillContext()
+                  : null,
               controller: widget.controller,
               scrollPhysics: const BouncingScrollPhysics(),
               keyboardType:

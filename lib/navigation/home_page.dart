@@ -25,15 +25,16 @@ class _HomePageState extends State<HomePage> {
   bool isFarmer = false;
   late List pages = List.filled(4, SizedBox.shrink());
 
-  Future<Widget> getProfilePage() async{
+  Future<Widget> getProfilePage() async {
     User user = await SecureStore.getUser();
 
-    if(user.isFarmer){
+    if (user.isFarmer) {
       return FarmerProfile();
-    }else return UserProfile();
-
+    } else
+      return UserProfile();
   }
-  void setPages() async{
+
+  void setPages() async {
     pages = [MainUserPage(), Directory(), Categories(), await getProfilePage()];
     setState(() {});
   }

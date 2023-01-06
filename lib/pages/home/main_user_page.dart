@@ -28,10 +28,10 @@ class _MainUserPageState extends State<MainUserPage> {
   late Future<User> currentUser;
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.95;
-  List<Category> categories = [];
-  List<Farmer> farmers = [];
-  List<Product> products = [];
-  List<Farmer> nearbyFarmers = [];
+  late List<Category> categories = [];
+  late List<Farmer> farmers = [];
+  late List<Product> products = [];
+  late List<Farmer> nearbyFarmers = [];
 
   getFarmers() async {
     Map<String, dynamic> response =
@@ -93,7 +93,7 @@ class _MainUserPageState extends State<MainUserPage> {
   @override
   void dispose() {
     super.dispose();
-    pageController.dispose(); //to prevent memory leak once page changes
+    // pageController.dispose(); //to prevent memory leak once page changes
   }
 
   @override
@@ -157,6 +157,7 @@ class _MainUserPageState extends State<MainUserPage> {
                         snapshot.data!.address["parish"])
                     .toList();
                 return CustomScrollView(
+                  physics: BouncingScrollPhysics(),
                   slivers: [
                     SliverAppBar(
                       centerTitle: true,
@@ -171,8 +172,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       pinned: true,
                       floating: true,
                       titleSpacing: Dimensions.width15,
-                      toolbarHeight: 60,
-                      collapsedHeight: 60,
+                      collapsedHeight: 65,
 
                       backgroundColor: Colors.white,
                       flexibleSpace: FlexibleSpaceBar(

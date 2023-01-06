@@ -80,8 +80,8 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: Dimensions.logoS,
-                    width: Dimensions.logoS,
+                    height: Dimensions.logoSize,
+                    width: Dimensions.logoSize,
                     child: Image.asset(
                       'assets/icons/logo.png',
                     ),
@@ -89,6 +89,7 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                   LargeText(
                     text: 'Farmer Login',
                     color: AppColors.mainGold,
+                    size: Dimensions.xl,
                   ),
                   SizedBox(
                     height: Dimensions.height10,
@@ -108,110 +109,114 @@ class _FarmerLoginPageState extends State<FarmerLoginPage> {
                         EdgeInsets.symmetric(horizontal: Dimensions.width40),
                     child: Form(
                       key: formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CustomTextField(
-                            controller: emailController,
-                            title: 'Email address',
-                            placeholder: 'johntravolta@gmail.com',
-                          ),
-                          CustomTextField(
-                            isPassword: true,
-                            controller: passwordController,
-                            title: 'Password',
-                            placeholder: '************',
-                          ),
-                          SizedBox(
-                            height: Dimensions.height20,
-                          ),
-                          SizedBox(
-                            width: double.maxFinite,
-                            height: Dimensions.height50,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: AppColors.mainGold,
-                                shape: const StadiumBorder(),
-                              ),
-                              onPressed: () {
-                                // print(emailController.text);
-                                submitLogin();
-                              },
-                              child: LargeText(
-                                text: 'Continue',
-                                color: Colors.white,
-                              ),
+                      child: AutofillGroup(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            CustomTextField(
+                              isEmail: true,
+                              controller: emailController,
+                              title: 'Email address',
+                              placeholder: 'johntravolta@gmail.com',
                             ),
-                          ),
-                          SizedBox(
-                            height: Dimensions.height20,
-                          ),
-                          const Align(
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: SmallText(
-                              text: 'Forgot Password?',
-                              color: Colors.blueAccent,
+                            CustomTextField(
+                              isPassword: true,
+                              controller: passwordController,
+                              title: 'Password',
+                              placeholder: '************',
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: Dimensions.width30),
-                            child: Row(
-                              children: <Widget>[
-                                const Expanded(child: Divider()),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Dimensions.width10),
-                                  child: const LargeText(text: 'OR'),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                            SizedBox(
+                              width: double.maxFinite,
+                              height: Dimensions.height50,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: AppColors.mainGold,
+                                  shape: const StadiumBorder(),
                                 ),
-                                const Expanded(child: Divider()),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: Dimensions.width30,
-                                child: Image.asset(
-                                  'assets/icons/google.png',
-                                  fit: BoxFit.cover,
+                                onPressed: () {
+                                  // print(emailController.text);
+                                  submitLogin();
+                                },
+                                child: LargeText(
+                                  text: 'Continue',
+                                  color: Colors.white,
                                 ),
                               ),
-                              SizedBox(
-                                width: Dimensions.width30,
+                            ),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                            const Align(
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: SmallText(
+                                text: 'Forgot Password?',
+                                color: Colors.blueAccent,
                               ),
-                              SizedBox(
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Dimensions.width30),
+                              child: Row(
+                                children: <Widget>[
+                                  const Expanded(child: Divider()),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: Dimensions.width10),
+                                    child: const LargeText(text: 'OR'),
+                                  ),
+                                  const Expanded(child: Divider()),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
                                   width: Dimensions.width30,
                                   child: Image.asset(
-                                    'assets/icons/facebook.png',
+                                    'assets/icons/google.png',
                                     fit: BoxFit.cover,
-                                  )),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: Dimensions.height40),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () => Get.to(() => FarmerSignUpPage()),
-                              child: RichText(
-                                text: const TextSpan(
-                                  text: "Don't have an account? ",
-                                  style: TextStyle(color: Colors.grey),
-                                  children: [
-                                    TextSpan(
-                                      text: 'Sign Up',
-                                      style: TextStyle(
-                                        color: AppColors.mainGold,
-                                        fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width30,
+                                ),
+                                SizedBox(
+                                    width: Dimensions.width30,
+                                    child: Image.asset(
+                                      'assets/icons/facebook.png',
+                                      fit: BoxFit.cover,
+                                    )),
+                              ],
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: Dimensions.height40),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => Get.to(() => FarmerSignUpPage()),
+                                child: RichText(
+                                  text: const TextSpan(
+                                    text: "Don't have an account? ",
+                                    style: TextStyle(color: Colors.grey),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Sign Up',
+                                        style: TextStyle(
+                                          color: AppColors.mainGold,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

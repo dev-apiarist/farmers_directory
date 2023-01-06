@@ -1,12 +1,9 @@
 import 'package:farmers_directory/pages/auth/farmer_login_page.dart';
-
 import 'package:farmers_directory/utils/dimensions.dart';
-import 'package:farmers_directory/widgets/lg_text.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../utils/colors.dart';
+import '../widgets/typography.dart';
 import 'auth/login_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -17,6 +14,11 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,14 +51,10 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          text: 'Meet Local Farmers'.toUpperCase(),
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: Dimensions.font27,
-                              fontWeight: FontWeight.w800),
-                        ),
+                      LargeText(
+                        text: 'Meet Local Farmers'.toUpperCase(),
+                        size: Dimensions.xxl,
+                        weight: FontWeight.bold,
                       ),
                       const LargeText(
                         text:
@@ -65,30 +63,31 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                            backgroundColor: AppColors.mainGreen,
-                            shape: const StadiumBorder()),
+                          backgroundColor: AppColors.mainGreen,
+                          shape: const StadiumBorder(),
+                        ),
                         onPressed: () {
-                          Get.off(() => const LoginPage());
+                          Get.to(
+                            () => const LoginPage(),
+                          );
                         },
                         child: Padding(
                           padding: EdgeInsets.all(Dimensions.width10),
                           child: LargeText(
                             text: 'Get Connected',
                             color: Colors.white,
-                            size: Dimensions.height20,
+                            size: Dimensions.lg,
                           ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const FarmerLoginPage());
+                          Get.to(
+                            () => const FarmerLoginPage(),
+                          );
                         },
-                        child: Text(
-                          "Are you a farmer? ",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontSize: Dimensions.height15),
-                        ),
+                        child: SmallText(
+                            text: "Are you a farmer? ", size: Dimensions.sm),
                       )
                     ],
                   ),
@@ -98,25 +97,23 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           Positioned(
             top: Dimensions.logoPos,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(Dimensions.height50),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ],
-                ),
-                width: Dimensions.logoS,
-                height: Dimensions.logoS,
-                child: Padding(
-                  padding: EdgeInsets.all(Dimensions.width5),
-                  child: Image.asset(
-                    'assets/icons/logo.png',
-                    fit: BoxFit.cover,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
                   ),
+                ],
+              ),
+              width: Dimensions.logoSize,
+              height: Dimensions.logoSize,
+              child: Padding(
+                padding: EdgeInsets.all(Dimensions.width5),
+                child: Image.asset(
+                  'assets/icons/logo.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

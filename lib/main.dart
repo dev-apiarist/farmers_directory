@@ -1,4 +1,5 @@
 import 'package:farmers_directory/pages/welcome_page.dart';
+import 'package:farmers_directory/utils/dimensions.dart';
 import 'package:farmers_directory/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,16 @@ class RootApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0,
+          toolbarHeight: 65,
+          centerTitle: true,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+      ),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: [

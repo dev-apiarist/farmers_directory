@@ -24,7 +24,7 @@ class SmallText extends StatelessWidget {
       textAlign: align,
       style: TextStyle(
           color: color,
-          fontSize: size == 0 ? Dimensions.font14 : size,
+          fontSize: size == 0 ? Dimensions.sm : size,
           height: height),
     );
   }

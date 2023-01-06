@@ -6,10 +6,12 @@ class LargeText extends StatelessWidget {
   final String text;
   final double size;
   final TextAlign? align;
+  final FontWeight? weight;
 
   const LargeText(
       {super.key,
       required this.text,
+      this.weight,
       this.color = const Color(0xFF1E1E1E),
       this.size = 0,
       this.align});
@@ -22,7 +24,7 @@ class LargeText extends StatelessWidget {
       style: TextStyle(
           color: color,
           fontWeight: FontWeight.w400,
-          fontSize: size == 0 ? Dimensions.font17 : size),
+          fontSize: size == 0 ? Dimensions.lg : size),
     );
   }
 }

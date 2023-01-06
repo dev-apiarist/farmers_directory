@@ -77,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: Dimensions.logoS,
-                    width: Dimensions.logoS,
+                    height: Dimensions.logoSize,
+                    width: Dimensions.logoSize,
                     child: Image.asset(
                       'assets/icons/logo.png',
                     ),
@@ -88,11 +88,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   LargeText(
                     text: 'Welcome to J Farmers',
+                    size: Dimensions.xl,
                   ),
                   SizedBox(
                     height: Dimensions.height10,
                   ),
-                  const SmallText(
+                  const LargeText(
                     text: 'Get connected with local farmers',
                   ),
                   SizedBox(
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CustomTextField(
+                            isEmail: true,
                             controller: emailController,
                             title: 'Your email address',
                             placeholder: 'johntravolta@gmail.com',

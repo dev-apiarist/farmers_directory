@@ -30,10 +30,10 @@ class Dimensions {
   static double width70 = screenWidth / 5.87;
 
 //fonts
-  static double font17 = screenHeight / 47.70;
-  static double font14 = screenHeight / 57.92;
-  static double font27 = screenHeight / 32.15;
-  static double font30 = screenHeight / 27.03;
+  static double sm = screenHeight / 62.04; //14
+  static double lg = screenHeight / 48.25; //18
+  static double xl = screenHeight / 39.48; //22
+  static double xxl = screenHeight / 33.41; //28
 
 //  radius
   static double radius5 = screenHeight / 162.2;
@@ -59,6 +59,6 @@ class Dimensions {
 
   // logo
 
-  static double logoS = screenHeight / 8.68;
+  static double logoSize = screenHeight / 8.68;
   static double logoPos = screenHeight / 1.88;
 }

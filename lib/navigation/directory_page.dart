@@ -49,23 +49,18 @@ class _DirectoryState extends State<Directory> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    getProducts();
-    farmerList = getFarmers();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
-        title: const LargeText(
-          text: 'Farmers',
+        title: SizedBox(
+          width: Dimensions.width70,
+          child: Image.asset(
+            'assets/icons/logo.png',
+            fit: BoxFit.cover,
+          ),
         ),
-        elevation: 0,
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder<List<Farmer>>(
@@ -75,24 +70,20 @@ class _DirectoryState extends State<Directory> {
             return Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: const LargeText(text: 'Farmers'),
+                    ),
                     TextButton(
                       onPressed: () {
                         GlobalFunctions.botomSheet(context);
                       },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const LargeText(text: 'Filter'),
-                          SizedBox(
-                            width: Dimensions.width10,
-                          ),
-                          const Icon(
-                            Icons.sort,
-                            color: Colors.black87,
-                          )
-                        ],
+                      child: IconButton(
+                        icon: Icon(Icons.sort),
+                        color: Colors.black,
+                        onPressed: () {},
                       ),
                     )
                   ],

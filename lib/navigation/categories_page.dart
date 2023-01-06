@@ -54,11 +54,13 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const LargeText(
-          text: 'Categories',
-          color: Colors.white,
+        title: SizedBox(
+          width: Dimensions.width70,
+          child: Image.asset(
+            'assets/icons/logo.png',
+            fit: BoxFit.cover,
+          ),
         ),
         actions: [
           IconButton(
@@ -66,8 +68,9 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
             icon: const Icon(Icons.search),
           )
         ],
+        foregroundColor: Colors.black,
         elevation: 0,
-        backgroundColor: AppColors.mainGreen,
+        backgroundColor: Colors.white,
       ),
       body: FutureBuilder<List<Category>>(
         future: allCategories,
