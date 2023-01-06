@@ -48,18 +48,23 @@ class _MainUserPageState extends State<MainUserPage> {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
-    products = productsList.map((product) {
-      return Product.fromJson(product);
-    }).toList();
+    setState((){
+      products = productsList.map((product) {
+        return Product.fromJson(product);
+      }).toList();
+    });
+
   }
 
   getCategories() async {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/categories"));
     List categoryList = response["data"];
-    categories = categoryList.map((category) {
-      return Category.fromJson(category);
-    }).toList();
+    setState(() {
+      categories = categoryList.map((category) {
+        return Category.fromJson(category);
+      }).toList();
+    });
   }
 
   getData() async {
