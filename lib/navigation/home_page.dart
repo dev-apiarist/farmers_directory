@@ -72,8 +72,8 @@ class _HomePageState extends State<HomePage> {
             // unselectedFontSize: 0,
             type: BottomNavigationBarType.fixed,
             onTap: onTap,
+            elevation: 0,
             currentIndex: currentIndex,
-            elevation: 1,
             selectedItemColor: AppColors.mainGreen,
             unselectedItemColor: Colors.grey.withOpacity(0.5),
             items: [

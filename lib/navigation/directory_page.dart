@@ -74,6 +74,19 @@ class _DirectoryState extends State<Directory> {
               decoration: const BoxDecoration(color: AppColors.mainGreen),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
+                    child: SizedBox(
+                      width: Dimensions.width70,
+                      child: Image.asset(
+                        'assets/icons/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             ListTile(

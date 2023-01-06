@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:farmers_directory/models/category.model.dart';
+import 'package:farmers_directory/navigation/categories_page.dart';
 import 'package:farmers_directory/pages/users/details/farmer_details.dart';
 import 'package:farmers_directory/pages/users/details/produce_details.dart';
 import 'package:farmers_directory/services/network_handler_service.dart';
@@ -9,6 +10,7 @@ import 'package:farmers_directory/utils/functions.dart';
 import 'package:farmers_directory/widgets/leading_icon.dart';
 import 'package:farmers_directory/widgets/produce.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../models/farmer.model.dart';
 import '../../models/product.model.dart';
@@ -48,12 +50,11 @@ class _MainUserPageState extends State<MainUserPage> {
     Map<String, dynamic> response =
         jsonDecode(await NetworkHandler.get(endpoint: "/products"));
     List productsList = response["data"];
-    setState((){
+    setState(() {
       products = productsList.map((product) {
         return Product.fromJson(product);
       }).toList();
     });
-
   }
 
   getCategories() async {
@@ -114,6 +115,19 @@ class _MainUserPageState extends State<MainUserPage> {
                 decoration: const BoxDecoration(color: AppColors.mainGreen),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.white),
+                      child: SizedBox(
+                        width: Dimensions.width70,
+                        child: Image.asset(
+                          'assets/icons/logo.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               ListTile(
@@ -276,12 +290,19 @@ class _MainUserPageState extends State<MainUserPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Image.network(
-                                          c.category_img,
-                                          fit: BoxFit.contain,
+                                        width: 70,
+                                        height: 70,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          child: Image.network(
+                                            c.category_img,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
                                       ),
                                       SmallText(
                                         text: c.category_name.toUpperCase(),
