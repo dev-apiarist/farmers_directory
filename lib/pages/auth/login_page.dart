@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: EdgeInsets.only(top: Dimensions.height40),
                             child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: () => Get.to(() => SignUpPage()),
+                              onTap: () => Get.off(() => SignUpPage()),
                               child: RichText(
                                 text: const TextSpan(
                                   text: "Don't have an account? ",

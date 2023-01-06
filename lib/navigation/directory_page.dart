@@ -6,7 +6,9 @@ import 'package:farmers_directory/utils/functions.dart';
 import 'package:flutter/material.dart';
 import '../models/product.model.dart';
 import '../pages/users/lists/farmers_list.dart';
+import '../utils/colors.dart';
 import '../utils/dimensions.dart';
+import '../widgets/leading_icon.dart';
 import '../widgets/typography.dart';
 
 class Directory extends StatefulWidget {
@@ -53,7 +55,7 @@ class _DirectoryState extends State<Directory> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
+        foregroundColor: Colors.black,
         title: SizedBox(
           width: Dimensions.width70,
           child: Image.asset(
@@ -61,7 +63,53 @@ class _DirectoryState extends State<Directory> {
             fit: BoxFit.cover,
           ),
         ),
-        backgroundColor: Colors.transparent,
+      ),
+      drawer: Drawer(
+        width: MediaQuery.of(context).size.width * 0.65,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        child: ListView(
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: AppColors.mainGreen),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            ),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.person,
+                text: 'Account',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.settings,
+                text: 'Settings',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.feedback,
+                text: 'Send Feedback',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.logout,
+                text: 'Logout',
+              ),
+            ),
+            const Divider(),
+          ],
+        ),
       ),
       body: FutureBuilder<List<Farmer>>(
         future: farmerList,

@@ -54,6 +54,53 @@ class _CategoriesState extends State<Categories> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        width: MediaQuery.of(context).size.width * 0.65,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        child: ListView(
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: AppColors.mainGreen),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            ),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.person,
+                text: 'Account',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.settings,
+                text: 'Settings',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.feedback,
+                text: 'Send Feedback',
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: LeadingIconText(
+                iconSize: Dimensions.iconSize16,
+                icon: Icons.logout,
+                text: 'Logout',
+              ),
+            ),
+            const Divider(),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: SizedBox(
           width: Dimensions.width70,

@@ -104,7 +104,6 @@ class _MainUserPageState extends State<MainUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         drawer: Drawer(
           width: MediaQuery.of(context).size.width * 0.65,
           elevation: 0,
@@ -152,6 +151,7 @@ class _MainUserPageState extends State<MainUserPage> {
             ],
           ),
         ),
+        backgroundColor: Colors.white,
         body: FutureBuilder<User>(
             future: currentUser,
             builder: (context, snapshot) {
@@ -178,6 +178,7 @@ class _MainUserPageState extends State<MainUserPage> {
                       floating: true,
                       titleSpacing: Dimensions.width15,
                       collapsedHeight: 65,
+                      toolbarHeight: 65,
 
                       backgroundColor: Colors.white,
                       flexibleSpace: FlexibleSpaceBar(
