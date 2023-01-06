@@ -375,8 +375,7 @@ class _MainUserPageState extends State<MainUserPage> {
                                             borderRadius: BorderRadius.circular(
                                                 Dimensions.radius5),
                                             image: DecorationImage(
-                                                image: NetworkImage(
-                                                    nearbyFarmers[index].image),
+                                                image:setProfileImage(nearbyFarmers[index].image),
                                                 fit: BoxFit.cover),
                                           ),
                                         ),
